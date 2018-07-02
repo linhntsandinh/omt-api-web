@@ -1,6 +1,6 @@
 # omt-api-web
 
-- cd /ui
+- cd ui/
 - npm run build
 - cd ..
 - sbt run  
