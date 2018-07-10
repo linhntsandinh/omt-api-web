@@ -18,9 +18,14 @@ export default {
       },
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },  {
+          name: 'Viết đơn',
+          url: '/absence',
+          icon: 'icon-pencil',
+      },
+    ,  {
           name: 'Chấm công',
           url: '/timekeeping',
-          icon: 'icon-pencil',
+          icon: 'icon-calculator',
       },
       ,
       {

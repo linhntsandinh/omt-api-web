@@ -36,6 +36,7 @@ class Login extends Component {
         }).then((response) => response.json())
             .then((responseJson) => {
                 localStorage.setItem('data',JSON.stringify(responseJson));
+                localStorage.setItem('Login','false')
                 pop.parent.HandleChange();
                 console.log(responseJson)
             })

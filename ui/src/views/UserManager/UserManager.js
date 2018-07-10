@@ -312,7 +312,7 @@ class Users extends Component {
           </CardHeader>
 
           <CardBody>
-            <Table responsive>
+            <Table className="private-table" responsive>
               <thead>
               <tr>
                 <th  width="5%">STT</th>

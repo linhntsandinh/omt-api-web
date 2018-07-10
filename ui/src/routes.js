@@ -186,6 +186,10 @@ const Timekeeping = Loadable({
     loader: () => import('./views/Timekeeping/Timekeeping'),
     loading: Loading,
 });
+const Absence = Loadable({
+    loader: () => import('./views/Absence/Absence'),
+    loading: Loading,
+});
 
 
 
@@ -235,6 +239,7 @@ const routes = [
   { path: '/users', exact: true,  name: 'Nhân viên', component: Users },
   { path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User },
     { path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping },
+    { path: '/absence', exact: true, name: 'Viết đơn', component: Absence },
 
 ];
 

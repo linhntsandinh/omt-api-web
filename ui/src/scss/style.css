@@ -9939,5 +9939,11 @@ body {
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
+table.private-table tr:hover {
+  background: #fff858; }
+
+.main-avatar {
+  width: 70%; }
+
 html body .app.flex-row.align-items-center {
   height: 100vh; }
