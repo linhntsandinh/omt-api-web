@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Redirect, HashRouter, Route, Switch} from 'react-router-dom';
 import './App.css';
 // Styles
 // CoreUI Icons Set
@@ -12,28 +12,46 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 import './scss/style.css'
+import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 
 // Containers
-import { DefaultLayout } from './containers';
+import {DefaultLayout} from './containers';
 // Pages
-import { Login, Page404, Page500, Register } from './views/Pages';
+import {Login, Page404, Page500, Register} from './views/Pages';
 
 // import { renderRoutes } from 'react-router-config';
 
 class App extends Component {
-  render() {
-    return (
-      <HashRouter>
-        <Switch>
-          <Route exact path="/login" name="Login Page" component={Login} />
-          <Route exact path="/register" name="Register Page" component={Register} />
-          <Route exact path="/404" name="Page 404" component={Page404} />
-          <Route exact path="/500" name="Page 500" component={Page500} />
-          <Route path="/" name="Home" component={DefaultLayout} />
-        </Switch>
-      </HashRouter>
-    );
-  }
+    constructor(props) {
+        super(props)
+        this.state = {
+            isLogin: false
+        }
+    }
+
+    HandleChange() {
+        this.setState({
+            isLogin: !this.state.isLogin
+        })
+        console.log("DM")
+    }
+
+    render() {
+        return (
+            <HashRouter>
+                <Switch>
+                    {!this.state.isLogin ?
+                        <Route exact path="/login" name="Login Page"
+                               render={(pop) => <Login props={pop} parent={this}/>}/> : null}
+                    {!this.state.isLogin ? <Redirect from="/" to="/login"/> : null}
+                    <Route exact path="/register" name="Register Page" component={Register}/>
+                    <Route exact path="/404" name="Page 404" component={Page404}/>
+                    <Route exact path="/500" name="Page 500" component={Page500}/>
+                    {this.state.isLogin ? <Route path="/" name="Home" render={(pop) => <DefaultLayout props={pop} parent={this}/>}/> : null}
+                </Switch>
+            </HashRouter>
+        );
+    }
 }
 
 export default App;

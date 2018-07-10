@@ -173,14 +173,21 @@ const Widgets = Loadable({
 });
 
 const Users = Loadable({
-  loader: () => import('./views/Users/Users'),
+  loader: () => import('./views/UserManager/UserManager'),
   loading: Loading,
 });
 
 const User = Loadable({
-  loader: () => import('./views/Users/User'),
+  loader: () => import('./views/UserManager/UserDetail'),
   loading: Loading,
 });
+
+const Timekeeping = Loadable({
+    loader: () => import('./views/Timekeeping/Timekeeping'),
+    loading: Loading,
+});
+
+
 
 
 
@@ -225,8 +232,10 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/charts', name: 'Charts', component: Charts },
-  { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/users', exact: true,  name: 'Nhân viên', component: Users },
+  { path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User },
+    { path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping },
+
 ];
 
 export default routes;
