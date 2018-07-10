@@ -1,8 +1,9 @@
 package models
 
 
-import javax.inject.Inject
+import java.util.Calendar
 
+import javax.inject.Inject
 import be.objectify.deadbolt.scala.models.Subject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
@@ -21,6 +22,11 @@ object LoginForm {
 
 /***/
 case class UserData(id: Int, username: String, password: String, email: String, created_at: Option[Int], updated_at: Option[Int], created_by: Option[Int], updated_by: Option[Int])
+object UserData {
+  implicit val reader = Json.reads[UserData]
+  implicit val writes = Json.writes[UserData]
+
+}
 class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
   def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
   def username = column[String]("username")
@@ -31,19 +37,24 @@ class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
   def created_by = column[Option[Int]]("created_by")
   def updated_by = column[Option[Int]]("updated_by")
   override def * =
-    (id, username, password, email, created_at, updated_at, created_by, updated_by) <>(UserData.tupled, UserData.unapply)
+    (id, username, password, email, created_at, updated_at, created_by, updated_by) <>((UserData.apply _).tupled, UserData.unapply)
 }
 
 /***/
 case class UserForm(var username: String, password: String, email: String)
-//class UserFormDef(tag: Tag) extends Table[UserForm](tag, "users") {
-//
-//  def username = column[String]("username")
-//  def password = column[String]("password")
-//  def email = column[String]("email")
-//  override def * =
-//    (username, password, email) <> (UserForm.tupled, UserForm.unapply)
-//}
+object UserForm {
+  implicit val reader = Json.reads[UserForm]
+  implicit val writes = Json.writes[UserForm]
+
+}
+class UserFormDef(tag: Tag) extends Table[UserForm](tag, "users") {
+
+  def username = column[String]("username")
+  def password = column[String]("password")
+  def email = column[String]("email")
+  override def * =
+    (username, password, email) <> ((UserForm.apply _).tupled, UserForm.unapply)
+}
 
 /***/
 class UserAuth(username: String, roleList: List[SecurityRole], permissionList: List[SecurityPermission]) extends Subject {
@@ -66,7 +77,7 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
 
   private val UserTable  = TableQuery[UserTableDef]
 
-  def getAuthInfo(username: String): Future[Option[UserAuth]] = {
+  def getAuthInfo(username: String): Future[Option[(UserData, ListBuffer[SecurityPermission])]] = {
     val role = TableQuery[RoleTableDef]
     val permission = TableQuery[PermissionTableDef]
     val userRole = TableQuery[UserRoleTableDef]
@@ -94,9 +105,10 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
                 roles += SecurityRole(role.code)
                 permissions += SecurityPermission(permission.code)
               }
-            }
 
-            Some(new UserAuth(username, roles.toList, permissions.toList))
+            }
+            println(permissions)
+            Some(list.head._1._1._1._1,permissions)
           }
         }
 
@@ -105,13 +117,18 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
   def insert(userForm: UserForm): Future[Int] = {
-    userForm.username = "12121"
-//    userForm.copy(username = "sdfsdf")
-//    db.run(UserForm += userForm)
+    val result : UserData = new UserData(1,userForm.username,userForm.password,userForm.email,Some((System.currentTimeMillis()).toInt),Some(1),Some(1),Some(1))
+    db.run(UserTable += result)
     Future(1)
   }
 
-  def delete(userId: Int): Unit = {
+  def delete(userId: Int) ={
     db.run(UserTable.filter(_.id === userId).delete)
+  }
+
+  def update(userData: UserData)={
+    val q = UserTable.filter(_.id === userData.id).update(userData)
+    db.run(q)
+    Future(1)
   }
 }
