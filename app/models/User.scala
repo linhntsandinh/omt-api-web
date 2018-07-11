@@ -21,10 +21,10 @@ object LoginForm {
 }
 
 /***/
-case class UserData(id: Int, username: String, password: String, email: String, created_at: Option[Int], updated_at: Option[Int], created_by: Option[Int], updated_by: Option[Int])
+case class UserData(id: Int, username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
 object UserData {
   implicit val reader = Json.reads[UserData]
-  implicit val writes = Json.writes[UserData]
+  implicit val writer = Json.writes[UserData]
 
 }
 class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
@@ -32,19 +32,22 @@ class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
   def username = column[String]("username")
   def password = column[String]("password")
   def email = column[String]("email")
-  def created_at = column[Option[Int]]("created_at")
-  def updated_at = column[Option[Int]]("updated_at")
+  def avatar = column[String]("avatar")
+  def holidayRemaining = column[Float]("holiday_remaining")
+  def status = column[Int]("status")
+  def created_at = column[Option[Long]]("created_at")
+  def updated_at = column[Option[Long]]("updated_at")
   def created_by = column[Option[Int]]("created_by")
   def updated_by = column[Option[Int]]("updated_by")
   override def * =
-    (id, username, password, email, created_at, updated_at, created_by, updated_by) <>((UserData.apply _).tupled, UserData.unapply)
+    (id, username, password, email, avatar, holidayRemaining, status, created_at, updated_at, created_by, updated_by) <>((UserData.apply _).tupled, UserData.unapply)
 }
 
 /***/
-case class UserForm(var username: String, password: String, email: String)
+case class UserForm(var username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int)
 object UserForm {
   implicit val reader = Json.reads[UserForm]
-  implicit val writes = Json.writes[UserForm]
+  implicit val writer = Json.writes[UserForm]
 
 }
 class UserFormDef(tag: Tag) extends Table[UserForm](tag, "users") {
@@ -52,8 +55,11 @@ class UserFormDef(tag: Tag) extends Table[UserForm](tag, "users") {
   def username = column[String]("username")
   def password = column[String]("password")
   def email = column[String]("email")
+  def avatar = column[String]("avatar")
+  def holidayRemaining = column[Float]("holiday_remaining")
+  def status = column[Int]("status")
   override def * =
-    (username, password, email) <> ((UserForm.apply _).tupled, UserForm.unapply)
+    (username, password, email, avatar, holidayRemaining, status) <> ((UserForm.apply _).tupled, UserForm.unapply)
 }
 
 /***/
@@ -117,9 +123,8 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
   def insert(userForm: UserForm): Future[Int] = {
-    val result : UserData = new UserData(1,userForm.username,userForm.password,userForm.email,Some((System.currentTimeMillis()).toInt),Some(1),Some(1),Some(1))
+    val result : UserData = new UserData(1,userForm.username,userForm.password,userForm.email,userForm.avatar,userForm.holidayRemaining,userForm.status,Some(System.currentTimeMillis()),Some(1),Some(1),Some(1))
     db.run(UserTable += result)
-    Future(1)
   }
 
   def delete(userId: Int) ={
@@ -129,6 +134,5 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   def update(userData: UserData)={
     val q = UserTable.filter(_.id === userData.id).update(userData)
     db.run(q)
-    Future(1)
   }
 }

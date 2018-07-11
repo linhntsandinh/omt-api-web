@@ -15,6 +15,7 @@ GET     /restApi                 controllers.RestApiController.getName
 GET     /user/delete/:id          controllers.UserController.delete(id: Int)
 GET     /userrole/delete/:id          controllers.UserRoleController.delete(id: Int)
 GET     /userrole/deletebyuserid/:id          controllers.UserRoleController.deleteByUserId(id: Int)
+GET     /absence/load/:id          controllers.AbsenceApplicationController.load(id: Int)
 +nocsrf
 POST     /user/insert                    controllers.UserController.insert
 +nocsrf
@@ -23,6 +24,8 @@ POST     /user/update                    controllers.UserController.update
 POST     /user/login                    controllers.UserController.login
 +nocsrf
 POST     /userole/insert                controllers.UserRoleController.insert
++nocsrf
+POST     /absence/insert                controllers.AbsenceApplicationController.insert
 GET     /*file                      controllers.HomeController.assetOrDefault(file)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

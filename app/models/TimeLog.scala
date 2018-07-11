@@ -11,7 +11,7 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 
 class TimeLog {
-  case class TimeLogData(id: Int, userId: Int, date: Int, startTime: Int, endTime: Int, deviceInfo:String, updated_at: Option[Int], update_by: Option[Int], created_by: Option[Int], updated_by: Option[Int])
+  case class TimeLogData(id: Int, userId: Int, date: Int, startTime: Int, endTime: Int, deviceInfo:String, updated_at: Option[Long], created_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
   object TimeLogData {
     implicit val reader = Json.reads[TimeLogData]
     implicit val writes = Json.writes[TimeLogData]
@@ -24,8 +24,8 @@ class TimeLog {
     def startTime = column[Int]("start_time")
     def endTime = column[Int]("end_time")
     def deviceInfo = column[String]("device_info")
-    def created_at = column[Option[Int]]("created_at")
-    def updated_at = column[Option[Int]]("updated_at")
+    def created_at = column[Option[Long]]("created_at")
+    def updated_at = column[Option[Long]]("updated_at")
     def created_by = column[Option[Int]]("created_by")
     def updated_by = column[Option[Int]]("updated_by")
     override def * =

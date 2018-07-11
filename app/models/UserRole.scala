@@ -4,10 +4,13 @@ package models
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
+import play.api.mvc.Result
+import utils.JS
 
 import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
+import utils.JS.OK
 
 /***/
 case class UserRoleData(id: Int, userId: Int, roleId: Int)
@@ -49,15 +52,27 @@ class UserRole @Inject() (protected val dbConfigProvider: DatabaseConfigProvider
 
   private val UserRoleData = TableQuery[UserRoleTableDef]
 
-  def insert(userRoleForm: UserRoleForm): Future[String] = {
-    val q = UserRole.filter(_.roleId === userRoleForm.roleId).filter(_.userId=== userRoleForm.userId).result
+  def insert(userRoleForm: UserRoleForm): Future[Result] = {
+    val q = ((UserRole.filter(_.roleId === userRoleForm.roleId)).filter(_.userId === userRoleForm.userId)).result
     val rs = db.run {
       q
     }
-    db.run(UserRole += userRoleForm).map {
-      res => "User successfully added"
-    }.recover {
-      case ex: Exception => ex.getCause.getMessage
+    rs.map {
+      list => {
+        list.size match {
+          case 0 => {
+            db.run(UserRole += userRoleForm).map {
+              res => "User successfully added"
+            }.recover {
+              case ex: Exception => ex.getCause.getMessage
+            }
+            OK("value" -> "sucess!!")
+          }
+          case _ => {
+            OK("value" -> "existed")
+          }
+        }
+      }
     }
   }
   def deleteByUserId(userId: Int): Future[Int] = {
