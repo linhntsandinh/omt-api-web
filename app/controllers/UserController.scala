@@ -1,4 +1,5 @@
 package controllers
+
 import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import be.objectify.deadbolt.scala.DeadboltActions
@@ -15,29 +16,29 @@ import utils.JS
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UserController  @Inject() (deadbolt: DeadboltActions, actorSystem: ActorSystem, userService: UserService, cc: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
+class UserController @Inject()(deadbolt: DeadboltActions, actorSystem: ActorSystem, userService: UserService, cc: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
 
   def login = Action.async(parse.json[LoginForm]) { req =>
     userService.login(req.body)
   }
 
-  def delete (id: Int)= Action.async{
+  def delete(id: Int) = Action.async {
     userService.delete(id)
-      Future(JS.OK("value"->"delete Success!!"))
+    Future(JS.OK("value" -> "delete Success!!"))
   }
 
 
-  def update = Action.async(parse.json[UserData]){request=>
+  def update = Action.async(parse.json[UserData]) { request =>
     userService.update(request.body)
-    Future(JS.OK("value"->"update Success!!"))
+    Future(JS.OK("value" -> "update Success!!"))
   }
 
   def index = deadbolt.Restrict(List(Array("admin")))() { authRequest =>
     val x = authRequest.session
-      Future(Ok(views.html.user()))
+    Future(Ok(views.html.user()))
   }
 
-  def insert =Action.async(parse.json[UserForm]) {request =>
+  def insert = Action.async(parse.json[UserForm]) { request =>
     val x = userService.insert(request.body)
 
     x.onComplete {

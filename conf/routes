@@ -4,29 +4,45 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.home
+GET         /                                   controllers.HomeController.home
 # An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
+GET         /count                              controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+GET         /message                            controllers.AsyncController.message
 
-GET     /user                    controllers.UserController.index
-GET     /restApi                 controllers.RestApiController.getName
-GET     /user/delete/:id          controllers.UserController.delete(id: Int)
-GET     /userrole/delete/:id          controllers.UserRoleController.delete(id: Int)
-GET     /userrole/deletebyuserid/:id          controllers.UserRoleController.deleteByUserId(id: Int)
-GET     /absence/load/:id          controllers.AbsenceApplicationController.load(id: Int)
+GET         /user                               controllers.UserController.index
+GET         /restApi                            controllers.RestApiController.getName
+GET         /user/delete/:id                    controllers.UserController.delete(id: Int)
+GET         /userrole/delete/:id                controllers.UserRoleController.delete(id: Int)
+GET         /userrole/deletebyuserid/:id        controllers.UserRoleController.deleteByUserId(id: Int)
+GET         /absence/load/:id                   controllers.AbsenceApplicationController.load(id: Int)
 +nocsrf
-POST     /user/insert                    controllers.UserController.insert
+POST        /user/insert                        controllers.UserController.insert
 +nocsrf
-POST     /user/update                    controllers.UserController.update
+POST        /user/update                        controllers.UserController.update
 +nocsrf
-POST     /user/login                    controllers.UserController.login
+POST        /user/login                         controllers.UserController.login
 +nocsrf
-POST     /userole/insert                controllers.UserRoleController.insert
+POST        /userole/insert                     controllers.UserRoleController.insert
 +nocsrf
-POST     /absence/insert                controllers.AbsenceApplicationController.insert
-GET     /*file                      controllers.HomeController.assetOrDefault(file)
+POST        /absence/insert                     controllers.AbsenceApplicationController.insert
+
+# Profile:
++nocsrf
+POST        /profile/insert                     controllers.ProfileController.insert
++nocsrf
+POST        /profile/update                     controllers.ProfileController.update
+GET         /profile/delete/:id                 controllers.ProfileController.delete(id: Int)
+
+# Timelogs:
++nocsrf
+POST        /timelog/insert                     controllers.TimelogController.insert
++nocsrf
+POST        /timelog/update                     controllers.TimelogController.update
+GET         /timelog/delete/:id                 controllers.TimelogController.delete(id: Int)
+
+
+GET         /*file                              controllers.HomeController.assetOrDefault(file)
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)
 

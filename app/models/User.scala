@@ -123,7 +123,7 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
   def insert(userForm: UserForm): Future[Int] = {
-    val result : UserData = new UserData(1,userForm.username,userForm.password,userForm.email,userForm.avatar,userForm.holidayRemaining,userForm.status,Some(System.currentTimeMillis()),Some(1),Some(1),Some(1))
+    val result : UserData = new UserData(1,userForm.username,userForm.password,userForm.email,userForm.avatar,userForm.holidayRemaining,userForm.status,Some(System.currentTimeMillis() / 1000),Some(1),Some(1),Some(1))
     db.run(UserTable += result)
   }
 
