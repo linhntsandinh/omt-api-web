@@ -122,8 +122,8 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     }
   }
 
-  def insert(result: UserData): Future[Int] = {
-    db.run(UserTable += result)
+  def insert(userData: UserData): Future[Int] = {
+    db.run(UserTable += userData)
   }
 
   def delete(userId: Int) ={
