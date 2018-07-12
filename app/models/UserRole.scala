@@ -81,4 +81,8 @@ class UserRole @Inject() (protected val dbConfigProvider: DatabaseConfigProvider
   def delete(userRoleId: Int): Future[Int] = {
     db.run(UserRoleData.filter(_.id === userRoleId).delete)
   }
+  def update(userRoleData: UserRoleData)={
+    val q = UserRoleData.filter(_.id === userRoleData.id).update(userRoleData)
+    db.run(q)
+  }
 }

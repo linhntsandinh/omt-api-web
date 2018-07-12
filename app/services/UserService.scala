@@ -18,7 +18,10 @@ class UserService @Inject() (user: User) {
 //  def all(): Future[Seq[UserFormData]] = db.run(Users.result)
 
   def delete(id: Int): Future[Int] = user.delete(id)
-  def insert(userForm: UserForm): Future[Int] = user.insert(userForm)
+  def insert(userForm: UserForm): Future[Int] = {
+    val result : UserData = new UserData(1,userForm.username,userForm.password,userForm.email,userForm.avatar,userForm.holidayRemaining,userForm.status,Some(System.currentTimeMillis()/1000),Some(1),Some(1),Some(1))
+    user.insert(result)
+  }
   def update(userData: UserData): Future[Int] = user.update(userData)
 
 

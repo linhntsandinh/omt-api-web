@@ -23,8 +23,11 @@ class AbsenceApplicationService @Inject() (absence : AbsenceApplications){
     }
   }
   def insert(absenceApplicationsForm: AbsenceApplicationsForm): Future[Int] = {
-    val result : AbsenceApplicationsData= new AbsenceApplicationsData(1,absenceApplicationsForm.reasonId, absenceApplicationsForm.description, absenceApplicationsForm.startTime, absenceApplicationsForm.endTime, absenceApplicationsForm.status, absenceApplicationsForm.userId, absenceApplicationsForm.totalTime,Some(11111),Some(1),Some(1),Some(1))
+    val result : AbsenceApplicationsData= new AbsenceApplicationsData(1,absenceApplicationsForm.reasonId, absenceApplicationsForm.description, absenceApplicationsForm.startTime, absenceApplicationsForm.endTime, absenceApplicationsForm.status, absenceApplicationsForm.userId, absenceApplicationsForm.totalTime,Some(System.currentTimeMillis()/1000),Some(1),Some(1),Some(1))
 
     absence.insert(result)
   }
+  def update(absenceApplicationsData: AbsenceApplicationsData): Future[Int] = absence.update(absenceApplicationsData)
+
+  def delete(id: Int): Future[Int] = absence.delete(id)
 }

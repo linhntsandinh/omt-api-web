@@ -26,4 +26,13 @@ class AbsenceApplicationController@Inject() (deadbolt: DeadboltActions, actorSys
 
     Future(Redirect(routes.UserController.index))
   }
+  def update = Action.async(parse.json[AbsenceApplicationsData]){request=>
+    absenceapplicationService.update(request.body)
+    Future(JS.OK("value"->"update Success!!"))
+  }
+  def delete (id: Int)= Action.async{
+    absenceapplicationService.delete(id)
+    Future(JS.OK("value"->"delete Success!!"))
+  }
+
 }

@@ -14,9 +14,13 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
                                                (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
   private val AbsenceTable = TableQuery[AbsenceApplicationsTableDef]
+  private val AbsenceReasonsTable = TableQuery[AbsenceReasonsTableDef]
 
-  def load(userId: Int): Future[Option[ListBuffer[AbsenceApplicationsData]]] = {
-    val q = AbsenceTable.filter(_.userId === userId).result
+  def load(userId: Int): Future[Option[ListBuffer[AbsenceApplicationsLoad]]] = {
+    val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
+    val q = (AbsenceTable join AbsenceReasonsTable).on(_.reasonId === _.id).filter(_._1.userId === userId).result
+
+    //
     val rs = db.run {
       q
     }
@@ -25,10 +29,10 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
         list.size match {
           case 0 => None
           case _ => {
-            val listAbsence = ListBuffer.empty[AbsenceApplicationsData]
-            list.foreach {
+            list.foreach{
               item => {
-                listAbsence += item
+                val itemLoad : AbsenceApplicationsLoad = new AbsenceApplicationsLoad(item._1.id,item._2.title,item._1.description,"dsa",12,12,item._1.status)
+                listAbsence += itemLoad
               }
             }
             Some(listAbsence)
@@ -37,9 +41,16 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       }
     }
   }
-
   def insert(result: AbsenceApplicationsData): Future[Int] = {
-    db.run(AbsenceTable += result)  }
+    db.run(AbsenceTable += result)
+  }
+  def delete(Id: Int): Future[Int] = {
+    db.run(AbsenceTable.filter(_.id === Id).delete)
+  }
+  def update(absenceApplicationsData: AbsenceApplicationsData)={
+    val q = AbsenceTable.filter(_.id === absenceApplicationsData.id).update(absenceApplicationsData)
+    db.run(q)
+  }
 }
   case class AbsenceApplicationsLoad(id: Int, resonTitle: String, from: String,to: String,startTime :Int,absenceDay :Int,statuse :Int)
   object AbsenceApplicationsLoad {
@@ -66,7 +77,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
     def created_by = column[Option[Int]]("created_by")
     def updated_by = column[Option[Int]]("updated_by")
     override def * =
-      (id, reasonId, description, startTime, endTime, status, userId, totalTime, created_at, updated_at, created_by, updated_by) <>((AbsenceApplicationsData.apply _).tupled, AbsenceApplicationsData.unapply)
+      (id, reasonId, description, startTime, endTime, status, userId, totalTime, created_at, updated_at, updated_by, created_by) <>((AbsenceApplicationsData.apply _).tupled, AbsenceApplicationsData.unapply)
   }
 
   case class AbsenceApplicationsForm(reasonId: Int, description: String, startTime: Int, endTime: Int, status:Int, userId:Int, totalTime:Float)
@@ -74,7 +85,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
     implicit val reader = Json.reads[AbsenceApplicationsForm]
     implicit val writes = Json.writes[AbsenceApplicationsForm]
   }
-  class TimeLogFormTableDef(tag: Tag) extends Table[AbsenceApplicationsForm](tag, "absence_applications") {
+  class AbsenceApplicationFormTableDef(tag: Tag) extends Table[AbsenceApplicationsForm](tag, "absence_applications") {
     def reasonId = column[Int]("reason_id")
     def description = column[String]("description")
     def startTime = column[Int]("start_time")

@@ -3,7 +3,7 @@ package controllers
 import akka.actor.ActorSystem
 import be.objectify.deadbolt.scala.DeadboltActions
 import javax.inject.Inject
-import models.{UserForm, UserRoleForm}
+import models.{UserForm, UserRoleData, UserRoleForm}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.{UserRoleService, UserService}
 import utils.JS
@@ -23,6 +23,11 @@ class UserRoleController  @Inject()(deadbolt: DeadboltActions, actorSystem: Acto
 
 
     Future(Redirect(routes.UserController.index))
+  }
+
+  def update = Action.async(parse.json[UserRoleData]){request=>
+    userRoleService.update(request.body)
+    Future(JS.OK("value"->"update Success!!"))
   }
   def delete (id: Int)= Action.async{
     userRoleService.delete(id)
