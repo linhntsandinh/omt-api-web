@@ -1,5 +1,7 @@
 package models
 
+import java.sql.Date
+
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
@@ -9,13 +11,7 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 
 
-case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Long, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: Long, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Long], updated_by: Option[Long])
-
-object ProfileData {
-  implicit val reader = Json.reads[ProfileData]
-  implicit val writer = Json.writes[ProfileData]
-
-}
+case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Date, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: Date, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Long], updated_by: Option[Long])
 
 class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
   def id = column[Option[Int]]("id", O.PrimaryKey, O.AutoInc)
@@ -26,7 +22,7 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
 
   def phone_number = column[String]("phone_number")
 
-  def birth_date = column[Long]("birth_date")
+  def birth_date = column[Date]("birth_date")
 
   def address = column[String]("address")
 
@@ -36,7 +32,7 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
 
   def status = column[Int]("status")
 
-  def join_date = column[Long]("join_date")
+  def join_date = column[Date]("join_date")
 
   def gender = column[Int]("gender")
 
@@ -53,7 +49,7 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
 }
 
 
-case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Long, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: Long, gender: Int)
+case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int)
 object ProfileForm {
   implicit val reader = Json.reads[ProfileForm]
   implicit val writer = Json.writes[ProfileForm]
@@ -70,7 +66,7 @@ class ProfileFormDef(tag: Tag) extends Table[ProfileForm](tag, "profiles") {
 
   def phone_number = column[String]("phone_number")
 
-  def birth_date = column[Long]("birth_date")
+  def birth_date = column[String]("birth_date")
 
   def address = column[String]("address")
 
@@ -80,7 +76,7 @@ class ProfileFormDef(tag: Tag) extends Table[ProfileForm](tag, "profiles") {
 
   def status = column[Int]("status")
 
-  def join_date = column[Long]("join_date")
+  def join_date = column[String]("join_date")
 
   def gender = column[Int]("gender")
 
