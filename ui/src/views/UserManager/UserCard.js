@@ -15,20 +15,20 @@ class FormCard extends Component {
   }
 
   getBadge = (status) => {
-    return status === '0' ? 'secondary' :
-      status === '1' ? 'success' :
+    return status === '0' ? 'success' :
+      status === '1' ? 'warning' :
         'danger'
   }
 
   setStatus = (status) => {
-    return status === '0' ? 'Chưa duyệt' :
-      status === '1' ? 'Đã duyệt' :
-        'Không duyệt'
+    return status === '0' ? 'Đi làm' :
+      status === '1' ? 'Nghỉ phép' :
+        'Nghỉ làm'
   }
 
   render() {
     const user = this.props.user;
-    const userLink = `#/usersmanage/${user.user_id}`
+    const userLink = `#/users/${user.user_id}`
 
     return (
       <tr onDoubleClick={() => {

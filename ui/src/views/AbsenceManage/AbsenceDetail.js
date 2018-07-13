@@ -34,19 +34,39 @@ import {
     Row,
 } from 'reactstrap';
 import {getData, formEncode} from '../../DataUser'
-import * as Datetime from 'react-datetime';
 
-var yesterday = Datetime.moment().subtract(1, 'day');
-var valid1 = function (current) {
-    return current.day() !== 0 && current.day() !== 6;
-};
+function Optioncard(data) {
+    let value = data.value.title;
+    return (
+        <option value={data.value.id}>{value}</option>
+    )
+}
+
+function curentDate() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds()
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    var today1 = dd + '/' + mm + '/' + yyyy + '   ' + h + ':' + m + ':' + s;
+
+    return today1;
+}
 
 
-class Absence extends Component {
+class AbsenceDetail extends Component {
 
     constructor(props) {
         super(props);
-        console.log(yesterday)
         this.state = {
             title_form: [],
             receiver: [],
@@ -55,15 +75,26 @@ class Absence extends Component {
             job_position: '',
             job_title: '',
             today: '',
-            from_: '',
-            to: '',
+            from_date: '',
+            from_time: '',
+            to_date: '',
+            to_time: '',
             reason: '',
             rec: '',
-            fadeIn: false,
-
+            today: ''
         }
 
     }
+
+    handleChange(e) {
+        console.log(e.target.value);
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    Send(e) {
+        console.log(this.state);
+    }
+
     componentDidMount() {
         this.setState({
             today: curentDate()
@@ -128,38 +159,9 @@ class Absence extends Component {
         )
 
     }
-    handleChange(e) {
-        this.setState({[e.target.name]: e.target.value});
-    }
-    handleChangeDateFrom( e) {
-        if (e._d) {
-            this.setState({from: e._d.getTime()});
-            this.setState({fadeIn:false});
-        }
-        if(e._d.getTime() >=this.state.to){
-            this.setState({fadeIn:true});
-        }
-    }
-    handleChangeDateTo( e) {
-        if (e._d) {
-            this.setState({to: e._d.getTime()});
-            this.setState({fadeIn:false});
-        }
-        if(this.state.from >=e._d.getTime()){
-            this.setState({fadeIn:true});
-        }
-    }
-    Send(e) {
-        console.log(this.state);
-    }
+
+
     render() {
-        const {
-            title_form, receiver, titleform, username, job_position, job_title, today,
-            from, to, reason, rec,  fadeIn
-        } = this.state;
-        var valid2 = function (current, from) {
-            return current.isSameOrAfter(from) && current.day() !== 0 && current.day() !== 6;
-        };
         return (
             <Card>
                 <CardHeader>
@@ -174,10 +176,10 @@ class Absence extends Component {
                                     <Label htmlFor="select"><h3>Đơn xin</h3></Label>
                                 </Col>
                                 <Col xs="12" md="4">
-                                    <Input value={titleform} onChange={(e) => this.handleChange(e)}
+                                    <Input value={this.state.titleform} onChange={(e) => this.handleChange(e)}
                                            type="select"
                                            name="titleform" id="selectLg" bsSize="small">
-                                        {title_form.map((value, index) =>
+                                        {this.state.title_form.map((value, index) =>
                                             <Optioncard key={index} index={index} value={value}/>
                                         )}
                                     </Input>
@@ -188,7 +190,7 @@ class Absence extends Component {
                                     <Label htmlFor="select"><h5>Tôi tên là :</h5></Label>
                                 </Col>
                                 <Col>
-                                    <Label htmlFor="select">{username}</Label>
+                                    <Label htmlFor="select">{this.state.username}</Label>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -196,13 +198,13 @@ class Absence extends Component {
                                     <Label htmlFor="select"><h5>Bộ phận :</h5></Label>
                                 </Col>
                                 <Col md="2">
-                                    <Label htmlFor="select">{job_title}</Label>
+                                    <Label htmlFor="select">{this.state.job_title}</Label>
                                 </Col>
                                 <Col md="2">
                                     <Label htmlFor="select"><h5>Chức vụ :</h5></Label>
                                 </Col>
                                 <Col md="2">
-                                    <Label htmlFor="select">{job_position}</Label>
+                                    <Label htmlFor="select">{this.state.job_position}</Label>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -210,7 +212,7 @@ class Absence extends Component {
                                     <Label htmlFor="select"><h5>Hôm nay là ngày :</h5></Label>
                                 </Col>
                                 <Col>
-                                    <Label>{today}</Label>
+                                    <Label>{this.state.today}</Label>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -218,24 +220,30 @@ class Absence extends Component {
                                     <Label htmlFor="date-input">Từ :</Label>
                                 </Col>
                                 <Col xs="12" md="4">
-                                    <Datetime
-                                        isValidDate={valid1} value={from} inputProps={{id: "from"}}
-                                        onChange={(e) => this.handleChangeDateFrom( e)}/>
-                                    {fadeIn ?
-                                        <p className="text-danger"> Thời gian không hợp lệ</p> : null}
-
+                                    <Input value={this.state.from_date} name="from_date"
+                                           onChange={(e) => this.handleChange(e)}
+                                           type="date" placeholder="date"/>
                                 </Col>
+                                <Col xs="12" md="3">
+                                    <Input value={this.state.from_time} name="from_time"
+                                           onChange={(e) => this.handleChange(e)}
+                                           type="time" placeholder="time"/>
+                                </Col>
+
                             </FormGroup>
                             <FormGroup row>
                                 <Col md="2">
                                     <Label htmlFor="date-input">Đến :</Label>
                                 </Col>
                                 <Col xs="12" md="4">
-                                    <Datetime isValidDate={(e) => valid2(e, from)} value={to} inputProps={{id:"to"}}
-                                              onChange={(e) => this.handleChangeDateTo(e)}/>
-                                    {fadeIn ?
-                                        <p className="text-danger"> Thời gian không hợp lệ</p> : null}
-
+                                    <Input value={this.state.to_date} name="to_date"
+                                           onChange={(e) => this.handleChange(e)} type="date"
+                                           placeholder="date"/>
+                                </Col>
+                                <Col xs="12" md="3">
+                                    <Input value={this.state.to_time} name="to_time"
+                                           onChange={(e) => this.handleChange(e)} type="time"
+                                           placeholder="time"/>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -243,7 +251,7 @@ class Absence extends Component {
                                     <Label htmlFor="textarea-input">Lý Do</Label>
                                 </Col>
                                 <Col xs="12" md="8">
-                                    <Input value={reason} onChange={(e) => this.handleChange(e)}
+                                    <Input value={this.state.reason} onChange={(e) => this.handleChange(e)}
                                            type="textarea"
                                            name="reason" id="textarea-input" rows="5"
                                            placeholder="Content..."/>
@@ -254,10 +262,10 @@ class Absence extends Component {
                                     <Label htmlFor="select">Người nhận</Label>
                                 </Col>
                                 <Col xs="12" md="4">
-                                    <Input value={rec} onChange={(e) => this.handleChange(e)} type="select"
+                                    <Input value={this.state.rec} onChange={(e) => this.handleChange(e)} type="select"
                                            name="rec"
                                            id="selectLg" bsSize="small">
-                                        {receiver.map((value, index) =>
+                                        {this.state.receiver.map((value, index) =>
                                             <Optioncard key={index} index={index} value={value}/>
                                         )}
                                     </Input>
@@ -278,31 +286,4 @@ class Absence extends Component {
 
 }
 
-function Optioncard(data) {
-    let value = data.value.title;
-    return (
-        <option value={data.value.id}>{value}</option>
-    )
-}
-
-function curentDate() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds()
-    if (dd < 10) {
-        dd = '0' + dd
-    }
-
-    if (mm < 10) {
-        mm = '0' + mm
-    }
-    var today1 = dd + '/' + mm + '/' + yyyy + '   ' + h + ':' + m + ':' + s;
-
-    return today1;
-}
-
-export default Absence;
+export default AbsenceDetail;

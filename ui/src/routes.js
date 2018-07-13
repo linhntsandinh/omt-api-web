@@ -190,6 +190,10 @@ const Absence = Loadable({
     loader: () => import('./views/Absence/Absence'),
     loading: Loading,
 });
+const AbsenceManage = Loadable({
+    loader: () => import('./views/AbsenceManage/AbsenceManage'),
+    loading: Loading,
+});
 
 
 
@@ -240,6 +244,8 @@ const routes = [
   { path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User },
     { path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping },
     { path: '/absence', exact: true, name: 'Viết đơn', component: Absence },
+    { path: '/absencemanage', exact: true, name: 'List đơn', component: AbsenceManage },
+
 
 ];
 

@@ -317,10 +317,10 @@ class Users extends Component {
               <tr>
                 <th  width="5%">STT</th>
                 <th width="10%" className="text-center"><i className="icon-people"></i></th>
-                <th  width="20%">Họ và Tên</th>
+                <th  width="15%">Họ và Tên</th>
                 <th  width="10%"></th>
                 <th  width="20%">Email</th>
-                <th  width="10%" className="text-lg-center">Số điện thoại</th>
+                <th  width="15%" className="text-lg-center">Số điện thoại</th>
                 <th  width="15%">Chuyên môn</th>
                 <th  width="10%">Status</th>
               </tr>

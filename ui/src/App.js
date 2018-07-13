@@ -13,7 +13,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 import './scss/style.css'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
-
+import '../node_modules/react-datetime/css/react-datetime.css'
 // Containers
 import {DefaultLayout} from './containers';
 // Pages

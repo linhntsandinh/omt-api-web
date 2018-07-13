@@ -9940,10 +9940,38 @@ body {
   right: auto; }
 
 table.private-table tr:hover {
-  background: #fff858; }
+  background: #ffed00; }
 
 .main-avatar {
   width: 70%; }
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  color: #fff;
+  background: linear-gradient(to bottom right, #002bff, #ff00d9); }
+
+.lable_search {
+  width: 100%;
+  margin-bottom: 2px; }
+
+.sidebar .nav-link .nav-icon {
+  display: inline-block;
+  width: 1.09375rem;
+  margin: 0 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: #fff;
+  text-align: center; }
+
+.sidebar .nav-link:hover .nav-icon {
+  color: #fff; }
+
+.icon-sort {
+  float: right; }
+
+body {
+  background: #f6faff; }
 
 html body .app.flex-row.align-items-center {
   height: 100vh; }
