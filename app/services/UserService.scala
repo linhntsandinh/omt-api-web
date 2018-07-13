@@ -10,17 +10,29 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class UserService @Inject() (user: User) {
-
-
-
-
-//  def all(): Future[Seq[UserFormData]] = db.run(Users.result)
+class UserService @Inject()(user: User) {
 
   def delete(id: Int): Future[Int] = user.delete(id)
-  def insert(userForm: UserForm): Future[Int] = user.insert(userForm)
-  def update(userData: UserData): Future[Int] = user.update(userData)
 
+  def insert(userForm: UserForm): Future[Int] = {
+    val userData: UserData = new UserData(null, userForm.username, userForm.password, userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), Some(1), Some(1))
+    user.insert(userData)
+  }
+
+  def update(userForm: UserForm): Future[Int] = {
+    val userData: UserData = new UserData(userForm.id,
+      userForm.username,
+      userForm.password,
+      userForm.email,
+      userForm.avatar,
+      userForm.holidayRemaining,
+      userForm.status,
+      null,
+      Some(System.currentTimeMillis() / 1000),
+      Some(1),
+      Some(1))
+    user.update(userData)
+  }
 
   def login(loginForm: LoginForm): Future[Result] = {
 
