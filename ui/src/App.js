@@ -14,6 +14,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import './scss/style.css'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import '../node_modules/react-datetime/css/react-datetime.css'
+import '../node_modules/react-select/dist/react-select.css';
 // Containers
 import {DefaultLayout} from './containers';
 // Pages
@@ -28,6 +29,7 @@ class App extends Component {
         this.state = {
             isLogin: localStorage.getItem('Login')
         }
+
     }
     HandleChange() {
         this.setState({

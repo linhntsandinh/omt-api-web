@@ -29,8 +29,10 @@ import {
     FormGroup,
     Label,
 } from 'reactstrap';
+import Select from 'react-select';
 import FormCard from "./FormCard"
 import {formEncode} from '../../DataUser'
+
 
 function Pagin(data) {
     let p = data.parent;
@@ -76,7 +78,7 @@ function More(data) {
                                     </InputGroupText>
                                 </Row>
                             </Col>
-                            <Col md ="8">
+                            <Col md="8">
                                 <Row>
                                     <Col>
                                         <Input className="lable_search" name="reciever"
@@ -150,7 +152,7 @@ class AbsenceManage extends Component {
             reason: '',
             start: '',
             total: '',
-            limit: 6,
+            limit: 10,
             orderby: '',
             ordervalue: '',
             length: 20,
@@ -193,11 +195,13 @@ class AbsenceManage extends Component {
             }
         ).then((result) => {
                 this.setState({length: result[0]['count']});
+
             }
         )
+
     }
 
-    getData(check) {
+    getData() {
         console.log("getData");
         fetch('https://daivt.000webhostapp.com/get_profile.php', {
             method: 'POST',
@@ -211,7 +215,7 @@ class AbsenceManage extends Component {
                     start: this.state.start,
                     total: this.state.total,
                     limit: this.state.limit,
-                    offset: ((check - 1) * this.state.limit)
+                    offset: ((this.state.check - 1) * this.state.limit)
                 })
 
         }).then(function (response) {
@@ -238,27 +242,33 @@ class AbsenceManage extends Component {
     onLeft() {
         if (this.state.check > 1 && this.state.pagin !== this.state.check) {
             this.setState(
-                {check: this.state.check - 1}
+                {check: this.state.check - 1}, function () {
+                    this.getData();
+                }
             )
-            this.getData(this.state.check - 1);
+
         }
         else if (this.state.check > 1 && this.state.pagin === this.state.check) {
             this.setState(
                 {
                     pagin: this.state.pagin - 5,
                     check: this.state.check - 1
+                }, function () {
+                    this.getData()
                 }
             )
-            this.getData(this.state.check - 1);
         }
     }
 
     onRight() {
-
         if (this.state.check < Math.ceil(this.state.length / this.state.limit)) {
             console.log("Dm");
             this.setState(
-                {check: this.state.check + 1}
+                {
+                    check: this.state.check + 1
+                }, function () {
+                    this.getData();
+                }
             )
             if (this.state.pagin + 4 === this.state.check) {
                 this.setState(
@@ -267,7 +277,7 @@ class AbsenceManage extends Component {
                     }
                 )
             }
-            this.getData(this.state.check + 1);
+
         }
 
     }
@@ -275,17 +285,35 @@ class AbsenceManage extends Component {
     handleClick(value) {
         this.setState({
             check: value
+        }, function () {
+            this.getData();
         })
-        this.getData(value);
+
     }
+
 
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
 
+    handleChangeLimit(e) {
+        // console.log(e)
+        if (e) {
+            this.setState({limit: e.value}, function () {
+                this.getData();
+            });
+        }
+        else {
+            this.setState({limit: 10}, function () {
+                this.getData();
+            });
+        }
+    }
+
     handleSearch(e) {
-        this.getData(1);
-        this.setState({check: 1, pagin: 1});
+        this.setState({check: 1, pagin: 1}, function () {
+            this.getData();
+        });
     }
 
 
@@ -351,7 +379,7 @@ class AbsenceManage extends Component {
                                     <InputGroupAddon addonType="prepend">
                                         <Button size="sm" onClick={(e) => {
                                             if (search === true) {
-                                                this.setState({reason: '', reciever: '', start: '',total:''})
+                                                this.setState({reason: '', reciever: '', start: '', total: ''})
                                             }
                                             this.setState({search: !search})
                                         }} color="info"><i
@@ -428,20 +456,40 @@ class AbsenceManage extends Component {
                                                stt={index + (check - 1) * limit + 1}/>)}
                             </tbody>
                         </Table>
-                        <Pagination>
-                            <PaginationItem>
-                                <PaginationLink previous tag="button" onClick={(e) => this.onLeft(e)}></PaginationLink>
-                            </PaginationItem>
-                            {
-                                data_pagin.map((value, index) =>
-                                    <Pagin key={index} index={index} parent={this} pagin={pagin}
-                                           check={check}/>
-                                )
-                            }
-                            <PaginationItem>
-                                <PaginationLink next tag="button" onClick={(e) => this.onRight(e)}></PaginationLink>
-                            </PaginationItem>
-                        </Pagination>
+                        <Row>
+                            <Col md="9">
+                                <Pagination>
+                                    <PaginationItem>
+                                        <PaginationLink previous tag="button"
+                                                        onClick={(e) => this.onLeft(e)}></PaginationLink>
+                                    </PaginationItem>
+                                    {
+                                        data_pagin.map((value, index) =>
+                                            <Pagin key={index} index={index} parent={this} pagin={pagin}
+                                                   check={check}/>
+                                        )
+                                    }
+                                    <PaginationItem>
+                                        <PaginationLink next tag="button"
+                                                        onClick={(e) => this.onRight(e)}></PaginationLink>
+                                    </PaginationItem>
+                                </Pagination>
+                            </Col>
+                            <Col>
+                                <Select
+                                    name="limit"
+                                    value={limit}
+                                    onChange={(e) => this.handleChangeLimit(e)}
+                                    options={[
+                                        {value: 10, label: '10'},
+                                        {value: 20, label: '20'},
+                                        {value: 30, label: '30'},
+                                        {value: 40, label: '40'},
+                                        {value: 50, label: '50'},
+                                    ]}
+                                />
+                            </Col>
+                        </Row>
                     </CardBody>
                 </Card>
             </Col>
