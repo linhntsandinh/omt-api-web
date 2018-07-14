@@ -1,6 +1,4 @@
-/**
- * Created by Vu Tien Dai on 25/06/2018.
- */
+
 import React, {Component} from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
@@ -142,7 +140,7 @@ class Timekeeping extends Component {
         }
     }
 
-    componentDidMount() {
+    /*componentDidMount() {
         console.log("getAll");
         fetch('https://daivt.000webhostapp.com/get_profile.php', {
             method: 'POST',
@@ -174,7 +172,7 @@ class Timekeeping extends Component {
 
             }
         )
-    }
+    }*/
 
     getData(check) {
         console.log("getData");
@@ -368,18 +366,15 @@ class Timekeeping extends Component {
                                 <tr>
                                     <th  width="5%">STT</th>
                                     <th width="10%" className="text-center"><i className="icon-people"></i></th>
-                                    <th  width="20%">Họ và Tên</th>
-                                    <th  width="10%"></th>
-                                    <th  width="20%">Email</th>
-                                    <th  width="10%" className="text-lg-center">Số điện thoại</th>
-                                    <th  width="15%">Chuyên môn</th>
-                                    <th  width="10%">Status</th>
+                                    <th  width="20%">A</th>
+                                    <th  width="10%">B</th>
+                                    <th  width="20%">C</th>
+                                    <th  width="10%" className="text-lg-center">D</th>
+                                    <th  width="15%">E</th>
+                                    <th  width="10%">F</th>
                                 </tr>
                                 </thead>
-                                <tbody>{
-                                    this.state.data.map((user, index) =>
-                                        < UserCard key={index} user={user} stt={index+(this.state.check-1)*this.state.limit+1}/>)}
-                                </tbody>
+                                <tbody></tbody>
                             </Table>
                             <Pagination  >
                                 <PaginationItem>

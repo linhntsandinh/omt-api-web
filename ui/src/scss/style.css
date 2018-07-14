@@ -9939,16 +9939,18 @@ body {
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
+.app-header .navbar-nav .dropdown-menu-right {
+  right: auto; }
+
 html body .app.flex-row.align-items-center {
   height: 100vh; }
+
 #thuonghtavatar {
-  width: 60%;
-}
-#idtable{
-  margin-top:20px;
+  width: 60%; }
+
+#idtable {
+  margin-top: 20px;
 }
 
-
-#idavata {
-  width: 60%;
-  border-radius: 50%; }
+html body .app.flex-row.align-items-center {
+  height: 100vh; }
