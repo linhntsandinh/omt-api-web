@@ -145,7 +145,6 @@ class AbsenceManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
             id: '',
             writer: '',
             reciever: '',
@@ -153,19 +152,20 @@ class AbsenceManage extends Component {
             start: '',
             total: '',
             limit: 10,
+            length: 20,
             orderby: '',
             ordervalue: '',
-            length: 20,
+            data: [],
             search: false,
             sort: new Array(7).fill(0),
             pagin: 1,
             check: 1,
+            pagin_number:8
 
         }
     }
 
     componentDidMount() {
-        console.log("getAll");
         fetch('https://daivt.000webhostapp.com/get_profile.php', {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
@@ -202,7 +202,6 @@ class AbsenceManage extends Component {
     }
 
     getData() {
-        console.log("getData");
         fetch('https://daivt.000webhostapp.com/get_profile.php', {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
@@ -223,18 +222,6 @@ class AbsenceManage extends Component {
             }
         ).then((result) => {
                 this.setState({data: result});
-                console.log(result);
-            }
-        )
-    }
-
-    getLength() {
-        fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-                this.setState({length: result[0]['count']});
-                console.log(result[0]['count']);
             }
         )
     }
@@ -251,7 +238,7 @@ class AbsenceManage extends Component {
         else if (this.state.check > 1 && this.state.pagin === this.state.check) {
             this.setState(
                 {
-                    pagin: this.state.pagin - 5,
+                    pagin: this.state.pagin - this.state.pagin_number,
                     check: this.state.check - 1
                 }, function () {
                     this.getData()
@@ -262,7 +249,6 @@ class AbsenceManage extends Component {
 
     onRight() {
         if (this.state.check < Math.ceil(this.state.length / this.state.limit)) {
-            console.log("Dm");
             this.setState(
                 {
                     check: this.state.check + 1
@@ -270,10 +256,10 @@ class AbsenceManage extends Component {
                     this.getData();
                 }
             )
-            if (this.state.pagin + 4 === this.state.check) {
+            if (this.state.pagin + this.state.pagin_number-1 === this.state.check) {
                 this.setState(
                     {
-                        pagin: this.state.pagin + 5,
+                        pagin: this.state.pagin + this.state.pagin_number,
                     }
                 )
             }
@@ -291,20 +277,22 @@ class AbsenceManage extends Component {
 
     }
 
-
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
 
     handleChangeLimit(e) {
-        // console.log(e)
         if (e) {
-            this.setState({limit: e.value}, function () {
+            let check = Math.ceil(((this.state.limit * this.state.check)-this.state.limit+1) / e.value);
+            let pagin =Math.floor(((this.state.limit * this.state.check)-this.state.limit+1) / (e.value*this.state.pagin_number))*this.state.pagin_number+1 ;
+            console.log(this.state.check+"  "+this.state.pagin)
+            console.log(check+"  "+pagin)
+            this.setState({limit: e.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
         }
         else {
-            this.setState({limit: 10}, function () {
+            this.setState({limit: 10, check: 1, pagin: 1}, function () {
                 this.getData();
             });
         }
@@ -318,7 +306,6 @@ class AbsenceManage extends Component {
 
 
     handleSort(name, i, e) {
-        console.log(e.target.name);
         const newArray = this.state.sort.map((element, index) => {
             if (index === i) {
                 element = element + 1;
@@ -338,11 +325,11 @@ class AbsenceManage extends Component {
 
     render() {
         const {
-            check, data, writer, length, limit, pagin, search, sort
+            check, data, writer, length, limit, pagin, search, sort,pagin_number
         } = this.state
         const data_pagin = [];
         for (let i = 0; i < Math.ceil(length / limit); i++) {
-            if (i >= (pagin - 1) && i < pagin + 4 && data_pagin.length < 5)
+            if (i >= (pagin - 1) && i < pagin + pagin_number-1 && data_pagin.length < pagin_number)
                 data_pagin.push(i);
         }
         return (
@@ -393,9 +380,9 @@ class AbsenceManage extends Component {
                     </CardHeader>
 
                     <CardBody>
-                        <Table responsive>
+                        <Table responsive className="private-table">
                             <thead>
-                            <tr>
+                            <tr className="header-table text-center">
                                 <th width="6%" name="id"
                                     onClick={(e) => this.handleSort("id", 0, e)}>STT
                                     <a className="icon-sort">
@@ -451,8 +438,8 @@ class AbsenceManage extends Component {
                             </tr>
                             </thead>
                             <tbody>{
-                                data.map((user, index) =>
-                                    < FormCard key={index} user={user}
+                                data.map((absence, index) =>
+                                    < FormCard key={index} absence={absence}
                                                stt={index + (check - 1) * limit + 1}/>)}
                             </tbody>
                         </Table>

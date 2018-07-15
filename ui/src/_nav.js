@@ -20,7 +20,7 @@ export default {
     },  {
           name: 'List đơn',
           url: '/absencemanage',
-          icon: 'icon-pencil',
+          icon: 'cui-clipboard icons',
       },  {
           name: 'Viết đơn',
           url: '/absence',

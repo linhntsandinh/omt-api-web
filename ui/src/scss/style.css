@@ -9940,7 +9940,10 @@ body {
   right: auto; }
 
 table.private-table tr:hover {
-  background: #ffed00; }
+  background: #e4ffd3; }
+
+table.private-table tr.header-table th:hover {
+  background: #fffa2f; }
 
 .main-avatar {
   width: 70%; }

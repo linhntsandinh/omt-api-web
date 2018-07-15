@@ -31,7 +31,7 @@ class FormCard extends Component {
     const userLink = `#/users/${user.user_id}`
 
     return (
-      <tr onDoubleClick={() => {
+      <tr className="text-center" onDoubleClick={() => {
         document.location = userLink
       }} onMouseEnter={(e) => {
         if (this.state.show === false)
@@ -41,13 +41,13 @@ class FormCard extends Component {
           this.setState({show: false})
       }}>
         <td>{this.props.stt}</td>
-        <td className="text-center">
+        <td >
           <div className="avatar">
             <img src={'assets/img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
             <span className="avatar-status badge-success"></span>
           </div>
         </td>
-        <td><a href={userLink}><font color="0003FF">{user.full_name}</font></a></td>
+        <td ><a href={userLink}><font color="0003FF">{user.full_name}</font></a></td>
         <td>
           {this.state.show === true ?
           <i  className="icon-trash" onClick={()=>{console.log("Xoa nha")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;

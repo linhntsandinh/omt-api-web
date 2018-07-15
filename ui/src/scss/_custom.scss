@@ -1,6 +1,9 @@
 // Here you can add other styles
 table.private-table tr:hover{
-  background: #ffed00;
+  background: rgb(228, 255, 211);
+}
+table.private-table tr.header-table th:hover{
+  background: #fffa2f;
 }
 .main-avatar{
   width: 70%;

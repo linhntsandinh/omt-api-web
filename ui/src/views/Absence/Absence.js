@@ -48,7 +48,7 @@ class Absence extends Component {
         super(props);
         console.log(yesterday)
         this.state = {
-            title_form: [],
+            reasonTitle: [],
             receiver: [],
             titleform: '',
             username: getData('full_name'),
@@ -74,7 +74,7 @@ class Absence extends Component {
         ).then((result) => {
                 // console.log(result)
                 this.setState({
-                    title_form: result,
+                    reasonTitle: result,
                     titleform: result[0]['id']
                 })
             }
@@ -154,7 +154,7 @@ class Absence extends Component {
     }
     render() {
         const {
-            title_form, receiver, titleform, username, job_position, job_title, today,
+            reasonTitle, receiver, titleform, username, job_position, job_title, today,
             from, to, reason, rec,  fadeIn
         } = this.state;
         var valid2 = function (current, from) {
@@ -177,7 +177,7 @@ class Absence extends Component {
                                     <Input value={titleform} onChange={(e) => this.handleChange(e)}
                                            type="select"
                                            name="titleform" id="selectLg" bsSize="small">
-                                        {title_form.map((value, index) =>
+                                        {reasonTitle.map((value, index) =>
                                             <Optioncard key={index} index={index} value={value}/>
                                         )}
                                     </Input>
@@ -185,7 +185,7 @@ class Absence extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col md="2">
-                                    <Label htmlFor="select"><h5>Tôi tên là :</h5></Label>
+                                    <Label htmlFor="select"><h5>Họ và Tên :</h5></Label>
                                 </Col>
                                 <Col>
                                     <Label htmlFor="select">{username}</Label>
@@ -207,7 +207,7 @@ class Absence extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col md="2">
-                                    <Label htmlFor="select"><h5>Hôm nay là ngày :</h5></Label>
+                                    <Label htmlFor="select"><h5>Ngày viết :</h5></Label>
                                 </Col>
                                 <Col>
                                     <Label>{today}</Label>
