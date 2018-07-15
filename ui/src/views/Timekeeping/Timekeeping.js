@@ -286,7 +286,7 @@ class Timekeeping extends Component {
               </Row>
               <Row className="btn-tk ">
                 <div className=" text-center card-body">
-                <Button className="btn-timekeeping" color="success" size="lg" onClick={()=>{}}   id={"thuonghtavatar"}>Chấm công</Button>
+                <Button className="btn-timekeeping" color="success" size="lg" onClick={()=>{}}   id={"idbuton"}>Chấm công</Button>
                 </div>
               </Row>
               <Row>
