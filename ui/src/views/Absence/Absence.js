@@ -8,6 +8,9 @@
  * Created by Vu Tien Dai on 25/06/2018.
  */
 import React, {Component} from 'react';
+import {getData, formEncode} from '../../DataUser'
+import * as Datetime from 'react-datetime';
+
 import {
     Badge,
     Button,
@@ -33,8 +36,6 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import {getData, formEncode} from '../../DataUser'
-import * as Datetime from 'react-datetime';
 
 var yesterday = Datetime.moment().subtract(1, 'day');
 var valid1 = function (current) {

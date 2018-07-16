@@ -18,9 +18,8 @@ export default {
       },
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },  {
-<<<<<<< HEAD
+
           name: 'Home',
-=======
           name: 'List đơn',
           url: '/absencemanage',
           icon: 'cui-clipboard icons',
@@ -32,7 +31,7 @@ export default {
       ,
     ,  {
           name: 'Chấm công',
->>>>>>> origin/absence-application
+
           url: '/timekeeping',
           icon: 'icon-calculator',
       },

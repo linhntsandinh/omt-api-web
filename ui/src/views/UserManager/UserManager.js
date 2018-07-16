@@ -34,18 +34,8 @@ import UserCard from "./UserCard"
 import {formEncode} from '../../DataUser'
 
 function Pagin(data) {
-<<<<<<< HEAD
-  let p = data.parent;
-  let check = data.check;
-  let pagin = data.pagin;
-    console.log(data.index + " ahihi 1" + pagin);
-    return (
-    <PaginationItem >
-      <PaginationLink tag="button"
-                      onClick={(e) => p.handleClick((pagin + data.index), e)}>{pagin + data.index}</PaginationLink>
-    </PaginationItem>
-  )
-=======
+
+
     let p = data.parent;
     let check = data.check;
     let pagin = data.pagin;
@@ -56,7 +46,7 @@ function Pagin(data) {
         </PaginationItem>
     )
 
->>>>>>> origin/absence-application
+
 }
 
 function More(data) {

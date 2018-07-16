@@ -27,11 +27,8 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-<<<<<<< HEAD
+
             isLogin: true
-=======
-            isLogin: localStorage.getItem('Login')
->>>>>>> origin/absence-application
         }
 
     }

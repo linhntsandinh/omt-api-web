@@ -9939,7 +9939,6 @@ body {
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
-<<<<<<< HEAD
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
@@ -9963,7 +9962,7 @@ html body .app.flex-row.align-items-center {
 
 #idavataUser {
   max-width: 30%; }
-=======
+
 table.private-table tr:hover {
   background: #e4ffd3; }
 
@@ -10000,7 +9999,6 @@ table.private-table tr.header-table th:hover {
 
 body {
   background: #f6faff; }
->>>>>>> origin/absence-application
 
 html body .app.flex-row.align-items-center {
   height: 100vh; }
