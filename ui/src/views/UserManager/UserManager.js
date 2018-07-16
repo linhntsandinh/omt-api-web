@@ -35,13 +35,13 @@ function Pagin(data) {
   let p = data.parent;
   let check = data.check;
   let pagin = data.pagin;
-  return (
-    <PaginationItem active={(check - pagin) === (data.index)}>
+    console.log(data.index + " ahihi 1" + pagin);
+    return (
+    <PaginationItem >
       <PaginationLink tag="button"
                       onClick={(e) => p.handleClick((pagin + data.index), e)}>{pagin + data.index}</PaginationLink>
     </PaginationItem>
   )
-
 }
 function More(data) {
   return (
