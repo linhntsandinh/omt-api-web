@@ -1,4 +1,4 @@
-
+import usersData from './UsersData'
 import React, {Component} from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
@@ -36,7 +36,7 @@ import {
 }from 'reactstrap';
 BigCalendar.momentLocalizer(moment);
 
-
+const sumUserCount=0;
 function Pagin(data) {
     let p = data.parent;
     let check = data.check;
@@ -120,11 +120,41 @@ function More(data) {
 }
 
 
+function UserRow(props) {
+    const user =  props.user
+    const index = props.index
+    const userLink = `#/users/${user.id}`
+   /* const getBadge = (status) => {
+        return status === 'Active' ? 'success' :
+            status === 'Inactive' ? 'secondary' :
+                status === 'Pending' ? 'warning' :
+                    status === 'Banned' ? 'danger' :
+                        'primary'
+    }*/
+
+    return (
+        <tr key={user.id.toString()}>
+            <th>
+                <a>{index}</a>
+            </th>
+            <th><img src={"assets/img/avatars/2.jpg" } className={"img-avatar"} id={"idavataUser1"} /></th>
+            <th scope="row"><a href={userLink}>{user.id}</a></th>
+            <td><a href={userLink}>{user.name}</a></td>
+            <td>{user.team}</td>
+            <td>{user.timecheckin}</td>
+            <td>{user.timecheckout}</td>
+            <td><Badge href={userLink} >{user.date}</Badge></td>
+        </tr>
+    )
+}
 
 class Timekeeping extends Component {
+
     constructor(props) {
         super(props);
+
         this.state = {
+            count:1,
             pagin: 1,
             check: 1,
             data: [],
@@ -266,6 +296,7 @@ class Timekeeping extends Component {
     }
 
   render() {
+      const userList = usersData.filter((user) => user.id < 10)
       const data = [];
       for (let i = 0; i < Math.ceil(this.state.length / this.state.limit); i++) {
           if (i >= (this.state.pagin - 1) && i < this.state.pagin + 4 && data.length < 5)
@@ -310,10 +341,7 @@ class Timekeeping extends Component {
         </div>
 
       </div>
-
-
             <Row id={"idtable"}>
-
                 <Col xs="12" lg="12">
                     <Card>
                         <CardHeader>
@@ -359,22 +387,28 @@ class Timekeeping extends Component {
                             </Row>
                             { this.state.search ? <More pr={this}/> : null }
                         </CardHeader>
-
                         <CardBody>
                             <Table responsive>
                                 <thead>
                                 <tr>
-                                    <th  width="5%">STT</th>
-                                    <th width="10%" className="text-center"><i className="icon-people"></i></th>
-                                    <th  width="20%">A</th>
-                                    <th  width="10%">B</th>
-                                    <th  width="20%">C</th>
-                                    <th  width="10%" className="text-lg-center">D</th>
-                                    <th  width="15%">E</th>
-                                    <th  width="10%">F</th>
+                                    <th  width="5%">Stt</th>
+                                    <th  width="10%" ><img src={"assets/img/avatars/2.jpg"} className={"img-avatar"} id={"idavataUser"}/></th>
+                                    <th  width="10%">Id</th>
+                                    <th  width="20%">Name</th>
+                                    <th  width="15%">Team</th>
+                                    <th  width="15%" >Time checkin</th>
+                                    <th  width="15%">Time checkout</th>
+                                    <th  width="10%">Date</th>
                                 </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+
+                                {
+                                    userList.map((user, index) =>
+                                    <UserRow key={index} index={index+1} user={user}/>
+                                )}
+
+                                </tbody>
                             </Table>
                             <Pagination  >
                                 <PaginationItem>

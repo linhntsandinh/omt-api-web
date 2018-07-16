@@ -9945,16 +9945,23 @@ body {
 html body .app.flex-row.align-items-center {
   height: 100vh; }
 
-#idbuton {
+#thuonghtavatar {
   width: 60%; }
 
 #idtable {
   margin-top: 20px; }
 
+#idavata {
+  max-width: 70%; }
+
+#idbuton {
+  width: 60%; }
+
+#idavataUser1 {
+  max-width: 30%; }
+
+#idavataUser {
+  max-width: 30%; }
+
 html body .app.flex-row.align-items-center {
   height: 100vh; }
-#idavata{
-
-  max-width: 70%;
-
-}
