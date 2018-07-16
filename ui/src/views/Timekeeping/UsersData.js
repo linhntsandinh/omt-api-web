@@ -33,6 +33,10 @@ const usersData = [
     {id: 31, name: 'Micheal Mercurius',team: 'Mar',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
     {id: 32, name: 'Ganesha Dubhghall',team: 'Mar',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
     {id: 33, name: 'Hiroto Šimun', team: 'Ki thuat',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
+    {id: 30, name: 'Paĉjo Jadon', team: 'Ki thuat',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
+    {id: 31, name: 'Micheal Mercurius',team: 'Mar',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
+    {id: 32, name: 'Ganesha Dubhghall',team: 'Mar',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
+    {id: 33, name: 'Hiroto Šimun', team: 'Ki thuat',timecheckin: '9:00', timecheckout: '18:00', date: '23/3/2018'},
 
 ]
 
