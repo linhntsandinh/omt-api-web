@@ -15,23 +15,23 @@ class FormCard extends Component {
   }
 
   getBadge = (status) => {
-    return status === '0' ? 'secondary' :
-      status === '1' ? 'success' :
+    return status === '0' ? 'success' :
+      status === '1' ? 'warning' :
         'danger'
   }
 
   setStatus = (status) => {
-    return status === '0' ? 'Chưa duyệt' :
-      status === '1' ? 'Đã duyệt' :
-        'Không duyệt'
+    return status === '0' ? 'Đi làm' :
+      status === '1' ? 'Nghỉ phép' :
+        'Nghỉ làm'
   }
 
   render() {
     const user = this.props.user;
-    const userLink = `#/usersmanage/${user.user_id}`
+    const userLink = `#/users/${user.user_id}`
 
     return (
-      <tr onDoubleClick={() => {
+      <tr className="text-center" onDoubleClick={() => {
         document.location = userLink
       }} onMouseEnter={(e) => {
         if (this.state.show === false)
@@ -41,13 +41,13 @@ class FormCard extends Component {
           this.setState({show: false})
       }}>
         <td>{this.props.stt}</td>
-        <td className="text-center">
+        <td >
           <div className="avatar">
             <img src={'assets/img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
             <span className="avatar-status badge-success"></span>
           </div>
         </td>
-        <td><a href={userLink}><font color="0003FF">{user.full_name}</font></a></td>
+        <td ><a href={userLink}><font color="0003FF">{user.full_name}</font></a></td>
         <td>
           {this.state.show === true ?
           <i  className="icon-trash" onClick={()=>{console.log("Xoa nha")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;

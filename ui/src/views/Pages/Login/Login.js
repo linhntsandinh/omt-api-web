@@ -35,10 +35,12 @@ class Login extends Component {
             body: formEncode({user:this.state.username,pass:this.state.password}),
         }).then((response) => response.json())
             .then((responseJson) => {
+                if(responseJson){
                 localStorage.setItem('data',JSON.stringify(responseJson));
+                localStorage.setItem('Login','false')
                 pop.parent.HandleChange();
                 console.log(responseJson)
-            })
+            }})
         const {history} = this.props.props;
         // history.push('/dashboard');
     }
