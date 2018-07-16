@@ -36,7 +36,7 @@ import {
 }from 'reactstrap';
 BigCalendar.momentLocalizer(moment);
 
-const sumUserCount=0;
+
 function Pagin(data) {
     let p = data.parent;
     let check = data.check;
@@ -154,7 +154,8 @@ class Timekeeping extends Component {
         super(props);
 
         this.state = {
-            count:1,
+
+
             pagin: 1,
             check: 1,
             data: [],
