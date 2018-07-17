@@ -31,7 +31,7 @@ import {
     Pagination,
     PaginationItem,
     PaginationLink,
-
+        
 
 }from 'reactstrap';
 BigCalendar.momentLocalizer(moment);
