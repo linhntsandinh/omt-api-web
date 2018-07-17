@@ -1,49 +1,45 @@
 package controllers
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import be.objectify.deadbolt.scala.DeadboltActions
-import models.{LoginForm, UserForm}
+import models.{LoginForm, UserData, UserForm}
 import services.UserService
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.data.Forms.text
+import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
+import play.mvc.Action
+import utils.JS
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UserController  @Inject() (deadbolt: DeadboltActions, actorSystem: ActorSystem, userService: UserService, cc: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
+class UserController @Inject()(deadbolt: DeadboltActions, actorSystem: ActorSystem, userService: UserService, cc: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
 
   def login = Action.async(parse.json[LoginForm]) { req =>
     userService.login(req.body)
   }
 
+  def delete(id: Int) = Action.async {
+    userService.delete(id)
+    Future(JS.OK("data" -> "delete Success!!"))
+  }
+
+
+  def update = Action.async(parse.json[UserForm]) { request =>
+    userService.update(request.body)
+    Future(JS.OK("data" -> "update Success!!"))
+  }
 
   def index = deadbolt.Restrict(List(Array("admin")))() { authRequest =>
     val x = authRequest.session
-      Future(Ok(views.html.user()))
+    Future(Ok(views.html.user()))
   }
 
-  val userForm = Form(
-    mapping(
-      "username" -> text(),
-      "password" -> text(),
-      "email" -> text(),
-    )(UserForm.apply)(UserForm.unapply)
-  )
-
-  def insert = Action.async { implicit request =>
-    val user: UserForm = userForm.bindFromRequest.get
-    val x = userService.insert(user)
-
-    x.onComplete {
-      rs => {
-        println(rs)
-      }
-    }
-
-
-    Future(Redirect(routes.UserController.index))
+  def insert = Action.async(parse.json[UserForm]) { request =>
+    val x = userService.insert(request.body)
+    Future(JS.OK("data" -> "Insert Success."))
   }
 }
