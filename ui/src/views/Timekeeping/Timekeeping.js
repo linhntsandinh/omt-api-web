@@ -400,14 +400,17 @@ class Timekeeping extends Component {
                                 <thead>
                                 <tr>
                                     <th  width="5%">Stt</th>
-                                    <th  width="15%"><img src={"assets/img/avatars/2.jpg"} className={"img-avatar"} id={"idavataUser"}/></th>
-                                    <th  width="10%">Id</th>
+
+
                                     <th  width="20%">Name</th>
-                                    <th  width="10%"></th>
+
                                     <th  width="10%">Team</th>
-                                    <th  width="10%">Time checkin</th>
-                                    <th  width="10%">Time checkout</th>
+                                    <th  width="12.5%">Time checkin</th>
+                                    <th  width="10%"></th>
+                                    <th  width="12.5%">Time checkout</th>
+                                    <th  width="10%"></th>
                                     <th  width="10%">Date</th>
+                                    <th  width="10%">Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>

@@ -41,21 +41,23 @@ class FormCard extends Component {
           this.setState({show: false})
       }}>
         <td>{this.props.stt}</td>
-        <td >
-            <img src={"assets/img/avatars/2.jpg" } className={"img-avatar"} id={"idavataUser1"} />
-
-        </td>
-        <td><a href={userLink}><font color="0003FF">{user.id}</font></a></td>
           <td  > {user.name}</td>
-        <td>
-          {this.state.show === true ?
-          <i  className="icon-trash" onClick={()=>{console.log("Xoa nha")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;
-          {this.state.show === true ?
-          <i  className="i icon-note" onClick={()=>{console.log("Fix nha")}}/> : null}</td>
+
         <td>{user.team}</td>
-        <td className="text-lg-center">{user.timecheckin}</td>
-        <td> {user.timecheckout}</td>
-        <td><Badge href={userLink} color={this.getBadge(user.status)}>{user.date}</Badge></td>
+        <td>{user.timecheckin}</td>
+          <td>
+              {this.state.show === true ?
+                  <i  className="icon-trash" onClick={()=>{console.log("Xoa")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+              {this.state.show === true ?
+                  <i  className="i icon-note" onClick={()=>{console.log("edit")}}/> : null}</td>
+        <td>{user.timecheckout}</td>
+          <td>
+              {this.state.show === true ?
+                  <i  className="icon-trash" onClick={()=>{console.log("Xoa")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+              {this.state.show === true ?
+                  <i  className="i icon-note" onClick={()=>{console.log("edit")}}/> : null}</td>
+        <td>{user.date}</td>
+          <td  ><Badge href={userLink} color={this.getBadge(user.status)}> {user.status} </Badge> </td>
       </tr>)
 
   }
