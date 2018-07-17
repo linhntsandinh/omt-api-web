@@ -15,11 +15,34 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
   extends HasDatabaseConfigProvider[JdbcProfile] {
   private val AbsenceTable = TableQuery[AbsenceApplicationsTableDef]
   private val AbsenceReasonsTable = TableQuery[AbsenceReasonsTableDef]
-
-  def load(userId: Int): Future[Option[ListBuffer[AbsenceApplicationsLoad]]] = {
+  private val ProfileTable = TableQuery[ProfileTableDef]
+  private val AbsenceApproveTable = TableQuery[AbsenceApproveTableDef]
+  def load(absenceRequestLoad: AbsenceRequestLoad): Future[Option[(ListBuffer[AbsenceApplicationsLoad],Int)]] = {
     val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
-    val q = (AbsenceTable join AbsenceReasonsTable).on(_.reasonId === _.id).filter(_._1.userId === userId).result
-
+    val q = (((((AbsenceTable join AbsenceReasonsTable)
+      .on(_.reasonId === _.id) join ProfileTable)
+      .on(_._1.userId === _.user_id) join AbsenceApproveTable)
+      .on(_._1._1.id === _.application_id)join ProfileTable)
+      .on(_._2.approve_id === _.user_id)).filter(_._1._1._1._1.userId === absenceRequestLoad.id).filter(row =>
+      if(absenceRequestLoad.reciever !="") row._2.full_name === absenceRequestLoad.reciever
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.start != 0) row._1._1._1._1.startTime === absenceRequestLoad.start
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.writer != "") row._1._1._2.full_name === absenceRequestLoad.writer
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.reasons != "") row._1._1._1._2.title === absenceRequestLoad.reasons
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.total != 0) row._1._1._1._1.totalTime === absenceRequestLoad.total
+      else LiteralColumn(true)
+      ).filter(row =>
+      if(absenceRequestLoad.ordervalue >= 0) row._1._1._1._1.status === absenceRequestLoad.ordervalue
+      else LiteralColumn(true)
+    )
+      .drop(absenceRequestLoad.pageTop).take(absenceRequestLoad.pageEnd).result
     //
     val rs = db.run {
       q
@@ -29,13 +52,47 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
         list.size match {
           case 0 => None
           case _ => {
-            list.foreach{
+            var i=0
+            list.foreach {
               item => {
-                val itemLoad : AbsenceApplicationsLoad = new AbsenceApplicationsLoad(item._1.id,item._2.title,item._1.description,"dsa",12,12,item._1.status)
+                val itemLoad : AbsenceApplicationsLoad =
+                  new AbsenceApplicationsLoad(item._1._1._1._1.id,item._1._1._1._2.title,item._1._1._2.full_name,item._2.full_name,item._1._1._1._1.startTime,item._1._1._1._1.totalTime,item._1._1._1._1.status)
                 listAbsence += itemLoad
               }
             }
-            Some(listAbsence)
+            Some(listAbsence,list.size)
+          }
+        }
+      }
+    }
+  }
+  def loadDetail(id : Int):  Future[Option[(AbsenceApplicationsLoad,AbsenceApplicationsData)]]={
+    val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
+    val q = (((((AbsenceTable join AbsenceReasonsTable)
+      .on(_.reasonId === _.id) join ProfileTable)
+      .on(_._1.userId === _.user_id) join AbsenceApproveTable)
+      .on(_._1._1.id === _.application_id)join ProfileTable)
+      .on(_._2.approve_id === _.user_id)).filter(_._1._1._1._1.id ===id)
+      .result
+    //
+    val rs = db.run {
+      q
+    }
+    rs.map {
+      list => {
+        list.size match {
+          case 0 => None
+          case _ => {
+            var itemLoad : AbsenceApplicationsLoad = null;
+            var itemData : AbsenceApplicationsData = null;
+            list.foreach {
+              item => {
+                itemLoad =
+                  new AbsenceApplicationsLoad(item._1._1._1._1.id,item._1._1._1._2.title,item._1._1._2.full_name,item._2.full_name,item._1._1._1._1.startTime,item._1._1._1._1.totalTime,item._1._1._1._1.status)
+                itemData = item._1._1._1._1
+              }
+            }
+            Some(itemLoad,itemData)
           }
         }
       }
@@ -47,16 +104,39 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
   def delete(Id: Int): Future[Int] = {
     db.run(AbsenceTable.filter(_.id === Id).delete)
   }
+  def loadForm(): Future[Option[Seq[AbsenceReasonsData]]] = {
+    val q = AbsenceReasonsTable.result
+    val rs = db.run {
+      q
+    }
+    rs.map {
+      list => {
+        list.size match {
+          case 0 => None
+          case _ => {
+            Some(list)
+          }
+        }
+      }
+    }
+  }
   def update(absenceApplicationsData: AbsenceApplicationsData)={
     val q = AbsenceTable.filter(_.id === absenceApplicationsData.id).update(absenceApplicationsData)
     db.run(q)
   }
 }
-  case class AbsenceApplicationsLoad(id: Int, resonTitle: String, from: String,to: String,startTime :Int,absenceDay :Int,statuse :Int)
+  case class AbsenceApplicationsLoad(id: Int, reasonTitle: String, writer: String,reciever: String,startTime :Int,totalTime :Float,status :Int)
   object AbsenceApplicationsLoad {
     implicit val reader = Json.reads[AbsenceApplicationsLoad]
     implicit val writer = Json.writes[AbsenceApplicationsLoad]
   }
+
+  case class AbsenceRequestLoad(id: Int, pageTop :Int, pageEnd :Int, start:Int, writer: String, reciever: String,reasons: String,total :Float,ordervalue:Int)
+  object AbsenceRequestLoad {
+    implicit val reader = Json.reads[AbsenceRequestLoad]
+    implicit val writer = Json.writes[AbsenceRequestLoad]
+  }
+
   case class AbsenceApplicationsData(id: Int, reasonId: Int, description: String, startTime: Int, endTime: Int, status:Int, userId:Int, totalTime:Float, created_at: Option[Long], updated_at: Option[Long], update_by: Option[Int], created_by: Option[Int])
   object AbsenceApplicationsData {
     implicit val reader = Json.reads[AbsenceApplicationsData]

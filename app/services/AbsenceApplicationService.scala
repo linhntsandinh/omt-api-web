@@ -12,12 +12,12 @@ import scala.concurrent.Future
 
 
 class AbsenceApplicationService @Inject() (absence : AbsenceApplications){
-  def load(id: Int): Future[Result] = {
-    val load = absence.load(id)
+  def load(absenceRequestLoad: AbsenceRequestLoad): Future[Result] = {
+    val load = absence.load(absenceRequestLoad)
     load.map{
       case Some(x) => {
-        val js = Json.toJson(x)
-        JS.OK("value"->js)
+        println(x._1)
+        JS.OK("data"->Json.toJson(x._1),"length" -> Json.toJson(x._2))
       }
       case None => JS.KO("Không có đơn nào hợp lệ!")
     }
@@ -27,7 +27,27 @@ class AbsenceApplicationService @Inject() (absence : AbsenceApplications){
 
     absence.insert(result)
   }
+  def loadForm(): Future[Result] =  {
+    val load = absence.loadForm()
+    load.map{
+      case Some(x) => {
+        println(x)
+        JS.OK("data"->Json.toJson(x))
+      }
+      case None => JS.KO("Không có đơn nào hợp lệ!")
+    }
+  }
   def update(absenceApplicationsData: AbsenceApplicationsData): Future[Int] = absence.update(absenceApplicationsData)
 
   def delete(id: Int): Future[Int] = absence.delete(id)
+  def loadDetail(id :Int): Future[Result]=  {
+    val load = absence.loadDetail(id)
+    load.map{
+      case Some(x) => {
+        println(x)
+        JS.OK("data"->Json.toJson(x))
+      }
+      case None => JS.KO("Không có đơn nào hợp lệ!")
+    }
+  }
 }

@@ -15,24 +15,44 @@ GET         /restApi                            controllers.RestApiController.ge
 GET         /user/delete/:id                    controllers.UserController.delete(id: Int)
 GET         /userrole/delete/:id                controllers.UserRoleController.delete(id: Int)
 GET         /userrole/deletebyuserid/:id        controllers.UserRoleController.deleteByUserId(id: Int)
-GET         /absence/load/:id                   controllers.AbsenceApplicationController.load(id: Int)
+GET         /absenceApprove/delete/:id                   controllers.AbsenceApproveController.delete(id: Int)
+GET         /absenceReason/delete/:id                   controllers.AbsenceReasonsController.delete(id: Int)
+GET         /absence/loadDetail/:id                   controllers.AbsenceApplicationController.loadDetail(id: Int)
+GET         /absence/loadForm                   controllers.AbsenceApplicationController.loadForm
+
 +nocsrf
 POST        /user/insert                        controllers.UserController.insert
 +nocsrf
 POST        /user/update                        controllers.UserController.update
 +nocsrf
 POST        /user/login                         controllers.UserController.login
+
 +nocsrf
 POST        /userole/insert                     controllers.UserRoleController.insert
+
 +nocsrf
 POST        /absence/insert                     controllers.AbsenceApplicationController.insert
+
++nocsrf
+POST        /absenceApprove/insert                     controllers.AbsenceApproveController.insert
++nocsrf
+POST        /absenceApprove/update                     controllers.AbsenceApproveController.update
+
++nocsrf
+POST        /absenceReason/insert                     controllers.AbsenceReasonsController.insert
++nocsrf
+POST        /absenceReason/update                     controllers.AbsenceReasonsController.update
 
 # Profile:
 +nocsrf
 POST        /profile/insert                     controllers.ProfileController.insert
 +nocsrf
 POST        /profile/update                     controllers.ProfileController.update
-GET         /profile/delete/:id                 controllers.ProfileController.delete(id: Int)
+
++nocsrf
+POST        /absence/load                  controllers.AbsenceApplicationController.load
+
+GET         /profile/delete/:id                controllers.ProfileController.delete(id: Int)
 
 # Timelogs:
 +nocsrf
