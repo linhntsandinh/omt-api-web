@@ -18,8 +18,8 @@ class AbsenceApplicationController@Inject() (deadbolt: DeadboltActions, actorSys
   def loadDetail(id: Int)=Action.async{
     absenceapplicationService.loadDetail(id)
   }
-  def loadForm()=Action.async{
-    absenceapplicationService.loadForm()
+  def loadForm(id : Int)=Action.async{
+    absenceapplicationService.loadForm(id)
   }
   def insert =Action.async(parse.json[AbsenceApplicationsForm]) { request =>
     val x = absenceapplicationService.insert(request.body)
