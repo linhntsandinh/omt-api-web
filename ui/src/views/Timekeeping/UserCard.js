@@ -41,22 +41,21 @@ class FormCard extends Component {
           this.setState({show: false})
       }}>
         <td>{this.props.stt}</td>
-        <td className="text-center">
-          <div className="avatar">
-            <img src={'assets/img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
-            <span className="avatar-status badge-success"></span>
-          </div>
+        <td >
+            <img src={"assets/img/avatars/2.jpg" } className={"img-avatar"} id={"idavataUser1"} />
+
         </td>
-        <td><a href={userLink}><font color="0003FF">{user.full_name}</font></a></td>
+        <td><a href={userLink}><font color="0003FF">{user.id}</font></a></td>
+          <td  > {user.name}</td>
         <td>
           {this.state.show === true ?
           <i  className="icon-trash" onClick={()=>{console.log("Xoa nha")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;
           {this.state.show === true ?
           <i  className="i icon-note" onClick={()=>{console.log("Fix nha")}}/> : null}</td>
-        <td>{user.email}</td>
-        <td className="text-lg-center">{user.phone_number}</td>
-        <td> {user.position}</td>
-        <td><Badge href={userLink} color={this.getBadge(user.status)}>{this.setStatus(user.status)}</Badge></td>
+        <td>{user.team}</td>
+        <td className="text-lg-center">{user.timecheckin}</td>
+        <td> {user.timecheckout}</td>
+        <td><Badge href={userLink} color={this.getBadge(user.status)}>{user.date}</Badge></td>
       </tr>)
 
   }

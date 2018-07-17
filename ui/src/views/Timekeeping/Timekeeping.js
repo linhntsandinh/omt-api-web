@@ -31,7 +31,7 @@ import {
     Pagination,
     PaginationItem,
     PaginationLink,
-        
+
 
 }from 'reactstrap';
 BigCalendar.momentLocalizer(moment);
@@ -157,10 +157,8 @@ class Timekeeping extends Component {
 
     constructor(props) {
         super(props);
-
+        console.log("contructor");
         this.state = {
-
-
             pagin: 1,
             check: 1,
             data: [],
@@ -176,7 +174,7 @@ class Timekeeping extends Component {
         }
     }
 
-    /*componentDidMount() {
+    componentDidMount() {
         console.log("getAll");
         fetch('https://daivt.000webhostapp.com/get_profile.php', {
             method: 'POST',
@@ -208,7 +206,7 @@ class Timekeeping extends Component {
 
             }
         )
-    }*/
+    }
 
     getData(check) {
         console.log("getData");
@@ -302,6 +300,7 @@ class Timekeeping extends Component {
     }
 
   render() {
+        console.log("render");
       const {
           check, data, full_name, length, limit, pagin, search, sort, orderby, ordervalue
       } = this.state
@@ -401,34 +400,28 @@ class Timekeeping extends Component {
                                 <thead>
                                 <tr>
                                     <th  width="5%">Stt</th>
-                                    <th  width="10%" ><img src={"assets/img/avatars/2.jpg"} className={"img-avatar"} id={"idavataUser"}/></th>
-                                    <th  width="5%">Id</th>
+                                    <th  width="15%"><img src={"assets/img/avatars/2.jpg"} className={"img-avatar"} id={"idavataUser"}/></th>
+                                    <th  width="10%">Id</th>
                                     <th  width="20%">Name</th>
-                                    <th  width="5%"></th>
-                                    <th  width="15%">Team</th>
-                                    <th  width="15%" >Time checkin</th>
-                                    <th  width="15%">Time checkout</th>
+                                    <th  width="10%"></th>
+                                    <th  width="10%">Team</th>
+                                    <th  width="10%">Time checkin</th>
+                                    <th  width="10%">Time checkout</th>
                                     <th  width="10%">Date</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {
                                     userList.map((user, index) =>
-                                    <UserRow key={index} index={index+1} user={user}/>
-                                )}
-
+                                        < UserCard key={index} user={user}
+                                                   stt={index + (check - 1) * limit + 1}/>)
+                                }
                                 </tbody>
                             </Table>
                             <Pagination  >
                                 <PaginationItem>
                                     <PaginationLink previous tag="button" onClick={(e) => this.onLeft(e)}></PaginationLink>
                                 </PaginationItem>
-                                {
-                                    data.map((user, index) =>
-                                        < UserCard key={index} user={user}
-                                                   stt={index + (check - 1) * limit + 1}/>)
-                                }
 
                                 <PaginationItem>
                                     <PaginationLink next tag="button" onClick={(e) => this.onRight(e)}></PaginationLink>
