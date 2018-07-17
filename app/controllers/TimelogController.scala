@@ -14,17 +14,17 @@ class TimelogController @Inject()(actorSystem: ActorSystem, timelogService: Time
 
   def insert = Action.async(parse.json[TimelogForm]) { request =>
     timelogService.insert(request.body)
-    Future(Redirect(routes.UserController.index))
+    Future(JS.OK("data" -> "Insert Success!!"))
   }
 
   def update = Action.async(parse.json[TimelogForm]) { request =>
     timelogService.update(request.body)
-    Future(JS.OK("value" -> "update Success!!"))
+    Future(JS.OK("data" -> "update Success!!"))
   }
 
   def delete (id: Int)= Action.async{
     timelogService.delete(id)
-    Future(JS.OK("value" -> "delete Success!!"))
+    Future(JS.OK("data" -> "delete Success!!"))
   }
 
 }
