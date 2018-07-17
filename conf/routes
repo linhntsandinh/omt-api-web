@@ -18,7 +18,7 @@ GET         /userrole/deletebyuserid/:id        controllers.UserRoleController.d
 GET         /absenceApprove/delete/:id                   controllers.AbsenceApproveController.delete(id: Int)
 GET         /absenceReason/delete/:id                   controllers.AbsenceReasonsController.delete(id: Int)
 GET         /absence/loadDetail/:id                   controllers.AbsenceApplicationController.loadDetail(id: Int)
-GET         /absence/loadForm                   controllers.AbsenceApplicationController.loadForm
+GET         /absence/loadForm/:id                   controllers.AbsenceApplicationController.loadForm(id: Int)
 
 +nocsrf
 POST        /user/insert                        controllers.UserController.insert

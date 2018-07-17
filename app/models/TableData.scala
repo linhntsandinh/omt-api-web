@@ -27,6 +27,10 @@ class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
 }
 
 case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Date, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: Date, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Long], updated_by: Option[Long])
+object ProfileData {
+  implicit val reader = Json.reads[ProfileData]
+  implicit val writer = Json.writes[ProfileData]
+}
 class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
   def id = column[Option[Int]]("id", O.PrimaryKey, O.AutoInc)
 
