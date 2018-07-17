@@ -30,7 +30,7 @@ import {
     Label,
 } from 'reactstrap';
 import Select from 'react-select';
-import FormCard from "./FormCard"
+import AttendCard from "./AttendCard"
 import {formEncode} from '../../DataUser'
 
 
@@ -47,7 +47,7 @@ function Pagin(data) {
 
 }
 
-function More(data) {
+function More(props) {
     return (
         <Row>
             <Col md="7">
@@ -59,33 +59,28 @@ function More(data) {
                             <Col md="4">
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Người nhận
+                                        Team
                                     </InputGroupText>
                                 </Row>
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Loại
+                                        Ngày
                                     </InputGroupText>
                                 </Row>
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Ngày viết
+                                        Status
                                     </InputGroupText>
                                 </Row>
-                                <Row>
-                                    <InputGroupText className="lable_search">
-                                        Số ngày
-                                    </InputGroupText>
-                                </Row>
+
                             </Col>
                             <Col md="8">
                                 <Row>
                                     <Col>
-                                        <Input className="lable_search" name="reciever"
-                                               value={data.pr.state.reciever}
-                                               onChange={(e) => data.pr.handleChange(e)}
+                                        <Input className="lable_search" name="team"
+                                               value={props.data.state.team}
+                                               onChange={(e) => props.data.handleChange(e)}
                                                onKeyPress={(ev, e) => {
-
                                                    if (ev.key === 'Enter') {
                                                        document.getElementById("btn-search").click();
                                                        ev.preventDefault();
@@ -95,9 +90,9 @@ function More(data) {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <Input className="lable_search" name="reason"
-                                               value={data.pr.state.reason}
-                                               onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
+                                        <Input className="lable_search" name="date"
+                                               value={props.data.state.date}
+                                               onChange={(e) => props.data.handleChange(e)} onKeyPress={(ev, e) => {
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
                                                 ev.preventDefault();
@@ -107,9 +102,8 @@ function More(data) {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <Input value={data.pr.state.start} name="start"
-                                               onChange={(e) => data.pr.handleChange(e)} type="date"
-                                               placeholder="date"
+                                        <Input value={props.data.state.status} name="status"
+                                               onChange={(e) => props.data.handleChange(e)}
                                                onKeyPress={(ev, e) => {
                                                    if (ev.key === 'Enter') {
                                                        document.getElementById("btn-search").click();
@@ -117,19 +111,6 @@ function More(data) {
                                                    }
                                                }}
                                         />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <Input className="lable_search" name="total"
-                                               value={data.pr.state.total}
-                                               onChange={(e) => data.pr.handleChange(e)}
-                                               onKeyPress={(ev, e) => {
-                                                   if (ev.key === 'Enter') {
-                                                       document.getElementById("btn-search").click();
-                                                       ev.preventDefault();
-                                                   }
-                                               }}/>
                                     </Col>
                                 </Row>
                             </Col>
@@ -141,18 +122,19 @@ function More(data) {
     )
 }
 
-class AbsenceManage extends Component {
+class AttendTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             id: '',
-            writer: '',
-            reciever: '',
-            reason: '',
-            start: '',
-            total: '',
+            username: '',
+            team: '',
+            check_in: '',
+            check_out: '',
+            date: new Date().getTime(),
+            status: '',
             limit: 10,
-            length: 20,
+            length: 0,
             orderby: '',
             ordervalue: '',
             data: [],
@@ -160,7 +142,7 @@ class AbsenceManage extends Component {
             sort: new Array(7).fill(0),
             pagin: 1,
             check: 1,
-            pagin_number:8
+            pagin_number: 8
 
         }
     }
@@ -172,15 +154,15 @@ class AbsenceManage extends Component {
             body: formEncode(
                 {
                     id: this.state.id,
-                    writer: this.state.writer,
-                    reciever: this.state.reciever,
-                    reason: this.state.reason,
-                    start: this.state.start,
-                    total: this.state.total,
+                    username: this.state.username,
+                    team: this.state.team,
+                    check_in: this.state.check_in,
+                    check_out: this.state.check_out,
+                    date: this.state.date,
+                    limit: this.state.limit,
+                    offset: ((this.state.check - 1) * this.state.limit),
                     orderby: this.state.orderby,
                     ordervalue: this.state.ordervalue,
-                    limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
                 })
 
         }).then(function (response) {
@@ -208,13 +190,15 @@ class AbsenceManage extends Component {
             body: formEncode(
                 {
                     id: this.state.id,
-                    writer: this.state.writer,
-                    reciever: this.state.reciever,
-                    reason: this.state.reason,
-                    start: this.state.start,
-                    total: this.state.total,
+                    username: this.state.username,
+                    team: this.state.team,
+                    check_in: this.state.check_in,
+                    check_out: this.state.check_out,
+                    date: this.state.date,
                     limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
+                    offset: ((this.state.check - 1) * this.state.limit),
+                    orderby: this.state.orderby,
+                    ordervalue: this.state.ordervalue,
                 })
 
         }).then(function (response) {
@@ -256,7 +240,7 @@ class AbsenceManage extends Component {
                     this.getData();
                 }
             )
-            if (this.state.pagin + this.state.pagin_number-1 === this.state.check) {
+            if (this.state.pagin + this.state.pagin_number - 1 === this.state.check) {
                 this.setState(
                     {
                         pagin: this.state.pagin + this.state.pagin_number,
@@ -278,15 +262,16 @@ class AbsenceManage extends Component {
     }
 
     handleChange(e) {
+        console.log(e.target.name)
         this.setState({[e.target.name]: e.target.value});
     }
 
     handleChangeLimit(e) {
         if (e) {
-            let check = Math.ceil(((this.state.limit * this.state.check)-this.state.limit+1) / e.value);
-            let pagin =Math.floor(((this.state.limit * this.state.check)-this.state.limit+1) / (e.value*this.state.pagin_number))*this.state.pagin_number+1 ;
-            console.log(this.state.check+"  "+this.state.pagin)
-            console.log(check+"  "+pagin)
+            let check = Math.ceil(((this.state.limit * this.state.check) - this.state.limit + 1) / e.value);
+            let pagin = Math.floor(((this.state.limit * this.state.check) - this.state.limit + 1) / (e.value * this.state.pagin_number)) * this.state.pagin_number + 1;
+            console.log(this.state.check + "  " + this.state.pagin)
+            console.log(check + "  " + pagin)
             this.setState({limit: e.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
@@ -325,11 +310,11 @@ class AbsenceManage extends Component {
 
     render() {
         const {
-            check, data, writer, length, limit, pagin, search, sort,pagin_number
+            check, data, username, length, limit, pagin, search, sort, pagin_number
         } = this.state
         const data_pagin = [];
         for (let i = 0; i < Math.ceil(length / limit); i++) {
-            if (i >= (pagin - 1) && i < pagin + pagin_number-1 && data_pagin.length < pagin_number)
+            if (i >= (pagin - 1) && i < pagin + pagin_number - 1 && data_pagin.length < pagin_number)
                 data_pagin.push(i);
         }
         return (
@@ -338,17 +323,17 @@ class AbsenceManage extends Component {
                     <CardHeader>
                         <Row>
                             <Col md="7">
-                                <i className="fa fa-align-justify"></i> Danh sách
+                                <h4><i className="fa fa-align-justify"></i> Danh sách chấm công</h4>
                             </Col>
                             <Col md="5">
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend" disabled><Button>
                                         <i className="fa fa-search"></i>
                                     </Button></InputGroupAddon>
-                                    <Input value={writer} onChange={(e) => this.handleChange(e)}
+                                    <Input value={username} onChange={(e) => this.handleChange(e)}
                                            type="text"
                                            id="input1-group2"
-                                           name="writer" placeholder="Người gửi"
+                                           name="username" placeholder="Họ và Tên"
                                            bsSize="lg"
                                            onKeyPress={(ev, e) => {
                                                if (ev.key === 'Enter') {
@@ -361,12 +346,12 @@ class AbsenceManage extends Component {
                                             id="btn-search" onClick={(e) => {
                                             this.handleSearch(e)
                                         }}
-                                            color="primary"><i className="fa fa-writer"> Search</i></Button>
+                                            color="primary"><i className="fa fa-username"> Search</i></Button>
                                     </InputGroupAddon>
                                     <InputGroupAddon addonType="prepend">
                                         <Button size="sm" onClick={(e) => {
                                             if (search === true) {
-                                                this.setState({reason: '', reciever: '', start: '', total: ''})
+                                                this.setState({check_in: '', team: '', check_out: '', date: ''})
                                             }
                                             this.setState({search: !search})
                                         }} color="info"><i
@@ -376,11 +361,11 @@ class AbsenceManage extends Component {
 
                             </Col>
                         </Row>
-                        {search ? <More pr={this}/> : null}
+                        {search ? <More data={this}/> : null}
                     </CardHeader>
 
                     <CardBody>
-                        <Table   bordered responsive className="private-table small-table">
+                        <Table bordered responsive className="private-table">
                             <thead>
                             <tr className="header-table text-center">
                                 <th width="6%" name="id"
@@ -391,22 +376,21 @@ class AbsenceManage extends Component {
                                                 <i className="fa fa-sort-up"></i>
                                         }</a>
                                 </th>
-                                <th width="15%" onClick={(e) => this.handleSort("writer", 1, e)}>Họ và Tên
+                                <th width="15%" onClick={(e) => this.handleSort("username", 1, e)}>Họ và Tên
                                     <a className="icon-sort">
                                         {(sort[1] % 3 == 0) ? <i className="fa fa-sort"></i> :
                                             (sort[1] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
                                                 <i className="fa fa-sort-up"></i>
                                         }</a>
                                 </th>
-                                <th width="8%"></th>
-                                <th width="15%" onClick={(e) => this.handleSort("reciever", 2, e)}>Nguời nhận
+                                <th width="15%" onClick={(e) => this.handleSort("team", 2, e)}>Team
                                     <a className="icon-sort">
                                         {(sort[2] % 3 == 0) ? <i className="fa fa-sort"></i> :
                                             (sort[2] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
                                                 <i className="fa fa-sort-up"></i>
                                         }</a>
                                 </th>
-                                <th width="13%" onClick={(e) => this.handleSort("reason", 3, e)}>Loại
+                                <th width="13%" onClick={(e) => this.handleSort("check_in", 3, e)}>Time Check in
                                     <a className="icon-sort">
                                         {(sort[3] % 3 == 0) ? <i className="fa fa-sort"></i> :
                                             (sort[3] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
@@ -414,14 +398,14 @@ class AbsenceManage extends Component {
                                         }</a>
                                 </th>
                                 <th width="13%" className="text-lg-center"
-                                    onClick={(e) => this.handleSort("start", 4, e)}>Ngày viết
+                                    onClick={(e) => this.handleSort("check_out", 4, e)}>Time Check out
                                     <a className="icon-sort">
                                         {(sort[4] % 3 == 0) ? <i className="fa fa-sort"></i> :
                                             (sort[4] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
                                                 <i className="fa fa-sort-up"></i>
                                         }</a>
                                 </th>
-                                <th width="10%" onClick={(e) => this.handleSort("total", 5, e)}>Số ngày
+                                <th width="10%" onClick={(e) => this.handleSort("date", 5, e)}>Ngày
                                     <a className="icon-sort">
                                         {(sort[5] % 3 == 0) ? <i className="fa fa-sort"></i> :
                                             (sort[5] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
@@ -438,9 +422,9 @@ class AbsenceManage extends Component {
                             </tr>
                             </thead>
                             <tbody>{
-                                data.map((absence, index) =>
-                                    < FormCard key={index} absence={absence}
-                                               stt={index + (check - 1) * limit + 1}/>)}
+                                data.map((attend, index) =>
+                                    < AttendCard key={index} attend={attend}
+                                                 stt={index + (check - 1) * limit + 1}/>)}
                             </tbody>
                         </Table>
                         <Row>
@@ -484,4 +468,4 @@ class AbsenceManage extends Component {
     }
 }
 
-export default AbsenceManage;
+export default AttendTable;

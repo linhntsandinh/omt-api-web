@@ -1,0 +1,6 @@
+{
+  "name": "Quan ly nhan vien",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Usermeanager.js"
+}

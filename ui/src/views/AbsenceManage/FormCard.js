@@ -29,9 +29,13 @@ class FormCard extends Component {
 
     render() {
         const absence = this.props.absence;
-        const absenceLink = `#/absencemanage/${absence.user_id}&&${absence.user_id}`
+        const absenceLink = `#/absencemanage/${absence.user_id}&&${absence.status}`
+           let className = "text-center";
+        if(absence.status!=='0'){
+          className="text-center block-formcard";
+        }
             return (
-                <tr className="text-center" onDoubleClick={() => {
+                <tr className={className} style={{height:20}} onDoubleClick={() => {
                     document.location = absenceLink
                 }} onMouseEnter={(e) => {
                     if (this.state.show === false)

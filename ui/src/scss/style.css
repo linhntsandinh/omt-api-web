@@ -9940,13 +9940,20 @@ body {
   right: auto; }
 
 table.private-table tr:hover {
-  background: #e4ffd3; }
+  outline: 2px solid rgba(0, 0, 0, 0.5);
+  outline-offset: -2px; }
 
 table.private-table tr.header-table th:hover {
-  background: #fffa2f; }
+  background-color: #f9ffc3; }
+
+.table.small-table th, .table.small-table td {
+  padding: 0.4em; }
 
 .main-avatar {
   width: 70%; }
+
+.block-formcard {
+  background-color: rgba(0, 0, 0, 0.05); }
 
 .sidebar {
   display: flex;
@@ -9975,6 +9982,9 @@ table.private-table tr.header-table th:hover {
 
 body {
   background: #f6faff; }
+
+.attend-table {
+  margin-top: 2em; }
 
 html body .app.flex-row.align-items-center {
   height: 100vh; }
