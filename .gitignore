@@ -14,5 +14,7 @@ dist
 /RUNNING_PID
 /.settings
 ui/node_modules
+node_modules
 ui/build
 /public
+/**/*.orig

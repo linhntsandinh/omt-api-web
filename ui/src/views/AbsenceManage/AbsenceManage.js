@@ -1,4 +1,7 @@
 /**
+ * Created by Vu Tien Dai on 29/06/2018.
+ */
+/**
  * Created by Vu Tien Dai on 27/06/2018.
  */
 /**
@@ -166,10 +169,10 @@ class AbsenceManage extends Component {
     }
 
     componentDidMount() {
-        fetch('https://daivt.000webhostapp.com/get_profile.php', {
+            fetch('http://localhost:9000/absence/load', {
             method: 'POST',
-            headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode(
+            headers: ("Content-type:application/json"),
+            body: JSON.stringify(
                 {
                     id: this.state.id,
                     writer: this.state.writer,
@@ -177,35 +180,28 @@ class AbsenceManage extends Component {
                     reason: this.state.reason,
                     start: this.state.start,
                     total: this.state.total,
-                    orderby: this.state.orderby,
-                    ordervalue: this.state.ordervalue,
                     limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
+                    offset: ((this.state.check - 1) * this.state.limit),
+                    orderby: this.state.orderby,
+                    ordervalue:this.state.ordervalue
                 })
 
         }).then(function (response) {
                 return response.json();
             }
         ).then((result) => {
+                console.log(result)
                 this.setState({data: result});
-            }
-        )
-        fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-                this.setState({length: result[0]['count']});
-
             }
         )
 
     }
 
     getData() {
-        fetch('https://daivt.000webhostapp.com/get_profile.php', {
+        fetch('http://localhost:9000/absence/load', {
             method: 'POST',
-            headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode(
+            headers: ("Content-type:application/json"),
+            body: JSON.stringify(
                 {
                     id: this.state.id,
                     writer: this.state.writer,
@@ -214,13 +210,16 @@ class AbsenceManage extends Component {
                     start: this.state.start,
                     total: this.state.total,
                     limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
+                    offset: ((this.state.check - 1) * this.state.limit),
+                    orderby: this.state.orderby,
+                    ordervalue:this.state.ordervalue
                 })
 
         }).then(function (response) {
                 return response.json();
             }
         ).then((result) => {
+            console.log(result)
                 this.setState({data: result});
             }
         )
@@ -485,3 +484,4 @@ class AbsenceManage extends Component {
 }
 
 export default AbsenceManage;
+

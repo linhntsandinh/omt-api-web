@@ -34,6 +34,8 @@ import UserCard from "./UserCard"
 import {formEncode} from '../../DataUser'
 
 function Pagin(data) {
+
+
     let p = data.parent;
     let check = data.check;
     let pagin = data.pagin;
@@ -43,6 +45,7 @@ function Pagin(data) {
                             onClick={(e) => p.handleClick((pagin + data.index), e)}>{pagin + data.index}</PaginationLink>
         </PaginationItem>
     )
+
 
 }
 

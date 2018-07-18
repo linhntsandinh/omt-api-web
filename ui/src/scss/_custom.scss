@@ -1,4 +1,29 @@
 // Here you can add other styles
+
+.app-header .navbar-nav .dropdown-menu-right {
+  right: auto; }
+
+html body .app.flex-row.align-items-center {
+  height: 100vh; }
+#thuonghtavatar {
+  width: 60%;
+}
+#idtable{
+  margin-top:20px;
+}
+#idavata{
+  max-width: 70%;
+}
+#idbuton {
+  width: 60%; }
+
+#idavataUser1{
+  max-width: 30%;
+}
+#idavataUser{
+  max-width: 30%;
+}
+
 table.private-table tr:hover {
   outline: 2px solid rgba(0, 0, 0, 0.5);
   outline-offset: -2px;
