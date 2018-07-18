@@ -7,6 +7,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
+import slick.lifted.TableQuery
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -64,6 +65,17 @@ class TimelogFormDef(tag: Tag) extends Table[TimelogForm](tag, "time_logs") {
     (id, user_id, date, start_time, end_time, device_info) <> ((TimelogForm.apply _).tupled, TimelogForm.unapply)
 }
 
+case class TimelogLoadRequest(id: Option[Int], user_name: String,job_possition_title: String ,date: Date)
+object TimelogLoadRequest{
+  implicit val reader = Json.reads[TimelogLoadRequest]
+  implicit val writer = Json.writes[TimelogLoadRequest]
+}
+
+case class TimelogLoad(id: Option[Int], user_name: String,job_possition_title: String , check_in: Time, check_out:Time, date: Date)
+object TimelogLoad {
+  implicit val reader = Json.reads[TimelogLoad]
+  implicit val writer = Json.writes[TimelogLoad]
+}
 
 class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                        (implicit executionContext: ExecutionContext)
@@ -84,5 +96,10 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   def update(timelogForm: TimelogForm) = {
     val q = TimelogForm.filter(_.id === timelogForm.id).update(timelogForm)
     db.run(q)
+  }
+
+
+  def load(date: Date):Future[Int] = {
+
   }
 }

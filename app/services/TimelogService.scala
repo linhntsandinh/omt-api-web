@@ -5,12 +5,13 @@ import java.text.SimpleDateFormat
 
 import javax.inject.Inject
 import models.{Timelog, TimelogData, TimelogForm}
+import play.api.mvc.Result
+import slick.lifted.TableQuery
 
 import scala.concurrent.Future
 
 class TimelogService @Inject()(timelog: Timelog){
   def delete(id: Int): Future[Int] = timelog.delete(id)
-
   def insert(timelogForm: TimelogForm): Future[Int] = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
     val sdf2 = new SimpleDateFormat("HH:mm:ss")

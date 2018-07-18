@@ -7,7 +7,7 @@ object LoginForm {
   implicit val reader = Json.reads[LoginForm]
 }
 
-case class UserForm(id: Option[Int], username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int)
+case class UserForm(id: Option[Int], username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, update_by: Option[Int], create_by: Option[Int])
 object UserForm {
   implicit val reader = Json.reads[UserForm]
   implicit val writer = Json.writes[UserForm]
