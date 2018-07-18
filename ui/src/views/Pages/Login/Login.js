@@ -37,9 +37,8 @@ class Login extends Component {
             .then((responseJson) => {
                 if(responseJson){
                 localStorage.setItem('data',JSON.stringify(responseJson));
-                localStorage.setItem('Login','false')
-                pop.parent.HandleChange();
-                console.log(responseJson)
+                localStorage.setItem('permission','true')
+                pop.parent.HandleChange(responseJson);
             }})
         const {history} = this.props.props;
         // history.push('/dashboard');

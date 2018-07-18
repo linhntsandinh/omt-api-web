@@ -21,14 +21,14 @@ class DefaultHeader extends Component {
 
     Logout(pop) {
         logout();
-        pop.parent.HandleChange()
+        pop.parent.HandleChange(null);
     }
 
     render() {
-
-        // eslint-disable-next-line
         const {children, ...attributes} = this.props;
 
+
+        // eslint-disable-next-line
         return (
             <React.Fragment>
                 <AppSidebarToggler className="d-lg-none" display="md" mobile/>

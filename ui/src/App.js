@@ -27,30 +27,20 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            data:'',
             isLogin: localStorage.getItem('Login')
         }
 
     }
-    HandleChange() {
+    HandleChange(data) {
         this.setState({
-            isLogin: !this.state.isLogin
+            data:data,
+            isLogin: !this.state.isLogin,
         })
-        console.log("DM")
+        console.log(data)
     }
 
-    // componentDidMount() {
-    //         fetch("https://daivt.000webhostapp.com/login.php", {
-    //             method: 'POST',
-    //             headers: {"Content-type": "application/x-www-form-urlencoded"},
-    //             body: formEncode({user: getData('username'), pass: getData('password')}),
-    //         }).then((response) => response.json())
-    //             .then((responseJson) => {
-    //                     localStorage.setItem('data', JSON.stringify(responseJson));
-    //                     localStorage.setItem('Login', 'false')
-    //                     this.HandleChange();
-    //                 }
-    //             )
-    // }
+
 
 
     render() {
