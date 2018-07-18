@@ -199,6 +199,18 @@ const AbsenceDetail = Loadable({
     loading: Loading,
 });
 
+const Profiles = Loadable(
+    {
+        loader:()=>import('./views/Profile/Profiles'),
+        loading: Loading,
+    }
+);
+const Profile = Loadable(
+    {
+        loader:()=>import('./views/Profile/ProfileAdmin'),
+        loading: Loading,
+    }
+);
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -247,7 +259,8 @@ const routes = [
     {path: '/absence', exact: true, name: 'Viết đơn', component: Absence},
     {path: '/absencemanage', exact: true, name: 'List đơn', component: AbsenceManage},
     {path: '/absencemanage/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetail},
-
+    {path: '/listprofile', exact: true, name: 'Profiles', component: Profiles},
+    {path: '/profile/:id', exact: true, name: 'Profiles', component: Profile},
 
 ];
 

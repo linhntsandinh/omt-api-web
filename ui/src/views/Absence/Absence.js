@@ -90,7 +90,7 @@ class Absence extends Component {
         ).then((result) => {
                 if (result) {
                     this.setState({
-                        job_title: result[0]['title']
+                        job_title: ''
                     })
                 }
             }

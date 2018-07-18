@@ -1,10 +1,4 @@
-/*
-/!**
- * Created by Vu Tien Dai on 27/06/2018.
- *!/
-/!**
- * Created by Vu Tien Dai on 25/06/2018.
- *!/
+
 import React, {Component} from 'react';
 import {
     Badge,
@@ -486,4 +480,4 @@ class AbsenceManage extends Component {
 }
 
 export default AbsenceManage;
-*/
+
