@@ -16,6 +16,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
   private val AbsenceTable = TableQuery[AbsenceApplicationsTableDef]
   private val AbsenceReasonsTable = TableQuery[AbsenceReasonsTableDef]
   private val ProfileTable = TableQuery[ProfileTableDef]
+  private val UserTable = TableQuery[UserTableDef]
   private val AbsenceApproveTable = TableQuery[AbsenceApproveTableDef]
   def load(absenceRequestLoad: AbsenceRequestLoad): Future[Option[(ListBuffer[AbsenceApplicationsLoad],Int)]] = {
     val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
@@ -104,22 +105,78 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
   def delete(Id: Int): Future[Int] = {
     db.run(AbsenceTable.filter(_.id === Id).delete)
   }
-  def loadForm(): Future[Option[Seq[AbsenceReasonsData]]] = {
+  def loadForm(id : Int): Future[Option[(Seq[AbsenceReasonsData], ListBuffer[String], Seq[ProfileData])]] = {
+//
+    var listName = new ListBuffer[String]
+    var listReason : Seq[AbsenceReasonsData] = null
+    var profileLoad : Seq[ProfileData]= null
     val q = AbsenceReasonsTable.result
     val rs = db.run {
       q
     }
-    rs.map {
-      list => {
-        list.size match {
-          case 0 => None
-          case _ => {
-            Some(list)
-          }
+//    rs.map {
+//      list => {
+//        listReason = list
+//      }
+//    }
+    val a = ProfileTable.filter(_.user_id === id).result
+    val rss = db.run {
+      a
+    }
+//    rss.map {
+//      list => {
+//        profileLoad = list
+//      }
+//    }
+    val p = ((UserTable join ProfileTable).on(_.id === _.user_id) join ProfileTable).on(_._2.job_title_id === _.job_title_id)
+      .filter(_._1._1.id=== id).result
+    val r = db.run {
+      p
+    }
+//    r.map {
+//      list => {
+//        list.foreach {
+//          item => {
+//            val itemName: String = item._2.full_name
+//            listName += itemName
+//          }
+//        }
+//      }
+//    }
+
+//    #1
+//    rss.zip(r).zip(rs).map{
+//      case ((rss1,r1),rs1) => {
+//        profileLoad = rss1
+//          r1.foreach {
+//            item => {
+//              val itemName: String = item._2.full_name
+//              listName += itemName
+//            }
+//          }
+//        listReason = rs1
+//        Some(listReason,listName,profileLoad)
+//      }
+//    }
+
+    for{
+      r1 <- r
+      rs1 <- rs
+      rss1 <- rss
+    } yield {
+      profileLoad = rss1
+      r1.foreach {
+        item => {
+          val itemName: String = item._2.full_name
+          listName += itemName
         }
       }
+      listReason = rs1
+      Some(listReason,listName,profileLoad)
     }
+
   }
+
   def update(absenceApplicationsData: AbsenceApplicationsData)={
     val q = AbsenceTable.filter(_.id === absenceApplicationsData.id).update(absenceApplicationsData)
     db.run(q)

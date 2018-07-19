@@ -140,6 +140,11 @@ function UserRow(props) {
             <th><img src={"assets/img/avatars/2.jpg" } className={"img-avatar"} id={"idavataUser1"} /></th>
             <th scope="row"><a href={userLink}>{user.id}</a></th>
             <td><a href={userLink}>{user.name}</a></td>
+            <td>
+                {user.show === true ?
+                    <i  className="icon-trash" onClick={()=>{console.log("Xoa nha")}}/> : null}  &nbsp;  &nbsp;
+                {user.show === true ?
+                    <i  className="i icon-note" onClick={()=>{console.log("Fix nha")}}/> : null}</td>
             <td>{user.team}</td>
             <td>{user.timecheckin}</td>
             <td>{user.timecheckout}</td>
@@ -152,10 +157,8 @@ class Timekeeping extends Component {
 
     constructor(props) {
         super(props);
-
+        console.log("contructor");
         this.state = {
-
-
             pagin: 1,
             check: 1,
             data: [],
@@ -171,7 +174,7 @@ class Timekeeping extends Component {
         }
     }
 
-    /*componentDidMount() {
+    componentDidMount() {
         console.log("getAll");
         fetch('https://daivt.000webhostapp.com/get_profile.php', {
             method: 'POST',
@@ -203,7 +206,7 @@ class Timekeeping extends Component {
 
             }
         )
-    }*/
+    }
 
     getData(check) {
         console.log("getData");
@@ -297,11 +300,15 @@ class Timekeeping extends Component {
     }
 
   render() {
+        console.log("render");
+      const {
+          check, data, full_name, length, limit, pagin, search, sort, orderby, ordervalue
+      } = this.state
       const userList = usersData.filter((user) => user.id < 10)
-      const data = [];
+      const data_pagin = [];
       for (let i = 0; i < Math.ceil(this.state.length / this.state.limit); i++) {
-          if (i >= (this.state.pagin - 1) && i < this.state.pagin + 4 && data.length < 5)
-              data.push(i);
+          if (i >= (this.state.pagin - 1) && i < this.state.pagin + 4 && data_pagin.length < 5)
+              data_pagin.push(i);
       }
     // this.componentDidMount();
     // console.log(this.state.data);
@@ -393,33 +400,31 @@ class Timekeeping extends Component {
                                 <thead>
                                 <tr>
                                     <th  width="5%">Stt</th>
-                                    <th  width="10%" ><img src={"assets/img/avatars/2.jpg"} className={"img-avatar"} id={"idavataUser"}/></th>
-                                    <th  width="10%">Id</th>
+
+
                                     <th  width="20%">Name</th>
-                                    <th  width="15%">Team</th>
-                                    <th  width="15%" >Time checkin</th>
-                                    <th  width="15%">Time checkout</th>
+
+                                    <th  width="10%">Team</th>
+                                    <th  width="12.5%">Time checkin</th>
+                                    <th  width="10%"></th>
+                                    <th  width="12.5%">Time checkout</th>
+                                    <th  width="10%"></th>
                                     <th  width="10%">Date</th>
+                                    <th  width="10%">Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {
                                     userList.map((user, index) =>
-                                    <UserRow key={index} index={index+1} user={user}/>
-                                )}
-
+                                        < UserCard key={index} user={user}
+                                                   stt={index + (check - 1) * limit + 1}/>)
+                                }
                                 </tbody>
                             </Table>
                             <Pagination  >
                                 <PaginationItem>
                                     <PaginationLink previous tag="button" onClick={(e) => this.onLeft(e)}></PaginationLink>
                                 </PaginationItem>
-                                {
-                                    data.map((value, index) =>
-                                        <Pagin key={index} index={index} parent={this} pagin={this.state.pagin} check={this.state.check}/>
-                                    )
-                                }
 
                                 <PaginationItem>
                                     <PaginationLink next tag="button" onClick={(e) => this.onRight(e)}></PaginationLink>

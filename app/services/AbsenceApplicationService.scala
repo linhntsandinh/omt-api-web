@@ -27,12 +27,13 @@ class AbsenceApplicationService @Inject() (absence : AbsenceApplications){
 
     absence.insert(result)
   }
-  def loadForm(): Future[Result] =  {
-    val load = absence.loadForm()
+  def loadForm(id : Int): Future[Result] =  {
+    val load = absence.loadForm(id)
     load.map{
       case Some(x) => {
         println(x)
-        JS.OK("data"->Json.toJson(x))
+        JS.OK("Reasons"->Json.toJson(x._1), "Reciver"->Json.toJson(x._2) , "profile"->Json.toJson(x._3))
+//
       }
       case None => JS.KO("Không có đơn nào hợp lệ!")
     }
