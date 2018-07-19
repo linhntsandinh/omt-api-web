@@ -5,8 +5,8 @@ import {createStore} from 'redux'
 import {formEncode} from "./DataUser";
 const profile={isLogin:false,profile:[]}
 const reducer = (state=profile,action)=>{
-    if(action.type==='login')return{isLogin:true,profiles:action.data}
-    if(action.type==='logout')return{isLogin:false,profiles:action.data}
+    if(action.type==='login')return{isLogin:true,profile:action.data}
+    if(action.type==='logout')return{isLogin:false,profile:action.data}
     return state;
 
 }
