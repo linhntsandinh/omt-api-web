@@ -10003,8 +10003,25 @@ body {
 html body .app.flex-row.align-items-center {
   height: 100vh; }
 
-#tablemount tr:hover{
 
-  background: #e4ffd3;
+.lableabc{
+  margin-left: 30px;
+}
+.rowsoid{
+  border-bottom: solid;
 
+}
+
+.Colabcprofile{
+  margin-top:8px;
+  text-align: right;
+}
+
+.Colabcprofile1{
+
+  text-align: right;
+}
+
+#rowcaleda{
+  margin-left: 0px;
 }

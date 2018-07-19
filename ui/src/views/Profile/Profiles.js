@@ -73,7 +73,7 @@ class Profiles extends Component {
                                         <th  width="10%">Stt</th>
                                         <th  width="20%">Name</th>
                                         <th  width="10%">Phone</th>
-                                        <th  width="10%">Birth date</th>
+                                        <th  width="10%">Gmail</th>
                                         <th  width="20%">Address</th>
                                         <th  width="10%">Join date</th>
                                         <th  width="10%">Gender</th>

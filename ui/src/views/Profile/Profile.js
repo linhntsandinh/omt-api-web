@@ -31,7 +31,6 @@ class Proflie extends Component {
                                                 <tr>
                                                     <td>{`${key}:`}</td>
                                                     <td><strong>{value}</strong></td>
-
                                                 </tr>
                                             )
                                         })

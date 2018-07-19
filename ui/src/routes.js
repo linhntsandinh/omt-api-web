@@ -212,6 +212,15 @@ const Profile = Loadable(
     }
 );
 
+const ProfileUser = Loadable(
+
+    {
+        loader:()=>import('./views/Profile/ProfileUser'),
+        loading: Loading,
+    }
+
+);
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
     {path: '/', exact: true, name: 'Home', component: DefaultLayout},
@@ -260,7 +269,8 @@ const routes = [
     {path: '/absencemanage', exact: true, name: 'List đơn', component: AbsenceManage},
     {path: '/absencemanage/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetail},
     {path: '/listprofile', exact: true, name: 'Profiles', component: Profiles},
-    {path: '/profile/:id', exact: true, name: 'Profiles', component: Profile},
+    {path: '/profile/:id', exact: true, name: 'ProfileAdmin', component: Profile},
+    {path: '/profileUser/:id', exact: true, name:'ProfileUser', component:ProfileUser},
 
 ];
 

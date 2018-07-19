@@ -17,8 +17,8 @@ class FormCard extends Component {
     render() {
 
         const user = this.props.user;
-        const userLink = `#/Profile/${user.id}`
-
+        const userLink = `#/Profile/${user.id}`;
+        const profileUserlink = `#/profileUser/${user.id}`;
         return (
             <tr  onDoubleClick={() => {
                 document.location = userLink
@@ -30,9 +30,9 @@ class FormCard extends Component {
                     this.setState({show: false})
             }}>
                 <td>{this.props.stt}</td>
-                <td>{user.full_name}</td>
+                <td> <a href={profileUserlink}><font color="0003FF">{user.full_name}</font></a></td>
                 <td>{user.phone_number}</td>
-                <td>{user.birth_date}</td>
+                <td>{user.Gmail}</td>
                 <td>{user.address}</td>
                 <td>{user.join_date}</td>
                 <td>{user.gender}</td>

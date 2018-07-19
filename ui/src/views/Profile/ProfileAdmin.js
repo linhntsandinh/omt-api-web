@@ -2,10 +2,11 @@
 
 
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, InputGroup, InputGroupAddon,Input, Button} from 'reactstrap';
 
 import proflieData from './ProfileData'
-
+import Gender from './Gender'
+import MyCaledar from "./Caledar";
 class Proflie extends Component {
     constructor(props) {
         super(props)
@@ -27,38 +28,138 @@ class Proflie extends Component {
                         <Card>
 
                             <CardHeader>
-                                <strong><i className="icon-info pr-1"></i>User id: {this.props.match.params.id}</strong>
+                                <Row>
+                                    <Col md="7">
+                                        <i className="fa fa-align-justify"></i> Thông tin
+                                    </Col>
+                                    <Col md="5">
+
+
+                                    </Col>
+                                </Row>
+
                             </CardHeader>
-                            <CardBody>
-                                <Table  responsive striped hover>
-                                    <tbody>
-                                    {
-                                        userDetails.map(([key, value]) => {
-                                            return (
-                                                <tr   onMouseEnter={(e) => {
-                                                    if (this.state.show === false)
-                                                        this.setState({show: true})
-                                                }} onMouseLeave={(e) => {
-                                                    if (this.state.show === true)
-                                                        this.setState({show: false})
-                                                }}>
-                                                    <td>{`${key}:`}</td>
-                                                    <td><strong>{value}</strong></td>
-                                                    <td>
-                                                        {this.state.show === true ?
-                                                            <i  className="icon-trash" onClick={()=>{console.log("Xoa")}}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;
-                                                        {this.state.show === true ?
-                                                            <i  className="i icon-note" onClick={()=>{console.log("edit")}}/> : null}</td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                    </tbody>
-                                </Table>
-                            </CardBody>
+
+
+
+                                        <Row >
+
+
+                                            <Col  md={"6"} className={"Colabcprofile"}><label  className={"lableabc"}>Tài khoản</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input  placeholder={user.user_id} />
+                                                </InputGroup>
+                                            </Col>
+
+
+                                        </Row>
+
+                                        <Row >
+                                            <Col md={"6"} className={"Colabcprofile"} ><label  className={"lableabc"} >Họ và Tên</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup >
+                                                    <Input  placeholder={user.full_name}/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col md={"6"} className={"Colabcprofile"}>
+                                            <label  className={"lableabc"}>Số điện thoại</label>
+                                            </Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input placeholder={user.phone_number} />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col  md={"6"} className={"Colabcprofile"}>
+                                                <label  className={"lableabc"}>Ngày sinh</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                   <MyCaledar/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={"6"} className={"Colabcprofile"}><label  className={"lableabc"}>Địa chỉ</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input placeholder={ user.address }/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={"6"} className={"Colabcprofile"}><label  className={"lableabc"}>Gmail</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input placeholder={ user.Gmail }/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row> <Col md={"6"} className={"Colabcprofile"}>
+                                            <label  className={"lableabc"}>Nghề nghiệp (job_title_id)</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input placeholder={ user.job_title_id } />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row> <Col md={"6"} className={"Colabcprofile"}>
+                                            <label  className={"lableabc"}>Bộ phận (job_position_id)</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input placeholder={user.job_position_id} />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row> <Col md={"6"} className={"Colabcprofile"}>
+                                            <label  className={"lableabc"}>Trạng thái(status)</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Input placeholder={user.status} />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row> <Col md={"6"} className={"Colabcprofile"}>
+                                            <label  className={"lableabc"}>Ngày vào làm</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <MyCaledar/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+
+                                        <Row> <Col md={"6"} className={"Colabcprofile"}>
+                                            <label className={"lableabc"}>Giới Tính</label></Col>
+                                            <Col md={"6"}>
+                                                <InputGroup>
+                                                    <Gender />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+
+                            <CardHeader>
+                                <Row>
+                                    <Col>
+
+                                    </Col>
+                                <Col col="6" sm="4" md="2" xl className="mb-3 mb-xl-0">
+                                    <Button block color="success">Chỉnh sửa</Button>
+                                </Col>
+
+                                </Row>
+                            </CardHeader>
+
                         </Card>
                     </Col>
                 </Row>
+                <Row>
+
+                </Row>
+
             </div>
         )
     }
