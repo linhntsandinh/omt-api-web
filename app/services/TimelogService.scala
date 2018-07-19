@@ -19,19 +19,39 @@ class TimelogService @Inject()(timelog: Timelog){
     val sqlStartTime = new Time(sdf2.parse(timelogForm.start_time).getTime)
     val sqlEndTime = new Time(sdf2.parse(timelogForm.end_time).getTime)
 
-    val profileData = new TimelogData(null,
+    val timelogData = new TimelogData(null,
       timelogForm.user_id,
       sqlDate,
       sqlStartTime,
       sqlEndTime,
       timelogForm.device_info,
       Some(System.currentTimeMillis() / 1000),
-      null,
-      null,
-      null
+      Some(System.currentTimeMillis() / 1000),
+      timelogForm.created_by,
+      timelogForm.updated_by
     )
-    timelog.insert(profileData)
+    timelog.insert(timelogData)
   }
 
-  def update(timelogData: TimelogForm): Future[Int] = timelog.update(timelogData)
+  def update(timelogForm: TimelogForm): Future[Int] = {
+    val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
+    val sdf2 = new SimpleDateFormat("HH:mm:ss")
+
+    val sqlDate = new Date(sdf1.parse(timelogForm.date).getTime)
+    val sqlStartTime = new Time(sdf2.parse(timelogForm.start_time).getTime)
+    val sqlEndTime = new Time(sdf2.parse(timelogForm.end_time).getTime)
+
+    val timelogData = new TimelogData(null,
+      timelogForm.user_id,
+      sqlDate,
+      sqlStartTime,
+      sqlEndTime,
+      timelogForm.device_info,
+      null,
+      Some(System.currentTimeMillis() / 1000),
+      timelogForm.created_by,
+      timelogForm.updated_by
+    )
+    timelog.update(timelogData)
+  }
 }
