@@ -26,6 +26,9 @@ import {connect} from 'react-redux'
 class App extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false
+        }
         this.isLogin();
     }
 
@@ -38,14 +41,19 @@ class App extends Component {
             .then((responseJson) => {
                 if (responseJson) {
                     this.props.dispatch({type: "login", data: responseJson})
+
                 }
+                this.setState({
+                    loading: true
+                })
             })
 
     }
 
     render() {
+        console.log(this.state.loading)
         return (
-            <HashRouter>
+            <HashRouter>{this.state.loading ?
                 <Switch>
                     {!this.props.isLogin ?
                         <Route path="/login" name="Login Page" component={Login}/> : null}
@@ -54,7 +62,7 @@ class App extends Component {
                     <Route exact path="/404" name="Page 404" component={Page404}/>
                     <Route exact path="/500" name="Page 500" component={Page500}/>
                     {this.props.isLogin ? <Route path="/" name="Home" component={DefaultLayout}/> : null}
-                </Switch>
+                </Switch> : null}
             </HashRouter>
         );
     }
