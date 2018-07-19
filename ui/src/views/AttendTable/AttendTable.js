@@ -262,7 +262,7 @@ class AttendTable extends Component {
     }
 
     handleChange(e) {
-        console.log(e.target.name)
+        // console.log(e.target.name)
         this.setState({[e.target.name]: e.target.value});
     }
 
@@ -270,8 +270,8 @@ class AttendTable extends Component {
         if (e) {
             let check = Math.ceil(((this.state.limit * this.state.check) - this.state.limit + 1) / e.value);
             let pagin = Math.floor(((this.state.limit * this.state.check) - this.state.limit + 1) / (e.value * this.state.pagin_number)) * this.state.pagin_number + 1;
-            console.log(this.state.check + "  " + this.state.pagin)
-            console.log(check + "  " + pagin)
+            // console.log(this.state.check + "  " + this.state.pagin)
+            // console.log(check + "  " + pagin)
             this.setState({limit: e.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
@@ -305,7 +305,7 @@ class AttendTable extends Component {
             orderby: name,
             ordervalue: (this.state.sort[i] % 3 === 1 ? 'ASC' : this.state.sort[i] % 3 === 2 ? 'DESC' : '')
         })
-        console.log(this.state.orderby + ":" + this.state.ordervalue)
+        // console.log(this.state.orderby + ":" + this.state.ordervalue)
     }
 
     render() {

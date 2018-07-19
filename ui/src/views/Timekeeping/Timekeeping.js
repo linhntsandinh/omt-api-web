@@ -7,24 +7,24 @@ import UserCard from "./UserCard"
 import {formEncode} from "../../DataUser";
 import {Bar, Line} from 'react-chartjs-2';
 import {
-  Badge,
-  Button,
-  ButtonDropdown,
-  ButtonGroup,
-  ButtonToolbar,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Col,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Progress,
-  Row,
-  Table,
+    Badge,
+    Button,
+    ButtonDropdown,
+    ButtonGroup,
+    ButtonToolbar,
+    Card,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    Col,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Progress,
+    Row,
+    Table,
     InputGroup,
     InputGroupAddon,
     InputGroupText,
@@ -34,7 +34,9 @@ import {
     PaginationLink,
 
 
-}from 'reactstrap';
+} from 'reactstrap';
+import {connect} from "react-redux";
+
 BigCalendar.momentLocalizer(moment);
 
 
@@ -50,6 +52,7 @@ function Pagin(data) {
     )
 
 }
+
 function More(data) {
     return (
         <Row>
@@ -61,25 +64,26 @@ function More(data) {
                         <Row>
                             <Col md="4">
                                 <Row>
-                                    <InputGroupText className="lable_search" >
+                                    <InputGroupText className="lable_search">
                                         Email
-                                    </InputGroupText >
+                                    </InputGroupText>
                                 </Row>
                                 <Row>
-                                    <InputGroupText className="lable_search" >
+                                    <InputGroupText className="lable_search">
                                         Số điện thoại
-                                    </InputGroupText >
+                                    </InputGroupText>
                                 </Row>
                                 <Row>
-                                    <InputGroupText className="lable_search"  >
+                                    <InputGroupText className="lable_search">
                                         Chuyên môn
                                     </InputGroupText>
                                 </Row>
                             </Col>
-                            <Col >
+                            <Col>
                                 <Row>
-                                    <Col >
-                                        <Input className="lable_search" name ="email" value={data.pr.state.email} onChange={(e)=>data.pr.handleChange(e)}  onKeyPress={(ev, e) => {
+                                    <Col>
+                                        <Input className="lable_search" name="email" value={data.pr.state.email}
+                                               onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
                                             console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
@@ -89,8 +93,10 @@ function More(data) {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col >
-                                        <Input className="lable_search" name ="phone_number" value={data.pr.state.phone_number} onChange={(e)=>data.pr.handleChange(e)}   onKeyPress={(ev, e) => {
+                                    <Col>
+                                        <Input className="lable_search" name="phone_number"
+                                               value={data.pr.state.phone_number}
+                                               onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
                                             console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
@@ -100,8 +106,10 @@ function More(data) {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col >
-                                        <Input className="lable_search" name ="job_position" value={data.pr.state.job_position} onChange={(e)=>data.pr.handleChange(e)}  onKeyPress={(ev, e) => {
+                                    <Col>
+                                        <Input className="lable_search" name="job_position"
+                                               value={data.pr.state.job_position}
+                                               onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
                                             console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
@@ -122,34 +130,38 @@ function More(data) {
 
 
 function UserRow(props) {
-    const user =  props.user
+    const user = props.user
     const index = props.index
     const userLink = `#/users/${user.id}`
-   /* const getBadge = (status) => {
-        return status === 'Active' ? 'success' :
-            status === 'Inactive' ? 'secondary' :
-                status === 'Pending' ? 'warning' :
-                    status === 'Banned' ? 'danger' :
-                        'primary'
-    }*/
+    /* const getBadge = (status) => {
+         return status === 'Active' ? 'success' :
+             status === 'Inactive' ? 'secondary' :
+                 status === 'Pending' ? 'warning' :
+                     status === 'Banned' ? 'danger' :
+                         'primary'
+     }*/
 
     return (
         <tr key={user.id.toString()}>
             <th>
                 <a>{index}</a>
             </th>
-            <th><img src={"assets/img/avatars/2.jpg" } className={"img-avatar"} id={"idavataUser1"} /></th>
+            <th><img src={"assets/img/avatars/2.jpg"} className={"img-avatar"} id={"idavataUser1"}/></th>
             <th scope="row"><a href={userLink}>{user.id}</a></th>
             <td><a href={userLink}>{user.name}</a></td>
             <td>
                 {user.show === true ?
-                    <i  className="icon-trash" onClick={()=>{console.log("Xoa nha")}}/> : null}  &nbsp;  &nbsp;
+                    <i className="icon-trash" onClick={() => {
+                        console.log("Xoa nha")
+                    }}/> : null}  &nbsp;  &nbsp;
                 {user.show === true ?
-                    <i  className="i icon-note" onClick={()=>{console.log("Fix nha")}}/> : null}</td>
+                    <i className="i icon-note" onClick={() => {
+                        console.log("Fix nha")
+                    }}/> : null}</td>
             <td>{user.team}</td>
             <td>{user.timecheckin}</td>
             <td>{user.timecheckout}</td>
-            <td><Badge href={userLink} >{user.date}</Badge></td>
+            <td><Badge href={userLink}>{user.date}</Badge></td>
         </tr>
     )
 }
@@ -158,7 +170,6 @@ class Timekeeping extends Component {
 
     constructor(props) {
         super(props);
-        console.log("contructor");
         this.state = {
             pagin: 1,
             check: 1,
@@ -184,13 +195,10 @@ class Timekeeping extends Component {
             this.setState({
                 data: x
             })
-            console.log(this.state.data)
         })
     }
 
     render() {
-        // this.componentDidMount();
-        // console.log(this.state.data);
         return (
             <Card>
                 <CardBody>
@@ -204,6 +212,7 @@ class Timekeeping extends Component {
                             <Row className="btn-tk ">
                                 <div className=" text-center card-body">
                                     <Button className="btn-timekeeping" color="success" size="lg" onClick={() => {
+                                        this.props.dispatch({type: 'UP'})
                                     }}>Chấm công</Button>
                                 </div>
                             </Row>
@@ -234,4 +243,10 @@ class Timekeeping extends Component {
     }
 }
 
-export default Timekeeping;
+function mapStatetoProps(state) {
+    return {profile: state.profile}
+
+}
+
+export default connect(mapStatetoProps)(Timekeeping);
+

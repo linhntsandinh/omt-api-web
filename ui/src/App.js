@@ -19,47 +19,50 @@ import '../node_modules/react-select/dist/react-select.css';
 import {DefaultLayout} from './containers';
 // Pages
 import {Login, Page404, Page500, Register} from './views/Pages';
-import {formEncode,getData} from "./DataUser";
-
+import {formEncode, getData} from "./DataUser";
 // import { renderRoutes } from 'react-router-config';
+import {connect} from 'react-redux'
 
 class App extends Component {
     constructor(props) {
-        super(props)
-        this.state = {
-            data:'',
-            isLogin: localStorage.getItem('Login')
-        }
-
-    }
-    HandleChange(data) {
-        this.setState({
-            data:data,
-            isLogin: !this.state.isLogin,
-        })
-        console.log(data)
+        super(props);
+        this.isLogin();
     }
 
+    isLogin() {
+        fetch("https://daivt.000webhostapp.com/login.php", {
+            method: 'POST',
+            headers: {"Content-type": "application/x-www-form-urlencoded"},
+            body: formEncode({user: localStorage.getItem("username"), pass: localStorage.getItem("password")}),
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson) {
+                    this.props.dispatch({type: "login", data: responseJson})
+                }
+            })
 
-
+    }
 
     render() {
         return (
             <HashRouter>
                 <Switch>
-                    {!this.state.isLogin ?
-                        <Route exact path="/login" name="Login Page"
-                               render={(pop) => <Login props={pop} parent={this}/>}/> : null}
-                    {!this.state.isLogin ? <Redirect from="/" to="/login"/> : null}
+                    {!this.props.isLogin ?
+                        <Route path="/login" name="Login Page" component={Login}/> : null}
+                    {!this.props.isLogin ? <Redirect from="/" to="/login"/> : null}
                     <Route exact path="/register" name="Register Page" component={Register}/>
                     <Route exact path="/404" name="Page 404" component={Page404}/>
                     <Route exact path="/500" name="Page 500" component={Page500}/>
-                    {this.state.isLogin ? <Route path="/" name="Home"
-                                                 render={(pop) => <DefaultLayout props={pop} parent={this}/>}/> : null}
+                    {this.props.isLogin ? <Route path="/" name="Home" component={DefaultLayout}/> : null}
                 </Switch>
             </HashRouter>
         );
     }
 }
 
-export default App;
+function mapStatetoProps(state) {
+    return {isLogin: state.isLogin}
+
+}
+
+export default connect(mapStatetoProps)(App);

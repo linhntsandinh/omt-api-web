@@ -31,13 +31,13 @@ class DefaultLayout extends Component {
         return (
             <div className="app">
                 <AppHeader fixed>
-                    <DefaultHeader parent={this.props.parent}/>
+                    <DefaultHeader />
                 </AppHeader>
                 <div className="app-body">
                     <AppSidebar fixed display="lg">
                         <AppSidebarHeader/>
                         <AppSidebarForm/>
-                        <AppSidebarNav navConfig={navigation} {...this.props.props} />
+                        <AppSidebarNav navConfig={navigation} {...this.props} />
                         <AppSidebarFooter/>
                         <AppSidebarMinimizer/>
                     </AppSidebar>

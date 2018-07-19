@@ -13,35 +13,38 @@ import {
     Row
 } from 'reactstrap';
 import {formEncode} from '../../../DataUser'
+import {connect} from "react-redux";
+
 class Login extends Component {
     constructor(props) {
         super(props)
-
-        this.state={
-            username:'',
-            password:''
+        console.log(props)
+        this.state = {
+            username: '',
+            password: ''
         }
     }
-    handleChange(e){
+
+    handleChange(e) {
         this.setState({
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
-    handleClick(pop,e) {
+    handleClick(pop, e) {
         fetch("https://daivt.000webhostapp.com/login.php", {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode({user:this.state.username,pass:this.state.password}),
+            body: formEncode({user: this.state.username, pass: this.state.password}),
         }).then((response) => response.json())
             .then((responseJson) => {
-                if(responseJson){
-                localStorage.setItem('data',JSON.stringify(responseJson));
-                localStorage.setItem('permission','true')
-                pop.parent.HandleChange(responseJson);
-            }})
-        const {history} = this.props.props;
-        // history.push('/dashboard');
+                if (responseJson) {
+                    localStorage.setItem('username',this.state.username);
+                    localStorage.setItem('password',this.state.password);
+                    this.props.dispatch({type:"login",data:responseJson})
+                }
+            })
+
     }
 
     render() {
@@ -61,7 +64,8 @@ class Login extends Component {
                                                     <i className="icon-user"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <Input onChange={(e)=>this.handleChange(e)} name="username" type="text" placeholder="Username"/>
+                                            <Input onChange={(e) => this.handleChange(e)} name="username" type="text"
+                                                   placeholder="Username"/>
                                         </InputGroup>
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
@@ -69,12 +73,13 @@ class Login extends Component {
                                                     <i className="icon-lock"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <Input onChange={(e)=>this.handleChange(e)} name="password" type="password" placeholder="Password"/>
+                                            <Input onChange={(e) => this.handleChange(e)} name="password"
+                                                   type="password" placeholder="Password"/>
                                         </InputGroup>
                                         <Row>
                                             <Col xs="6">
                                                 <Button color="primary" className="px-4"
-                                                        onClick={(e) => this.handleClick(this.props,e)}>Login</Button>
+                                                        onClick={(e) => this.handleClick(e)}>Login</Button>
                                             </Col>
                                             <Col xs="6" className="text-right">
                                                 <Button color="link" className="px-0">Forgot password?</Button>
@@ -102,4 +107,6 @@ class Login extends Component {
     }
 }
 
-export default Login;
+
+export default connect(null)(Login);
+

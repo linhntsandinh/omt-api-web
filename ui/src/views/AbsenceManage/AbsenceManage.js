@@ -160,7 +160,7 @@ class AbsenceManage extends Component {
             sort: new Array(7).fill(0),
             pagin: 1,
             check: 1,
-            pagin_number:8
+            pagin_number: 8
 
         }
     }
@@ -177,8 +177,6 @@ class AbsenceManage extends Component {
                     reason: this.state.reason,
                     start: this.state.start,
                     total: this.state.total,
-                    orderby: this.state.orderby,
-                    ordervalue: this.state.ordervalue,
                     limit: this.state.limit,
                     offset: ((this.state.check - 1) * this.state.limit)
                 })
@@ -188,7 +186,6 @@ class AbsenceManage extends Component {
             }
         ).then((result) => {
                 this.setState({data: result});
-                console.log(result)
             }
         )
         fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
@@ -257,7 +254,7 @@ class AbsenceManage extends Component {
                     this.getData();
                 }
             )
-            if (this.state.pagin + this.state.pagin_number-1 === this.state.check) {
+            if (this.state.pagin + this.state.pagin_number - 1 === this.state.check) {
                 this.setState(
                     {
                         pagin: this.state.pagin + this.state.pagin_number,
@@ -284,10 +281,10 @@ class AbsenceManage extends Component {
 
     handleChangeLimit(e) {
         if (e) {
-            let check = Math.ceil(((this.state.limit * this.state.check)-this.state.limit+1) / e.value);
-            let pagin =Math.floor(((this.state.limit * this.state.check)-this.state.limit+1) / (e.value*this.state.pagin_number))*this.state.pagin_number+1 ;
-            console.log(this.state.check+"  "+this.state.pagin)
-            console.log(check+"  "+pagin)
+            let check = Math.ceil(((this.state.limit * this.state.check) - this.state.limit + 1) / e.value);
+            let pagin = Math.floor(((this.state.limit * this.state.check) - this.state.limit + 1) / (e.value * this.state.pagin_number)) * this.state.pagin_number + 1;
+            console.log(this.state.check + "  " + this.state.pagin)
+            console.log(check + "  " + pagin)
             this.setState({limit: e.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
@@ -326,11 +323,11 @@ class AbsenceManage extends Component {
 
     render() {
         const {
-            check, data, writer, length, limit, pagin, search, sort,pagin_number
+            check, data, writer, length, limit, pagin, search, sort, pagin_number
         } = this.state
         const data_pagin = [];
         for (let i = 0; i < Math.ceil(length / limit); i++) {
-            if (i >= (pagin - 1) && i < pagin + pagin_number-1 && data_pagin.length < pagin_number)
+            if (i >= (pagin - 1) && i < pagin + pagin_number - 1 && data_pagin.length < pagin_number)
                 data_pagin.push(i);
         }
         return (
@@ -381,7 +378,7 @@ class AbsenceManage extends Component {
                     </CardHeader>
 
                     <CardBody>
-                        <Table   bordered responsive className="private-table small-table">
+                        <Table bordered responsive className="private-table small-table">
                             <thead>
                             <tr className="header-table text-center">
                                 <th width="6%" name="id"

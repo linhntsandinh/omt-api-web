@@ -7,6 +7,7 @@ import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 
 import {logout} from '../../DataUser'
+import {connect} from "react-redux";
 
 const propTypes = {
     children: PropTypes.node,
@@ -19,9 +20,9 @@ class DefaultHeader extends Component {
         super(props)
     }
 
-    Logout(pop) {
-        logout();
-        pop.parent.HandleChange(null);
+    Logout() {
+        this.props.dispatch({type:"logout",data:[]});
+        localStorage.clear();
     }
 
     render() {
@@ -84,7 +85,7 @@ class DefaultHeader extends Component {
                                 color="primary">42</Badge></DropdownItem>
                             <DropdownItem divider/>
                             <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-                            <DropdownItem onClick={(e)=>{this.Logout(this.props,e)}}><i
+                            <DropdownItem onClick={(e)=>{this.Logout(e)}}><i
                                 className="fa fa-lock"></i> Logout</DropdownItem>
                         </DropdownMenu>
                     </AppHeaderDropdown>
@@ -99,4 +100,9 @@ class DefaultHeader extends Component {
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-export default DefaultHeader;
+function mapStatetoProps(state) {
+    return {isLogin: state.isLogin}
+
+}
+export default connect(mapStatetoProps)(DefaultHeader);
+
