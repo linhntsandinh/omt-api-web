@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 
-import proflieData from './ProfileData'
+import proflieData from './tool/ProfileData'
 
 class Proflie extends Component {
 

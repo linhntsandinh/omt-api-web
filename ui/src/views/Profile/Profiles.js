@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
-import profileData from './ProfileData';
-import ProfileCard from './ProfileCard';
+import profileData from './tool/ProfileData';
+import ProfileCard from './tool/ProfileCard';
 
 import {
     Badge,

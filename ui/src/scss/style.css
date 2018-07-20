@@ -10000,28 +10000,41 @@ table.private-table tr.header-table th:hover {
 body {
   background: #f6faff; }
 
+.lableabc {
+  margin-left: 30px; }
+
+.rowsoid {
+  border-bottom: solid; }
+
+.Colabcprofile {
+  margin-top: 8px;
+  text-align: right; }
+
+.Colabcprofile1 {
+  text-align: right; }
+
+#rowcaleda {
+  margin-left: 0px; }
+
 html body .app.flex-row.align-items-center {
   height: 100vh; }
 
+#idrowprofileadmin1223{
 
-.lableabc{
-  margin-left: 30px;
-}
-.rowsoid{
-  border-bottom: solid;
+  padding-right: 100px;
+  padding-left: 100px;
+  padding-top: 20px;
+  text-align: center;
 
-}
-
-.Colabcprofile{
-  margin-top:8px;
-  text-align: right;
 }
 
-.Colabcprofile1{
-
-  text-align: right;
+#buttonsubmit{
+  margin-bottom: 30px;
 }
 
-#rowcaleda{
-  margin-left: 0px;
+#thuonght_div_center7_20_2018{
+
+  margin-left: 100px;
+  margin-right: 100px;
+
 }

@@ -4,9 +4,8 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, InputGroup, InputGroupAddon,Input} from 'reactstrap';
 
-import proflieData from './ProfileData'
-import Gender from './Gender'
-import MyCaledar from "./Caledar";
+import proflieData from './tool/ProfileData'
+
 class ProflieUser extends Component {
     constructor(props) {
         super(props)

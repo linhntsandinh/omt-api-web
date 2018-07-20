@@ -4,9 +4,9 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, InputGroup, InputGroupAddon,Input, Button} from 'reactstrap';
 
-import proflieData from './ProfileData'
-import Gender from './Gender'
-import MyCaledar from "./Caledar";
+import proflieData from './tool/ProfileData'
+import Gender from './tool/Gender'
+import MyCaledar from "./tool/Caledar";
 class Proflie extends Component {
     constructor(props) {
         super(props)
@@ -22,8 +22,8 @@ class Proflie extends Component {
         const userDetails = user ? Object.entries(user) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
 
         return (
-            <div className="animated fadeIn">
-                <Row>
+            <div className="animated fadeIn"  id={"idrowprofileadmin123"}>
+                <Row id={"idrowprofileadmin"} className="text-lg-center">
                     <Col lg={6}>
                         <Card>
 
