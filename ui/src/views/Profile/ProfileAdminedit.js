@@ -4,12 +4,66 @@ import MyCaledar from "./tool/Caledar";
 import proflieData from './tool/ProfileData'
  class ProfileAdminedit extends Component {
 
+     constructor(props) {
+         super(props);
+         console.log("contructor");
+         this.state = {
+
+             user_id:'',
+             full_name: '',
+             phone_number:'',
+             birth_date:'',
+             address: '',
+             gmail:'',
+             job_title_id:'',
+             job_position_id:'',
+             status:'stt',
+             time_join:'',
+             gender:'',
+
+
+         }
+         this.handleChange1 = this.handleChange1.bind(this);
+         this.handleSubmit1 = this.handleSubmit1.bind(this);
+     }
+
+     handleChange(e) {
+         this.setState({[e.target.name]: e.target.value});
+     }
+
+
+
+
+     handleChange1(event) {
+
+         this.setState({gender: event.target.value});
+     }
+
+     handleSubmit1(event) {
+         event.preventDefault();
+     }
+
+     getGerder = (e) => {
+
+     }
      onFormSubmit = (e) => {
          e.preventDefault()
-         console.log(this.emailInputValue)
+         console.log(this.emailInputValue);
+         console.log(this.state.user_id+ " " +
+             this.state.full_name + " " +
+         this.state.phone_number
+         + " " + this.state.birth_date
+         + " " + this.state.address
+         + " " + this.state.gmail
+         + " " + this.state.job_title_id
+         + " " + this.state.job_position_id
+         + " " + this.state.status
+         + " " + this.state.time_join
+         + " " + this.state.gender);
      }
 
     render() {
+
 
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)
 
@@ -19,46 +73,94 @@ import proflieData from './tool/ProfileData'
             <Form onSubmit={this.onFormSubmit}>
                 <FormGroup>
                     <Label for="exampleEmail">Tài Khoản</Label>
-                    <Input  placeholder= {user.user_id} />
+                    <Input
+                        value={this.state.user_id}
+                        onChange={(e) => this.handleChange(e)}
+                        name="user_id"
+                        innerRef={(node) => this.emailInputValue = node}
+                        placeholder= {user.user_id} />
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="exampleEmail">Họ và Tên</Label>
-                    <Input innerRef={(node) => this.emailInputValue = node} placeholder= {user.full_name} />
+                    <Input
+                        value={this.state.full_name}
+                        onChange={(e) => this.handleChange(e)}
+                        name="full_name"
+                        innerRef={(node) => this.emailInputValue = node}
+                        placeholder= {user.full_name}
+
+
+                    />
                 </FormGroup>
                 <FormGroup>
                     <Label for="exampleEmail">Số điện thoại</Label>
-                    <Input  placeholder= {user.phone_number} />
+                    <Input
+                        value={this.state.phone_number}
+                        onChange={(e) => this.handleChange(e)}
+                        name="phone_number"
+                        innerRef={(node) => this.emailInputValue = node}
+                        placeholder= {user.phone_number} />
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="exampleEmail">Ngày sinh</Label>
-                    <MyCaledar/>
+                    <MyCaledar   />
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="exampleEmail">Địa chỉ</Label>
-                    <Input  placeholder={user.address} />
+                    <Input
+                        value={this.state.address}
+                        onChange={(e) => this.handleChange(e)}
+                        name="address"
+                        innerRef={(node) => this.emailInputValue = node}
+                        placeholder={user.address} />
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="exampleEmail">Gamil</Label>
-                    <Input  placeholder= {user.Gmail} />
+                    <Label for="exampleEmail">Gmail</Label>
+                    <Input
+                        value={this.state.gmail}
+                        onChange={(e) => this.handleChange(e)}
+                        name="gmail"
+                        innerRef={(node) => this.emailInputValue = node}
+                        placeholder= {user.Gmail} />
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="exampleEmail">Nghề nghiệp (job_title_id)</Label>
-                    <Input  placeholder={user.job_title_id} />
+                    <Input
+                        value={this.state.job_title_id}
+                        onChange={(e) => this.handleChange(e)}
+                        name="job_title_id"
+                        innerRef={(node) => this.emailInputValue = node}
+
+                        placeholder={user.job_title_id} />
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="exampleEmail">Bộ phận</Label>
-                    <Input  placeholder= {user.job_position_id} />
+                    <Input
+                        value={this.state.job_position_id}
+                        onChange={(e) => this.handleChange(e)}
+                        name="job_position_id"
+                        innerRef={(node) => this.emailInputValue = node}
+
+                        placeholder= {user.job_position_id} />
                 </FormGroup>
 
                 <FormGroup>
+
                     <Label for="exampleEmail">Trạng thái(status)</Label>
-                    <Input  placeholder= {user.status} />
+                    <Input
+                        value={this.state.status}
+                        onChange={(e) => this.handleChange(e)}
+                        name="status"
+                        innerRef={(node) => this.emailInputValue = node}
+
+                        placeholder= {user.status} />
+
                 </FormGroup>
 
                 <FormGroup>
@@ -69,12 +171,18 @@ import proflieData from './tool/ProfileData'
 
 
                 <FormGroup>
-                    <Label for="exampleSelect">Select</Label>
-                    <Input type="select" name="select" id="exampleSelect">
-                        <option>Nam</option>
-                        <option>Nu</option>
-                        <option>Nam/Nam</option>
-                        <option>Nữ/Nữ</option>
+                    <Label for="exampleSelect">Giới tính</Label>
+                    <Input
+                        value={this.state.gender}
+                        onChange={(e) => this.handleChange1(e)}
+                        name="gender"
+                        innerRef={(node) => this.emailInputValue = node}
+
+                        type="select" name="select" id="exampleSelect">
+                        <option value={"nam"}>Nam</option>
+                        <option value={"nu"}>Nu</option>
+                        <option value={"namnam"}>Nam/Nam</option>
+                        <option value={"nunu"}>Nữ/Nữ</option>
 
                     </Input>
                 </FormGroup>

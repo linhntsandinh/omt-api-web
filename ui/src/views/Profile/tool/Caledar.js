@@ -6,10 +6,15 @@ import { FormGroup, CardBody, CardHeader, Col, Row, InputGroup, InputGroupAddon,
 
 class MyCaledar extends Component {
     state = {
-        date: new Date(),
+        dd:0,
+        mm:0,
+        yy:0,
     }
 
-    onChange = date => this.setState({ date })
+    input123 (e){
+        return this.state;
+    }
+
 
     render() {
         return (
