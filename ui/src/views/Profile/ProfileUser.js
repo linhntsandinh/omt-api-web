@@ -140,7 +140,38 @@ class ProflieUser extends Component {
                                 </Col>
                             </Row>
 
-
+                            <Row> <Col md={"6"} className={"Colabcprofile1"}>
+                                <label className={"lableabc"}>Created_at</label></Col>
+                                <Col md={"6"}>
+                                    <InputGroup>
+                                        <label>{user.created_at}</label>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                            <Row> <Col md={"6"} className={"Colabcprofile1"}>
+                                <label className={"lableabc"}>Update_at</label></Col>
+                                <Col md={"6"}>
+                                    <InputGroup>
+                                        <label>{user.updated_at}</label>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                            <Row> <Col md={"6"} className={"Colabcprofile1"}>
+                                <label className={"lableabc"}>Created_by</label></Col>
+                                <Col md={"6"}>
+                                    <InputGroup>
+                                        <label>{user.created_by}</label>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                            <Row> <Col md={"6"} className={"Colabcprofile1"}>
+                                <label className={"lableabc"}>Updated_by</label></Col>
+                                <Col md={"6"}>
+                                    <InputGroup>
+                                        <label>{user.updated_by}</label>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
 
                         </Card>
                     </Col>

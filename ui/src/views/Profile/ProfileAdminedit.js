@@ -20,6 +20,15 @@ import proflieData from './tool/ProfileData'
              status:'stt',
              time_join:'',
              gender:'',
+             created_at:'',
+             updated_at:'',
+             created_by:'',
+             updated_by:'',
+
+
+             dd:123,
+             mm:456,
+             yy:789,
 
 
          }
@@ -43,9 +52,6 @@ import proflieData from './tool/ProfileData'
          event.preventDefault();
      }
 
-     getGerder = (e) => {
-
-     }
      onFormSubmit = (e) => {
          e.preventDefault()
          console.log(this.emailInputValue);
@@ -60,9 +66,16 @@ import proflieData from './tool/ProfileData'
          + " " + this.state.status
          + " " + this.state.time_join
          + " " + this.state.gender);
+
      }
 
-    render() {
+     getGender = (status) => {
+         return status === 0 ? 'Nam' :
+             status === 1 ? 'Nu' :
+                 'Nam/nu'
+     }
+
+     render() {
 
 
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)
@@ -165,7 +178,11 @@ import proflieData from './tool/ProfileData'
 
                 <FormGroup>
                     <Label for="exampleEmail">Ngày vào làm</Label>
-                    <MyCaledar />
+                    <MyCaledar
+                        dd={this.state.dd}
+                        mm={this.state.mm}
+                        yy={this.state.yy}
+                    />
                 </FormGroup>
 
 
@@ -179,13 +196,36 @@ import proflieData from './tool/ProfileData'
                         innerRef={(node) => this.emailInputValue = node}
 
                         type="select" name="select" id="exampleSelect">
-                        <option value={"nam"}>Nam</option>
-                        <option value={"nu"}>Nu</option>
-                        <option value={"namnam"}>Nam/Nam</option>
-                        <option value={"nunu"}>Nữ/Nữ</option>
+                        <option value={""}>{this.getGender(user.gender)} </option>
+                        <option value={1}>Nam</option>
+                        <option value={2}>Nu</option>
+                        <option value={3}>Nam/Nam</option>
+                        <option value={4}>Nữ/Nữ</option>
 
                     </Input>
                 </FormGroup>
+
+
+                <FormGroup>
+                    <Label for="exampleEmail">Created_at</Label>
+                    <Input disabled placeholder={user.created_at}/>
+                </FormGroup>
+
+                <FormGroup>
+                    <Label for="exampleEmail">Updated_at</Label>
+                    <Input disabled placeholder={user.updated_at}/>
+                </FormGroup>
+
+                <FormGroup>
+                    <Label for="exampleEmail">Created_by</Label>
+                    <Input disabled placeholder={user.created_by}/>
+                </FormGroup>
+
+                <FormGroup>
+                    <Label for="exampleEmail">Updated_by</Label>
+                    <Input disabled placeholder={user.updated_by}/>
+                </FormGroup>
+
 
 
                 <Button id={"buttonsubmit"}>Submit</Button>
