@@ -48,6 +48,13 @@ import proflieData from './tool/ProfileData'
          this.setState({gender: event.target.value});
      }
 
+     handleChang2(event) {
+
+         this.setState({[event.target.name]: event.target.value});
+         alert(   event.target.value);
+
+     }
+
      handleSubmit1(event) {
          event.preventDefault();
      }
@@ -65,7 +72,10 @@ import proflieData from './tool/ProfileData'
          + " " + this.state.job_position_id
          + " " + this.state.status
          + " " + this.state.time_join
-         + " " + this.state.gender);
+         + " " + this.state.gender
+         + " " + this.state.dd
+         + " " + this.state.mm
+         + " " + this.state.yy);
 
      }
 
@@ -74,6 +84,8 @@ import proflieData from './tool/ProfileData'
              status === 1 ? 'Nu' :
                  'Nam/nu'
      }
+
+
 
      render() {
 
@@ -179,6 +191,7 @@ import proflieData from './tool/ProfileData'
                 <FormGroup>
                     <Label for="exampleEmail">Ngày vào làm</Label>
                     <MyCaledar
+                        onChange={(e)=>this.handleChang2(e)}
                         dd={this.state.dd}
                         mm={this.state.mm}
                         yy={this.state.yy}
