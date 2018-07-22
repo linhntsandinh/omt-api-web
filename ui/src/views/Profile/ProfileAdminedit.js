@@ -26,9 +26,9 @@ import proflieData from './tool/ProfileData'
              updated_by:'',
 
 
-             dd:123,
-             mm:456,
-             yy:789,
+             dd:0,
+             mm:0,
+             yy:0,
 
 
          }
@@ -130,7 +130,13 @@ import proflieData from './tool/ProfileData'
 
                 <FormGroup>
                     <Label for="exampleEmail">Ngày sinh</Label>
-                    <MyCaledar   />
+                    <MyCaledar
+                        onChange={(e)=>this.handleChang2(e)}
+                        dd={this.state.dd}
+                        mm={this.state.mm}
+                        yy={this.state.yy}
+
+                    />
                 </FormGroup>
 
                 <FormGroup>
