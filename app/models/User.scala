@@ -29,6 +29,7 @@ object UserData {
   implicit val reader = Json.reads[UserData]
   implicit val writer = Json.writes[UserData]
 }
+
 class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
   def id = column[Option[Int]]("id", O.PrimaryKey,O.AutoInc)
   def username = column[String]("username")
@@ -99,11 +100,7 @@ class User @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
   def insert(userData: UserData): Future[Int] = {
-    val r = db.run(UserTable += userData)
-    r.onComplete(
-      data => println(data)
-    )
-    Future(1)
+    db.run(UserTable += userData)
   }
 
   def delete(userId: Int) = {
