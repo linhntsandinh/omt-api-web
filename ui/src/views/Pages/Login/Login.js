@@ -29,7 +29,7 @@ class Login extends Component {
     }
 
     handleClick(pop,e) {
-        fetch("https://daivt.000webhostapp.com/login.php", {
+        fetch("https://localhost9000/login", {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
             body: formEncode({user:this.state.username,pass:this.state.password}),

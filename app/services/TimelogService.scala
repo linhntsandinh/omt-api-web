@@ -4,14 +4,17 @@ import java.sql.{Date, Time}
 import java.text.SimpleDateFormat
 
 import javax.inject.Inject
-import models.{Timelog, TimelogData, TimelogForm}
-
+import models._
+import play.api.libs.json.Json
+import play.api.mvc.Result
+import slick.lifted.TableQuery
+import utils.JS
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class TimelogService @Inject()(timelog: Timelog){
   def delete(id: Int): Future[Int] = timelog.delete(id)
-
-  def insert(timelogForm: TimelogForm): Future[Int] = {
+  def insert(timelogForm: TimelogForm): Future[Result] = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
     val sdf2 = new SimpleDateFormat("HH:mm:ss")
 
@@ -34,4 +37,15 @@ class TimelogService @Inject()(timelog: Timelog){
   }
 
   def update(timelogData: TimelogForm): Future[Int] = timelog.update(timelogData)
+
+  def load(timeLogRequestLoad: TimelogLoadRequest): Future[Result] = {
+    val load = timelog.load(timeLogRequestLoad)
+    load.map{
+      case Some(x) => {
+        println(x._1)
+        JS.OK("data"->Json.toJson(x._1),"length" -> Json.toJson(x._2))
+      }
+      case None => JS.KO("Không có đơn nào hợp lệ!")
+    }
+  }
 }
