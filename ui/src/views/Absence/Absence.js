@@ -295,7 +295,7 @@ class Absence extends Component {
                 <CardFooter>
                     <Button onClick={(e) => this.Send(e)} type="submit" size="lg" color="primary"><i
                         className="icon-cursor"></i> Send</Button>
-                    <Button type="reset" size="lg" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
+                    <Button  type="reset" size="lg" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
                 </CardFooter>
             </Card>
 

@@ -40,7 +40,7 @@ class App extends Component {
         }).then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson) {
-                    this.props.dispatch({type: "login", data: responseJson})
+                    this.props.dispatch({type: "profile", data: responseJson})
 
                 }
                 this.setState({
@@ -51,7 +51,7 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.state.loading)
+        // console.log(this.state.loading)
         return (
             <HashRouter>{this.state.loading ?
                 <Switch>

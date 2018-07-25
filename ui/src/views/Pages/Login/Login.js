@@ -41,7 +41,7 @@ class Login extends Component {
                 if (responseJson) {
                     localStorage.setItem('username',this.state.username);
                     localStorage.setItem('password',this.state.password);
-                    this.props.dispatch({type:"login",data:responseJson})
+                    this.props.dispatch({type:"profile",data:responseJson})
                 }
             })
 

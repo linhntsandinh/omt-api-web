@@ -190,12 +190,24 @@ const Absence = Loadable({
     loader: () => import('./views/Absence/Absence'),
     loading: Loading,
 });
-const AbsenceManage = Loadable({
-    loader: () => import('./views/AbsenceManage/AbsenceManage'),
+const AbsenceSend = Loadable({
+    loader: () => import('./views/AbsenceManage/Send/AbsenceSend'),
     loading: Loading,
 });
-const AbsenceDetail = Loadable({
-    loader: () => import('./views/AbsenceManage/AbsenceDetail'),
+const AbsenceReciver = Loadable({
+    loader: () => import('./views/AbsenceManage/Receiver/AbsenceReceiver'),
+    loading: Loading,
+});
+const AbsenceDetailSend = Loadable({
+    loader: () => import('./views/AbsenceManage/Send/AbsenceDetail'),
+    loading: Loading,
+});
+const AbsenceDetailReceiver = Loadable({
+    loader: () => import('./views/AbsenceManage/Receiver/AbsenceDetail'),
+    loading: Loading,
+});
+const FireBase = Loadable({
+    loader: () => import('./views/Firebase/Firebase'),
     loading: Loading,
 });
 
@@ -245,8 +257,11 @@ const routes = [
     {path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User},
     {path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping},
     {path: '/absence', exact: true, name: 'Viết đơn', component: Absence},
-    {path: '/absencemanage', exact: true, name: 'List đơn', component: AbsenceManage},
-    {path: '/absencemanage/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetail},
+    {path: '/absencemanage/send/', exact: true, name: 'List đơn', component: AbsenceSend},
+    {path: '/absencemanage/receiver/', exact: true, name: 'List đơn', component: AbsenceReciver},
+    {path: '/absencemanage/send/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailSend},
+    {path: '/absencemanage/receiver/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailReceiver},
+    {path: '/firebase', exact: true, name: 'FireBase', component: FireBase},
 
 
 ];

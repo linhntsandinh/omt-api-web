@@ -5,6 +5,11 @@
  * Created by Vu Tien Dai on 25/06/2018.
  */
 import React, {Component} from 'react';
+
+import Select from 'react-select';
+import FormCard from "./FormCard"
+import {formEncode} from '../../../DataUser'
+import {connect} from "react-redux";
 import {
     Badge,
     Card,
@@ -29,11 +34,6 @@ import {
     FormGroup,
     Label,
 } from 'reactstrap';
-import Select from 'react-select';
-import FormCard from "./FormCard"
-import {formEncode} from '../../DataUser'
-
-
 function Pagin(data) {
     let p = data.parent;
     let check = data.check;
@@ -81,8 +81,8 @@ function More(data) {
                             <Col md="8">
                                 <Row>
                                     <Col>
-                                        <Input className="lable_search" name="reciever"
-                                               value={data.pr.state.reciever}
+                                        <Input className="lable_search" name="receiver"
+                                               value={data.pr.state.receiver}
                                                onChange={(e) => data.pr.handleChange(e)}
                                                onKeyPress={(ev, e) => {
 
@@ -141,13 +141,13 @@ function More(data) {
     )
 }
 
-class AbsenceManage extends Component {
+class AbsenceReceiver extends Component {
     constructor(props) {
         super(props);
         this.state = {
             id: '',
             writer: '',
-            reciever: '',
+            receiver: '',
             reason: '',
             start: '',
             total: '',
@@ -173,7 +173,7 @@ class AbsenceManage extends Component {
                 {
                     id: this.state.id,
                     writer: this.state.writer,
-                    reciever: this.state.reciever,
+                    receiver: this.state.receiver,
                     reason: this.state.reason,
                     start: this.state.start,
                     total: this.state.total,
@@ -207,7 +207,7 @@ class AbsenceManage extends Component {
                 {
                     id: this.state.id,
                     writer: this.state.writer,
-                    reciever: this.state.reciever,
+                    receiver: this.state.receiver,
                     reason: this.state.reason,
                     start: this.state.start,
                     total: this.state.total,
@@ -364,7 +364,7 @@ class AbsenceManage extends Component {
                                     <InputGroupAddon addonType="prepend">
                                         <Button size="sm" onClick={(e) => {
                                             if (search === true) {
-                                                this.setState({reason: '', reciever: '', start: '', total: ''})
+                                                this.setState({reason: '', receiver: '', start: '', total: ''})
                                             }
                                             this.setState({search: !search})
                                         }} color="info"><i
@@ -397,13 +397,6 @@ class AbsenceManage extends Component {
                                         }</a>
                                 </th>
                                 <th width="8%"></th>
-                                <th width="15%" onClick={(e) => this.handleSort("reciever", 2, e)}>Nguời nhận
-                                    <a className="icon-sort">
-                                        {(sort[2] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[2] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
                                 <th width="13%" onClick={(e) => this.handleSort("reason", 3, e)}>Loại
                                     <a className="icon-sort">
                                         {(sort[3] % 3 == 0) ? <i className="fa fa-sort"></i> :
@@ -437,7 +430,7 @@ class AbsenceManage extends Component {
                             </thead>
                             <tbody>{
                                 data.map((absence, index) =>
-                                    < FormCard key={index} absence={absence}
+                                    < FormCard key={index} data={absence} duty='send'
                                                stt={index + (check - 1) * limit + 1}/>)}
                             </tbody>
                         </Table>
@@ -482,4 +475,10 @@ class AbsenceManage extends Component {
     }
 }
 
-export default AbsenceManage;
+
+function mapStatetoProps(state) {
+    return {profile: state.profile}
+
+}
+
+export default connect(mapStatetoProps)(AbsenceReceiver);

@@ -25,7 +25,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       .on(_._1.userId === _.user_id) join AbsenceApproveTable)
       .on(_._1._1.id === _.application_id)join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(_._1._1._1._1.userId === absenceRequestLoad.id).filter(row =>
-      if(absenceRequestLoad.reciever !="") row._2.full_name === absenceRequestLoad.reciever
+      if(absenceRequestLoad.receiver !="") row._2.full_name === absenceRequestLoad.receiver
       else LiteralColumn(true)
     ).filter(row =>
       if(absenceRequestLoad.start != 0) row._1._1._1._1.startTime === absenceRequestLoad.start
@@ -182,13 +182,13 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
     db.run(q)
   }
 }
-  case class AbsenceApplicationsLoad(id: Int, reasonTitle: String, writer: String,reciever: String,startTime :Int,totalTime :Float,status :Int)
+  case class AbsenceApplicationsLoad(id: Int, reasonTitle: String, writer: String,receiver: String,startTime :Int,totalTime :Float,status :Int)
   object AbsenceApplicationsLoad {
     implicit val reader = Json.reads[AbsenceApplicationsLoad]
     implicit val writer = Json.writes[AbsenceApplicationsLoad]
   }
 
-  case class AbsenceRequestLoad(id: Int, pageTop :Int, pageEnd :Int, start:Int, writer: String, reciever: String,reasons: String,total :Float,ordervalue:Int)
+  case class AbsenceRequestLoad(id: Int, pageTop :Int, pageEnd :Int, start:Int, writer: String, receiver: String,reasons: String,total :Float,ordervalue:Int)
   object AbsenceRequestLoad {
     implicit val reader = Json.reads[AbsenceRequestLoad]
     implicit val writer = Json.writes[AbsenceRequestLoad]

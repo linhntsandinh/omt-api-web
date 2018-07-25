@@ -15,7 +15,7 @@ import {
     AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
-import navigation from '../../_nav';
+import navi from '../../_nav';
 // routes config
 import routes from '../../routes';
 import DefaultAside from './DefaultAside';
@@ -37,9 +37,11 @@ class DefaultLayout extends Component {
                     <AppSidebar fixed display="lg">
                         <AppSidebarHeader/>
                         <AppSidebarForm/>
-                        <AppSidebarNav navConfig={navigation} {...this.props} />
-                        <AppSidebarFooter/>
+                        <AppSidebarNav navConfig={navi(0)} {...this.props} >
+                        </AppSidebarNav>
                         <AppSidebarMinimizer/>
+                        <AppSidebarFooter/>
+
                     </AppSidebar>
                     <main className="main">
                         <AppBreadcrumb appRoutes={routes}/>
@@ -54,7 +56,7 @@ class DefaultLayout extends Component {
                                             : (null);
                                     },
                                 )}
-                                <Redirect from="/" to="/timekeeping"/>
+                                <Redirect from="/" to="/firebase"/>
                             </Switch>
                         </Container>
                     </main>

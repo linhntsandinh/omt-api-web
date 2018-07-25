@@ -1,11 +1,10 @@
-import usersData from './UsersData'
+
 import React, {Component} from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import Attend from '../AttendTable/AttendTable'
-import UserCard from "./UserCard"
-import {formEncode} from "../../DataUser";
-import {Bar, Line} from 'react-chartjs-2';
+import {connect} from "react-redux";
+import firebase from '../../firebase_config'
 import {
     Badge,
     Button,
@@ -35,10 +34,99 @@ import {
 
 
 } from 'reactstrap';
-import {connect} from "react-redux";
 
+import notify from  './../../notification'
 BigCalendar.momentLocalizer(moment);
 
+class Timekeeping extends Component {
+
+    constructor(props) {
+        super(props);
+        //console.log(this.props)
+        this.state = {
+            pagin: 1,
+            check: 1,
+            data: [],
+            length: 20,
+            id: '',
+            full_name: '',
+            phone_number: '',
+            email: '',
+            job_title: '',
+            job_position: '',
+            limit: 30,
+            search: false
+        }
+        const noti = firebase.database().ref().child('test')
+        noti.on('value', (vl) => {
+            // this.setState({
+            //     noti_count: vl.val()['dai']
+            // })
+            console.log(vl.val())
+        });
+    }
+
+    componentDidMount() {
+        fetch('https://daivt.000webhostapp.com/get_info.php').then(function (response) {
+                return response.json();
+            }
+        ).then((result) => {
+            let x = result.filter((value, index) => (value.start = new Date(result[index].start)) && (value.end = new Date(result[index].end)))
+            this.setState({
+                data: x
+            })
+        })
+    }
+
+    onUpdate() {
+        // const noti = firebase.database().ref('/test')
+        // noti.child('dai').update(new notify(1,2,'Chao ban','/home/'));
+    }
+
+    render() {
+        return (
+            <Card>
+                <CardBody>
+                    <Row>
+                        <Col md="4">
+                            <Row>
+                                <div size="sm" className=" text-center card-body">
+                                    <img src={'assets/img/avatars/test.jpg'} className="main-avatar img-avatar"></img>
+                                </div>
+                            </Row>
+                            <Row className="btn-tk ">
+                                <div className=" text-center card-body">
+                                    <Button className="btn-timekeeping" color="success" size="lg" onClick={() => {
+                                        this.onUpdate()
+                                    }}>Chấm công</Button>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className="card-body">
+                                    <p>Số ngày đi muộn trong tháng : </p>
+                                    <p> Sô ngày về sớm trong tháng : </p>
+                                    <p> Số ngày nghỉ trong tháng : </p>
+                                </div>
+                            </Row>
+
+                        </Col>
+                        <Col md="8">
+                            <BigCalendar
+                                events={this.state.data}
+                                defaultDate={new Date(2018, 5, 12)}
+                            />
+                        </Col>
+                    </Row>
+                </CardBody>
+                <CardBody className="attend-table">
+                    <Row>
+                        <Attend/>
+                    </Row>
+                </CardBody>
+            </Card>
+        )
+    }
+}
 
 function Pagin(data) {
     let p = data.parent;
@@ -65,8 +153,7 @@ function More(data) {
                             <Col md="4">
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Email
-                                    </InputGroupText>
+                                        Email</InputGroupText>
                                 </Row>
                                 <Row>
                                     <InputGroupText className="lable_search">
@@ -84,7 +171,7 @@ function More(data) {
                                     <Col>
                                         <Input className="lable_search" name="email" value={data.pr.state.email}
                                                onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
-                                            console.log(`Pressed keyCode ${ev.key}`);
+                                            // //console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
                                                 ev.preventDefault();
@@ -97,7 +184,7 @@ function More(data) {
                                         <Input className="lable_search" name="phone_number"
                                                value={data.pr.state.phone_number}
                                                onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
-                                            console.log(`Pressed keyCode ${ev.key}`);
+                                            //console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
                                                 ev.preventDefault();
@@ -110,7 +197,7 @@ function More(data) {
                                         <Input className="lable_search" name="job_position"
                                                value={data.pr.state.job_position}
                                                onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
-                                            console.log(`Pressed keyCode ${ev.key}`);
+                                            //console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
                                                 ev.preventDefault();
@@ -152,11 +239,11 @@ function UserRow(props) {
             <td>
                 {user.show === true ?
                     <i className="icon-trash" onClick={() => {
-                        console.log("Xoa nha")
+                        //console.log("Xoa nha")
                     }}/> : null}  &nbsp;  &nbsp;
                 {user.show === true ?
                     <i className="i icon-note" onClick={() => {
-                        console.log("Fix nha")
+                        //console.log("Fix nha")
                     }}/> : null}</td>
             <td>{user.team}</td>
             <td>{user.timecheckin}</td>
@@ -164,84 +251,6 @@ function UserRow(props) {
             <td><Badge href={userLink}>{user.date}</Badge></td>
         </tr>
     )
-}
-
-class Timekeeping extends Component {
-
-    constructor(props) {
-        super(props);
-        console.log(this.props)
-        this.state = {
-            pagin: 1,
-            check: 1,
-            data: [],
-            length: 20,
-            id: '',
-            full_name: '',
-            phone_number: '',
-            email: '',
-            job_title: '',
-            job_position: '',
-            limit: 30,
-            search: false
-        }
-    }
-
-    componentDidMount() {
-        fetch('https://daivt.000webhostapp.com/get_info.php').then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-            let x = result.filter((value, index) => (value.start = new Date(result[index].start)) && (value.end = new Date(result[index].end)))
-            this.setState({
-                data: x
-            })
-        })
-    }
-
-    render() {
-        return (
-            <Card>
-                <CardBody>
-                    <Row>
-                        <Col md="4">
-                            <Row>
-                                <div size="sm" className=" text-center card-body">
-                                    <img src={'assets/img/avatars/test.jpg'} className="main-avatar img-avatar"></img>
-                                </div>
-                            </Row>
-                            <Row className="btn-tk ">
-                                <div className=" text-center card-body">
-                                    <Button className="btn-timekeeping" color="success" size="lg" onClick={() => {
-                                        this.props.dispatch({type: 'UP'})
-                                    }}>Chấm công</Button>
-                                </div>
-                            </Row>
-                            <Row>
-                                <div className="card-body">
-                                    <p>Số ngày đi muộn trong tháng : </p>
-                                    <p> Sô ngày về sớm trong tháng : </p>
-                                    <p> Số ngày nghỉ trong tháng : </p>
-                                </div>
-                            </Row>
-
-                        </Col>
-                        <Col md="8">
-                            <BigCalendar
-                                events={this.state.data}
-                                defaultDate={new Date(2018, 5, 12)}
-                            />
-                        </Col>
-                    </Row>
-                </CardBody>
-                <CardBody className="attend-table">
-                    <Row>
-                        <Attend/>
-                    </Row>
-                </CardBody>
-            </Card>
-        )
-    }
 }
 
 function mapStatetoProps(state) {
