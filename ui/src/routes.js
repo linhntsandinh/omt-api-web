@@ -278,7 +278,7 @@ const routes = [
     {path: '/listprofile', exact: true, name: 'Profiles', component: Profiles},
     {path: '/profiles/:id', exact: true, name: 'ProfileAdmin', component: ProfileAdmin},
     {path: '/profileUser/:id', exact: true, name:'ProfileUser', component:ProfileUser},
-    {path: '/profileAdminEdit/:id', exact:true,name:'demoFormEdit', component: ProfileFormEdit},
+    {path: '/listprofile/:id', exact:true,name:'demoFormEdit', component: ProfileFormEdit},
 
 
 

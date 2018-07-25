@@ -19,7 +19,7 @@ class FormCard extends Component {
         const user = this.props.user;
         const userLink = `#/Profiles/${user.id}`;
         const profileUserlink = `#/profileUser/${user.id}`;
-        const demoformlinhk = `#/profileAdminEdit/${user.id}`;
+        const demoformlinhk = `#/listprofile/${user.id}`;
         return (
             <tr  onDoubleClick={() => {
                 document.location = userLink
