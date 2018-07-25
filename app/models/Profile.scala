@@ -10,7 +10,7 @@ import slick.jdbc.JdbcProfile
 import javax.inject.Inject
 import play.api.libs.json.Json
 
-case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int,created_by: Option[Long],updated_by: Option[Long])
+case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int, created_by: Option[Long])
 object ProfileForm {
   implicit val reader = Json.reads[ProfileForm]
   implicit val writer = Json.writes[ProfileForm]
@@ -56,12 +56,29 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
     (id, user_id, full_name, phone_number, birth_date, address, job_title_id, job_position_id, status, join_date, gender, created_at, updated_at, created_by, updated_by) <> ((ProfileData.apply _).tupled, ProfileData.unapply)
 }
 
-
 class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                        (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
   private val ProfileTable = TableQuery[ProfileTableDef]
+
+  def getProfile(id: Int): Future[Option[(ProfileData, JobPositionData, TitleData)]] = {
+    val jobPosition = TableQuery[JobPositionDef]
+    val jobTitle = TableQuery[TitleTableDef]
+    val query = (ProfileTable join jobPosition on (_.job_position_id === _.id) join jobTitle on (_._1.job_title_id === _.id)).filter(_._1._1.id === id).result
+    val rs = db.run(query)
+    rs.map{
+      list => {
+        list.size match {
+          case 0 => None
+          case _ => {
+            val ((profile, job_posistion),job_title) = list.head
+            Some(profile, job_posistion, job_title)
+          }
+        }
+      }
+    }
+  }
 
   def insert(profileData: ProfileData): Future[Int] = {
     db.run(ProfileTable += profileData)

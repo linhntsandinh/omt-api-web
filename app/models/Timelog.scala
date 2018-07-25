@@ -45,14 +45,15 @@ class TimelogTableDef(tag: Tag) extends Table[TimelogData](tag, "time_logs") {
 
 
 case class TimelogForm(id: Option[Int], user_id: Int, date: String, start_time: String, end_time: String, device_info: String,created_by: Option[Long],updated_by: Option[Long])
+
 object TimelogForm {
   implicit val reader = Json.reads[TimelogForm]
   implicit val writer = Json.writes[TimelogForm]
 
 }
 
-
 class TimelogFormDef(tag: Tag) extends Table[TimelogForm](tag, "time_logs") {
+
   def id = column[Option[Int]]("id", O.PrimaryKey, O.AutoInc)
 
   def user_id = column[Int]("user_id")
@@ -110,8 +111,10 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(TimelogTable.filter(_.id === timelogId).delete)
   }
 
-  def update(timelogForm: TimelogForm) = {
-    val q = TimelogForm.filter(_.id === timelogForm.id).update(timelogForm)
+  def update(timelogData: TimelogData) = {
+    val q = TimelogTable.filter(_.id === timelogData.id)
+      .map(p => (p.user_id, p.date, p.start_time, p.end_time, p.device_info, p.updated_at, p.updated_by))
+      .update(timelogData.user_id, timelogData.date, timelogData.start_time, timelogData.end_time, timelogData.device_info, timelogData.updated_at, timelogData.updated_by)
     db.run(q)
   }
 
