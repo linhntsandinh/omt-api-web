@@ -2,7 +2,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import javax.inject.Inject
-import models.RoleForm
+import models.{RoleData, RoleForm}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.RoleService
 
@@ -13,11 +13,11 @@ class RoleController @Inject()(actorSystem: ActorSystem, role : RoleService, cc:
     role.insert(request.body)
   }
 
-  def update = Action.async(parse.json[TitleData]) { request =>
-    jobTitle.update(request.body)
+  def update = Action.async(parse.json[RoleData]) { request =>
+    role.update(request.body)
   }
 
   def delete (id: Int)= Action.async{
-    jobTitle.delete(id)
+    role.delete(id)
   }
 }
