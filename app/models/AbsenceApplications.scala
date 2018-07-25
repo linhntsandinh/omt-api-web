@@ -219,11 +219,12 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       listReason = rs1
       Some(listReason,listName,profileLoad)
     }
-
   }
 
   def update(absenceApplicationsData: AbsenceApplicationsData)={
-    val q = AbsenceTable.filter(_.id === absenceApplicationsData.id).update(absenceApplicationsData)
+    val q = AbsenceTable.filter(_.id === absenceApplicationsData.id)
+      .map(p => (p.reasonId,p.description,p.startTime,p.endTime,p.status,p.userId,p.totalTime,p.created_by,p.updated_by))
+      .update(absenceApplicationsData.reasonId,absenceApplicationsData.description,absenceApplicationsData.startTime,absenceApplicationsData.endTime,absenceApplicationsData.status,absenceApplicationsData.userId,absenceApplicationsData.totalTime,absenceApplicationsData.created_by,absenceApplicationsData.update_by)
     db.run(q)
   }
 }

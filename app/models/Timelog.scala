@@ -1,14 +1,18 @@
 package models
 
 import java.sql.{Date, Time}
+import java.text.SimpleDateFormat
 
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import play.api.libs.json.Json
+import play.api.libs.json._
+import play.api.mvc.Result
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.TableQuery
+import utils.JS
 
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 
@@ -40,7 +44,7 @@ class TimelogTableDef(tag: Tag) extends Table[TimelogData](tag, "time_logs") {
 }
 
 
-case class TimelogForm(id: Option[Int], user_id: Int, date: String, start_time: String, end_time: String, device_info: String)
+case class TimelogForm(id: Option[Int], user_id: Int, date: String, start_time: String, end_time: String, device_info: String,created_by: Option[Long],updated_by: Option[Long])
 object TimelogForm {
   implicit val reader = Json.reads[TimelogForm]
   implicit val writer = Json.writes[TimelogForm]
@@ -61,17 +65,22 @@ class TimelogFormDef(tag: Tag) extends Table[TimelogForm](tag, "time_logs") {
 
   def device_info = column[String]("device_info")
 
+  def created_by = column[Option[Long]]("created_by")
+
+  def updated_by = column[Option[Long]]("updated_by")
+
   override def * =
-    (id, user_id, date, start_time, end_time, device_info) <> ((TimelogForm.apply _).tupled, TimelogForm.unapply)
+    (id, user_id, date, start_time, end_time, device_info, created_by, updated_by) <> ((TimelogForm.apply _).tupled, TimelogForm.unapply)
 }
 
-case class TimelogLoadRequest(id: Option[Int], user_name: String,job_possition_title: String ,date: Date)
+
+case class TimelogLoadRequest(id: Option[Int], user_name: String,job_title: String ,date: String,offset :Int,limit :Int)
 object TimelogLoadRequest{
   implicit val reader = Json.reads[TimelogLoadRequest]
   implicit val writer = Json.writes[TimelogLoadRequest]
 }
 
-case class TimelogLoad(id: Option[Int], user_name: String,job_possition_title: String , check_in: Time, check_out:Time, date: Date)
+case class TimelogLoad(id: Option[Int], user_name: String, job_title: String, check_in: String, check_out: String, date: String)
 object TimelogLoad {
   implicit val reader = Json.reads[TimelogLoad]
   implicit val writer = Json.writes[TimelogLoad]
@@ -85,8 +94,13 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   private val TimelogTable = TableQuery[TimelogTableDef]
 
-  def insert(timelogData: TimelogData): Future[Int] = {
+  private val ProfileTable = TableQuery[ProfileTableDef]
+
+  private val TitleTable = TableQuery[TitleTableDef]
+
+  def insert(timelogData: TimelogData): Future[Result] = {
     db.run(TimelogTable += timelogData)
+    Future(JS.OK("data" -> "Insert Success!!"))
   }
 
   def delete(timelogId: Int) = {
@@ -99,7 +113,51 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
 
-  def load(date: Date):Future[Int] = {
-
+  def load(timelogLoadRequest: TimelogLoadRequest):Future[Option[(ListBuffer[TimelogLoad],Int)]] = {
+    val listLoad : ListBuffer[TimelogLoad] = new ListBuffer[TimelogLoad]
+    val q = ((TimelogTable join ProfileTable).on(_.user_id === _.user_id) join TitleTable).on(_._2.job_title_id === _.id)
+        .filter(row =>
+          if(timelogLoadRequest.user_name !="") row._1._2.full_name === timelogLoadRequest.user_name
+          else LiteralColumn(true)
+        ).filter(row =>
+          if(timelogLoadRequest.job_title !="") row._2.title === timelogLoadRequest.job_title
+          else LiteralColumn(true)
+        ).filter(row =>
+          if(timelogLoadRequest.date != "") {
+            val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
+            val sqlDate = new Date(sdf1.parse(timelogLoadRequest.date).getTime)
+            row._1._1.date === sqlDate
+          }
+          else LiteralColumn(true)
+        ).drop(timelogLoadRequest.offset).take(timelogLoadRequest.limit).result
+    val rs = db.run(q)
+    val p = ((TimelogTable join ProfileTable).on(_.user_id === _.user_id) join TitleTable).on(_._2.job_title_id === _.id)
+      .filter(row =>
+        if(timelogLoadRequest.user_name !="") row._1._2.full_name === timelogLoadRequest.user_name
+        else LiteralColumn(true)
+      ).filter(row =>
+      if(timelogLoadRequest.job_title !="") row._2.title === timelogLoadRequest.job_title
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(timelogLoadRequest.date != "") {
+        val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
+        val sqlDate = new Date(sdf1.parse(timelogLoadRequest.date).getTime)
+        row._1._1.date === sqlDate
+      }
+      else LiteralColumn(true)
+    ).result
+    val rss = db.run(p)
+    for{
+      fs <- rs
+      fs1 <- rss
+    } yield {
+      fs.foreach(
+        item=>{
+          val itemLoad : TimelogLoad = new TimelogLoad(item._1._1.id,item._1._2.full_name,item._2.title,item._1._1.start_time.toString,item._1._1.end_time.toString,item._1._1.date.toString)
+          listLoad += itemLoad
+        }
+      )
+      Some(listLoad,fs1.size)
+    }
   }
 }

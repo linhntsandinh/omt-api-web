@@ -33,7 +33,7 @@ class ProfileService @Inject()(profile: Profile) {
       profileForm.gender,
       Some(System.currentTimeMillis() / 1000),
       Some(System.currentTimeMillis() / 1000),
-      null,
+      profileForm.created_by,
       null
     )
     profile.insert(profileData)

@@ -13,7 +13,7 @@ object UserForm {
   implicit val writer = Json.writes[UserForm]
 }
 
-case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int)
+case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int,created_by: Option[Long],updated_by: Option[Long])
 object ProfileForm {
   implicit val reader = Json.reads[ProfileForm]
   implicit val writer = Json.writes[ProfileForm]
