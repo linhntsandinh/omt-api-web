@@ -15,7 +15,7 @@ class UserService @Inject()(user: User) {
   def delete(id: Int): Future[Int] = user.delete(id)
 
   def insert(userForm: UserForm): Future[Int] = {
-    val userData: UserData = new UserData(null, userForm.username, userForm.password, userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), Some(1), Some(1))
+    val userData: UserData = new UserData(null, userForm.username, userForm.password, userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), userForm.create_by, Some(1))
     user.insert(userData)
   }
 
