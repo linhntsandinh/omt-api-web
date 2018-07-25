@@ -25,7 +25,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       .on(_._1.userId === _.user_id) join AbsenceApproveTable)
       .on(_._1._1.id === _.application_id)join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(_._1._1._1._1.userId === absenceRequestLoad.id).filter(row =>
-      if(absenceRequestLoad.receiver !="") row._2.full_name === absenceRequestLoad.receiver
+      if(absenceRequestLoad.reciever !="") row._2.full_name === absenceRequestLoad.reciever
       else LiteralColumn(true)
     ).filter(row =>
       if(absenceRequestLoad.start != 0) row._1._1._1._1.startTime === absenceRequestLoad.start
@@ -43,29 +43,74 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       if(absenceRequestLoad.ordervalue >= 0) row._1._1._1._1.status === absenceRequestLoad.ordervalue
       else LiteralColumn(true)
     )
-      .drop(absenceRequestLoad.pageTop).take(absenceRequestLoad.pageEnd).result
+      .drop(absenceRequestLoad.offset).take(absenceRequestLoad.limit).result
     //
     val rs = db.run {
       q
     }
-    rs.map {
-      list => {
-        list.size match {
+//    rs.map {
+//      list => {
+//        list.size match {
+//          case 0 => None
+//          case _ => {
+//            var i=0
+//            list.foreach {
+//              item => {
+//                val itemLoad : AbsenceApplicationsLoad =
+//                  new AbsenceApplicationsLoad(item._1._1._1._1.id,item._1._1._1._2.title,item._1._1._2.full_name,item._2.full_name,item._1._1._1._1.startTime,item._1._1._1._1.totalTime,item._1._1._1._1.status)
+//                listAbsence += itemLoad
+//              }
+//            }
+//            Some(listAbsence,list.size)
+//          }
+//        }
+//      }
+//    }
+    val p = (((((AbsenceTable join AbsenceReasonsTable)
+      .on(_.reasonId === _.id) join ProfileTable)
+      .on(_._1.userId === _.user_id) join AbsenceApproveTable)
+      .on(_._1._1.id === _.application_id)join ProfileTable)
+      .on(_._2.approve_id === _.user_id)).filter(_._1._1._1._1.userId === absenceRequestLoad.id).filter(row =>
+      if(absenceRequestLoad.reciever !="") row._2.full_name === absenceRequestLoad.reciever
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.start != 0) row._1._1._1._1.startTime === absenceRequestLoad.start
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.writer != "") row._1._1._2.full_name === absenceRequestLoad.writer
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.reasons != "") row._1._1._1._2.title === absenceRequestLoad.reasons
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.total != 0) row._1._1._1._1.totalTime === absenceRequestLoad.total
+      else LiteralColumn(true)
+    ).filter(row =>
+      if(absenceRequestLoad.ordervalue >= 0) row._1._1._1._1.status === absenceRequestLoad.ordervalue
+      else LiteralColumn(true)
+    ).result
+    val rs1 = db.run{
+      p
+    }
+    for{
+      fs <- rs
+      fs1 <- rs1
+    } yield {
+        fs.size match {
           case 0 => None
           case _ => {
             var i=0
-            list.foreach {
+            fs.foreach {
               item => {
-                val itemLoad : AbsenceApplicationsLoad =
-                  new AbsenceApplicationsLoad(item._1._1._1._1.id,item._1._1._1._2.title,item._1._1._2.full_name,item._2.full_name,item._1._1._1._1.startTime,item._1._1._1._1.totalTime,item._1._1._1._1.status)
+                val itemLoad: AbsenceApplicationsLoad =
+                  new AbsenceApplicationsLoad(item._1._1._1._1.id, item._1._1._1._2.title, item._1._1._2.full_name, item._2.full_name, item._1._1._1._1.startTime, item._1._1._1._1.totalTime, item._1._1._1._1.status)
                 listAbsence += itemLoad
               }
             }
-            Some(listAbsence,list.size)
           }
         }
+      Some(listAbsence,fs1.size)
       }
-    }
   }
   def loadDetail(id : Int):  Future[Option[(AbsenceApplicationsLoad,AbsenceApplicationsData)]]={
     val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
@@ -174,21 +219,22 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       listReason = rs1
       Some(listReason,listName,profileLoad)
     }
-
   }
 
   def update(absenceApplicationsData: AbsenceApplicationsData)={
-    val q = AbsenceTable.filter(_.id === absenceApplicationsData.id).update(absenceApplicationsData)
+    val q = AbsenceTable.filter(_.id === absenceApplicationsData.id)
+      .map(p => (p.reasonId,p.description,p.startTime,p.endTime,p.status,p.userId,p.totalTime,p.created_by,p.updated_by))
+      .update(absenceApplicationsData.reasonId,absenceApplicationsData.description,absenceApplicationsData.startTime,absenceApplicationsData.endTime,absenceApplicationsData.status,absenceApplicationsData.userId,absenceApplicationsData.totalTime,absenceApplicationsData.created_by,absenceApplicationsData.update_by)
     db.run(q)
   }
 }
-  case class AbsenceApplicationsLoad(id: Int, reasonTitle: String, writer: String,receiver: String,startTime :Int,totalTime :Float,status :Int)
+  case class AbsenceApplicationsLoad(id: Int, reasonTitle: String, writer: String,reciever: String,startTime :Int,totalTime :Float,status :Int)
   object AbsenceApplicationsLoad {
     implicit val reader = Json.reads[AbsenceApplicationsLoad]
     implicit val writer = Json.writes[AbsenceApplicationsLoad]
   }
 
-  case class AbsenceRequestLoad(id: Int, pageTop :Int, pageEnd :Int, start:Int, writer: String, receiver: String,reasons: String,total :Float,ordervalue:Int)
+  case class AbsenceRequestLoad(id: Int, offset :Int, limit :Int, start:Int, writer: String, reciever: String,reasons: String,total :Float,ordervalue:Int)
   object AbsenceRequestLoad {
     implicit val reader = Json.reads[AbsenceRequestLoad]
     implicit val writer = Json.writes[AbsenceRequestLoad]

@@ -19,6 +19,7 @@ GET         /absenceApprove/delete/:id                   controllers.AbsenceAppr
 GET         /absenceReason/delete/:id                   controllers.AbsenceReasonsController.delete(id: Int)
 GET         /absence/loadDetail/:id                   controllers.AbsenceApplicationController.loadDetail(id: Int)
 GET         /absence/loadForm/:id                   controllers.AbsenceApplicationController.loadForm(id: Int)
+GET         /jobTitle/delete/:id                   controllers.JobTitleController.delete(id: Int)
 
 +nocsrf
 POST        /user/insert                        controllers.UserController.insert
@@ -49,6 +50,8 @@ POST        /profile/insert                     controllers.ProfileController.in
 +nocsrf
 POST        /profile/update                     controllers.ProfileController.update
 
+GET         /profile/info/:id                       controllers.ProfileController.getProfile(id: Int)
+
 +nocsrf
 POST        /absence/load                  controllers.AbsenceApplicationController.load
 
@@ -59,6 +62,15 @@ GET         /profile/delete/:id                controllers.ProfileController.del
 POST        /timelog/insert                     controllers.TimelogController.insert
 +nocsrf
 POST        /timelog/update                     controllers.TimelogController.update
+
++nocsrf
+POST        /timelog/load                     controllers.TimelogController.load
+
++nocsrf
+POST        /jobTitle/insert                     controllers.JobTitleController.insert
++nocsrf
+POST        /jobTitle/update                     controllers.JobTitleController.update
+
 GET         /timelog/delete/:id                 controllers.TimelogController.delete(id: Int)
 
 
