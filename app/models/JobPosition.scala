@@ -6,7 +6,7 @@ import play.api.libs.json.Json
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 case class JobPositionData(id: Option[Int], title: String)
 object JobPositionData {
@@ -25,5 +25,22 @@ class JobPositionDef(tag: Tag) extends Table[JobPositionData](tag, "job_position
 class JobPosition @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                     (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
+
+  private val JobPositionTable = TableQuery[JobPositionDef]
+
+  def insert(jobPositionData: JobPositionData): Future[Int] = {
+    db.run(JobPositionTable += jobPositionData)
+  }
+
+  def delete(jobPositionId: Int) = {
+    db.run(JobPositionTable.filter(_.id === jobPositionId).delete)
+  }
+
+  def update(jobPositionData: JobPositionData) = {
+    val q = JobPositionTable.filter(_.id === jobPositionData.id)
+      .map(p => p.title)
+      .update(jobPositionData.title)
+    db.run(q)
+  }
 
 }
