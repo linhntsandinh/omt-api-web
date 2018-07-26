@@ -33,12 +33,12 @@ import proflieData from './tool/ProfileData'
 
          }
          this.handleChange1 = this.handleChange1.bind(this);
-         this.handleSubmit1 = this.handleSubmit1.bind(this);
      }
 
      handleChange(e) {
          this.setState({[e.target.name]: e.target.value});
-     }
+
+         this.handleSubmit1 = this.handleSubmit1.bind(this);}
 
 
 
