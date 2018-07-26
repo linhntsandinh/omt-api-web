@@ -4,6 +4,7 @@ package models
 import javax.inject.Inject
 import be.objectify.deadbolt.scala.models.Subject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import play.api.libs.json.Json
 import security.{SecurityPermission, SecurityRole}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -11,6 +12,39 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 
 import scala.collection.mutable.ListBuffer
+
+case class LoginForm(username: String, password: String)
+object LoginForm {
+  implicit val reader = Json.reads[LoginForm]
+}
+
+case class UserForm(id: Option[Int], username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, update_by: Option[Int], create_by: Option[Int])
+object UserForm {
+  implicit val reader = Json.reads[UserForm]
+  implicit val writer = Json.writes[UserForm]
+}
+
+case class UserData(id: Option[Int], username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
+object UserData {
+  implicit val reader = Json.reads[UserData]
+  implicit val writer = Json.writes[UserData]
+}
+
+class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
+  def id = column[Option[Int]]("id", O.PrimaryKey,O.AutoInc)
+  def username = column[String]("username")
+  def password = column[String]("password")
+  def email = column[String]("email")
+  def avatar = column[String]("avatar")
+  def holidayRemaining = column[Float]("holiday_remaining")
+  def status = column[Int]("status")
+  def created_at = column[Option[Long]]("created_at")
+  def updated_at = column[Option[Long]]("updated_at")
+  def created_by = column[Option[Int]]("created_by")
+  def updated_by = column[Option[Int]]("updated_by")
+  override def * =
+    (id, username, password, email, avatar, holidayRemaining, status, created_at, updated_at, created_by, updated_by) <>((UserData.apply _).tupled, UserData.unapply)
+}
 
 class UserAuth(username: String, roleList: List[SecurityRole], permissionList: List[SecurityPermission]) extends Subject {
   override def roles: List[SecurityRole] = roleList

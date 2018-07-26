@@ -18,8 +18,8 @@ class ProfileController  @Inject()(deadbolt: DeadboltActions, actorSystem: Actor
     Future(JS.OK("data" -> "insert success!!"))
   }
 
-  def getProfiles = Action.async{
-    Future(JS.OK("data" -> "delete success!!"))
+  def getProfile(id: Int) = Action.async{
+    profileService.getProfile(id)
   }
 
   def update = Action.async(parse.json[ProfileForm]) { request =>

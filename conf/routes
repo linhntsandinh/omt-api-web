@@ -54,6 +54,8 @@ POST        /profile/insert                     controllers.ProfileController.in
 +nocsrf
 POST        /profile/update                     controllers.ProfileController.update
 
+GET         /profile/info/:id                       controllers.ProfileController.getProfile(id: Int)
+
 +nocsrf
 POST        /DRole/update                     controllers.RoleController.update
 
