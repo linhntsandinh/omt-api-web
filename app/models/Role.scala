@@ -28,17 +28,18 @@ class RoleTableDef(tag: Tag) extends Table[RoleData](tag, "roles") {
 }
 
 /***/
-case class RoleForm(code: String, name: String)
+case class RoleForm(id: Int,code: String, name: String)
 object RoleForm {
   implicit val reader = Json.reads[RoleForm]
   implicit val writer = Json.writes[RoleForm]
 
 }
 class RoleFormDef(tag: Tag) extends Table[RoleForm](tag, "roles") {
+  def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
   def code = column[String]("code")
   def name = column[String]("name")
   override def * =
-    (code, name) <> ((RoleForm.apply _).tupled, RoleForm.unapply)
+    (id,code, name) <> ((RoleForm.apply _).tupled, RoleForm.unapply)
 }
 
 /***/
@@ -61,10 +62,10 @@ class DRole @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     Future(JS.OK("data" -> "delete Success!!"))
   }
 
-  def update(roleData: RoleData)={
-    val q = RoleData.filter(_.id === roleData.id)
+  def update(roleForm: RoleForm)={
+    val q = RoleData.filter(_.id === roleForm.id)
       .map(p => (p.code,p.name,p.update_at))
-      .update((roleData.code,roleData.name,Some(System.currentTimeMillis()/1000)))
+      .update((roleForm.code,roleForm.name,Some(System.currentTimeMillis()/1000)))
     db.run(q)
     Future(JS.OK("data" -> "update Success!!"))
   }
