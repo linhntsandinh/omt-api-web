@@ -172,7 +172,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
 //        profileLoad = list
 //      }
 //    }
-    val p = ((UserTable join ProfileTable).on(_.id === _.user_id) join ProfileTable).on(_._2.job_title_id === _.job_title_id)
+    val p = ((UserTable join ProfileTable).on(_.id === _.user_id) join ProfileTable).on(_._2.departmenti_id === _.departmenti_id)
       .filter(_._1._1.id=== id).result
     val r = db.run {
       p
