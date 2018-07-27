@@ -37,28 +37,28 @@ class Firebase extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            location: 'test',
+            location: '',
             sender: 'Đại',
             receiver: 'Quy',
             des: 'Xin nghỉ về ăn cưới bạn',
             path: 'https://www.facebook.com/vu.t.dai.56',
             status:false,
             choise: 'push',
-            data: {}
+            data: {},
+            firebase:firebase.database().ref().child('/test/'+this.props.profile['username'])
         }
-        const noti = firebase.database().ref().child('test')
-        noti.on('value', (vl) => {
+        this.state.firebase.on('value', (vl) => {
             this.setState({
                 data: vl.val()
             })
-            if (vl.val()) {
-                for (var v in vl.val()['test']) {
-                    for (var l in vl.val()['test'][v]) {
-                        // console.log(vl.val()['test'][[v]])
-                        // console.log(vl.val()['test'][v][l]);
-                    }
-                }
-            }
+            // if (vl.val()) {
+            //     for (var v in vl.val()['test']) {
+            //         for (var l in vl.val()['test'][v]) {
+            //             console.log(vl.val()['test'][[v]])
+            //             console.log(vl.val()['test'][v][l]);
+            //         }
+            //     }
+            // }
         });
     }
 
@@ -75,16 +75,15 @@ class Firebase extends Component {
     }
 
     onUpdate() {
-        const noti = firebase.database().ref('/test')
         if (this.state.choise === 'detele') {
-            noti.remove()
+            this.state.firebase.remove()
         }
         else {
             if (this.state.location != '') {
-                noti.child(this.state.location)[this.state.choise](new notify(this.state.sender, this.state.receiver, this.state.des, this.state.path,this.state.status));
+                this.state.firebase.child(this.state.location)[this.state.choise](new notify(this.state.sender, this.state.receiver, this.state.des, this.state.path,this.state.status));
             }
             else {
-                noti[this.state.choise](new notify(this.state.sender, this.state.receiver, this.state.des, this.state.path,this.state.status));
+                this.state.firebase[this.state.choise](new notify(this.state.sender, this.state.receiver, this.state.des, this.state.path,this.state.status));
             }
         }
     }

@@ -12,7 +12,7 @@ import {
     Nav,
     Label,
     NavItem,
-    NavLink
+    NavLink,
 } from 'reactstrap';
 import firebase from '../../firebase_config'
 import PropTypes from 'prop-types';
@@ -30,17 +30,26 @@ const propTypes = {
 };
 
 const defaultProps = {};
-const noti = firebase.database().ref('/test')
+
 class DefaultHeader extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: []
+            data: [],
+            firebase: firebase.database().ref('/test/' + this.props.profile['username'])
         }
-        noti.on('value', (vl) => {
+        this.state.firebase.on('value', (vl) => {
             this.setState({
                 data: vl.val()
             })
+            // if (vl.val()) {
+            //     for (var v in vl.val()['test']) {
+            //         for (var l in vl.val()['test'][v]) {
+            //             console.log(vl.val()['test'][[v]])
+            //             console.log(vl.val()['test'][v][l]);
+            //         }
+            //     }
+            // }
         });
     }
 
@@ -48,39 +57,81 @@ class DefaultHeader extends Component {
         this.props.dispatch({type: "logout", data: []});
         localStorage.clear();
     }
-
+    setSeen=(e)=>{
+        console.log(e.target)
+        // this.state.firebase.child(e.target.name).child('status').set(true);
+    }
     render() {
         const {children, ...attributes} = this.props;
-        const list = [];
-        var count=0 ;
+        const list_1 = [];
+        const list_2 = [];
+        var count = 0;
+        list_1.push(<tr className={"label-icon"} disabled  key={"label"}>
+            <td style={{backgroundColor:"#f3f3f3",padding:"0.35em"}}>
+               MỚI
+            </td>
+        </tr>)
+        list_2.push(<tr className={"label-icon"} disabled key={"label"}>
+            <td style={{backgroundColor:"#f3f3f3",padding:"0.35em"}}>
+                TRƯỚC ĐÓ
+            </td>
+        </tr>)
         if (this.state.data) {
-            for (var v in this.state.data['test']) {
-                list.push(
-                    <tr key={v}>
-                        <td>
-                            <a target="_blank" rel="noopener noreferrer" style={{textDecoration: "none",width:70}}
-                               // href={this.state.data['test'][v]['path']}
-                               onClick={()=>{
-                                console.log(noti.child(v).child('status').set(null))
-                            }}>
-                              <Row>
-                                <Col md={"2"}> <img src={'assets/img/avatars/6.jpg'} className="img-avatar"
-                                           alt="admin@bootstrapmaster.com"/>
-                                </Col>
-                                <Col md={"8"}>
-                                    <strong>{this.state.data['test'][v]['sender']}</strong>    &nbsp;
-                                    <span>{this.state.data['test'][v]['des']}</span>
-                                </Col>
-                                <Col md={"2"}>
-                                    <Badge color="info">42</Badge>
-                                </Col>
-                              </Row>
-                            </a>
-                        </td>
-                    </tr>
-                )
-                if(this.state.data['test'][v]['status']==false){
-                     count++;
+            for (var v in this.state.data) {
+                if (this.state.data[v]['status'] == false) {
+                    list_1.push(
+                        <tr  namez={v}  key={v} onClick={this.setSeen}>
+                            <td>
+                                <a target="_blank" rel="noopener noreferrer" style={{textDecoration: "none", width: 70}}
+                                    // href={this.state.data['test'][v]['path']}
+                                   >
+                                    <Row >
+                                        <Col md={"2"}> <img src={'assets/img/avatars/6.jpg'} className="img-avatar"
+                                                            alt="admin@bootstrapmaster.com"/>
+                                        </Col>
+                                        <Col md={"8"}>
+                                            <strong>{this.state.data[v]['sender']}</strong>    &nbsp;
+                                            <span>{this.state.data[v]['des']}</span>
+                                        </Col>
+                                        <Col md={"2"}>
+                                            <Badge color="info">42</Badge>
+                                        </Col>
+                                    </Row>
+                                </a>
+                            </td>
+                        </tr>
+                    )
+                }
+                else {
+                    list_2.push(
+                        <tr key={v}>
+                            <td>
+                                <a target="_blank" rel="noopener noreferrer" style={{textDecoration: "none", width: 70}}
+                                    // href={this.state.data['test'][v]['path']}
+                                   onClick={() => {
+                                       console.log(v)
+                                       this.state.firebase.child(v).child('status').set(true);
+                                   }}>
+                                    <Row>
+                                        <Col md={"2"}> <img src={'assets/img/avatars/6.jpg'} className="img-avatar"
+                                                            alt="admin@bootstrapmaster.com"/>
+                                        </Col>
+                                        <Col md={"8"}>
+                                            <strong>{this.state.data[v]['sender']}</strong>    &nbsp;
+                                            <span>{this.state.data[v]['des']}</span>
+                                        </Col>
+                                        <Col md={"2"}>
+                                            <Badge color="info">42</Badge>
+                                        </Col>
+                                    </Row>
+                                </a>
+                            </td>
+                        </tr>
+                    )
+                }
+                console.log(v)
+                if (this.state.data[v]['status'] == false) {
+                    count++;
                 }
             }
         }
@@ -108,7 +159,7 @@ class DefaultHeader extends Component {
                 <Nav className="ml-auto" navbar>
                     <AppHeaderDropdown direction="down">
                         <DropdownToggle nav>
-                            <i className="icon-bell"></i><Badge pill color="danger">{count>0?count:null}</Badge>
+                            <i className="icon-bell"></i><Badge pill color="danger">{count > 0 ? count : null}</Badge>
                         </DropdownToggle>
                         <DropdownMenu right style={{right: 'auto'}}>
                             <DropdownItem header className={"noti-header"}><strong>Thông báo</strong></DropdownItem>
@@ -116,15 +167,18 @@ class DefaultHeader extends Component {
                                  style={{
                                      width: "430px",
                                      height: "450px",
-                                     overflowY:"auto",
-                                     overflowX:"hidden"
+                                     overflowY: "auto",
+                                     overflowX: "hidden"
                                  }}
 
                             >
                                 <Table className="noti-table">
-                                    <tbody style={{width:430,height:450}}>
+                                    <tbody style={{width: 430, height: 450}}>
                                     {
-                                        list
+                                        list_1
+                                    }
+                                    {
+                                        list_2
                                     }
                                     </tbody>
                                 </Table>
@@ -186,7 +240,7 @@ DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
 function mapStatetoProps(state) {
-    return {isLogin: state.isLogin}
+    return {isLogin: state.isLogin, profile: state.profile}
 
 }
 
