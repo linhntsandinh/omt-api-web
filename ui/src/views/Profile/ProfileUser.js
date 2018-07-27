@@ -11,7 +11,7 @@ class ProflieUser extends Component {
         super(props)
         this.state =
             {
-                data: new Array()
+                data: null
             };
     }
 
@@ -33,7 +33,7 @@ class ProflieUser extends Component {
     render() {
 
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)
-        console.log()
+      
         const userDetails = user ? Object.entries(user) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
 
         return (
