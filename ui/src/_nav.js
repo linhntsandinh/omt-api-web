@@ -22,13 +22,8 @@ export default {
           url: '/timekeeping',
           icon: 'icon-pencil',
       },
-      ,
       {
-<<<<<<< HEAD
-          name: 'ListUsers',
-=======
           name: 'Quản lý nhân viên ',
->>>>>>> ed1e83720d1138c8f0214bfe7380db03a06b0fb3
           url: '/users',
           icon: 'icon-people',
       },
