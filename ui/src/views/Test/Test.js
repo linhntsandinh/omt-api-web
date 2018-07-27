@@ -66,9 +66,7 @@ function UserBox(props) {
           </ButtonGroup>
           <div className="text-value">{user.name}</div>
           <div> {user.registered}</div>
-          <div>
-            <td><Badge href={userLink} color={getBadge(user.status)}>{user.status}</Badge></td>
-          </div>
+          <Badge href={userLink} color={getBadge(user.status)}>{user.status}</Badge>
         </CardBody>
         <div className="chart-wrapper mx-3" style={{height: '70px'}}>
           <Line data={cardChartData} options={ props.style} height={70}/>
@@ -86,8 +84,10 @@ class Test extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       dropdownOpen: new Array(usersData.length).fill(false),
+      data:[]
     };
   }
+
 
   toggle(i) {
     const newArray = this.state.dropdownOpen.map((element, index) => {
@@ -172,7 +172,7 @@ class Test extends Component {
     return (
       <Row>{
         userList.map((user, index) =>
-          < UserBox keys={index} user={user} parent={this} data={cardChartData} style={cardChartOpts}/>
+          < UserBox key={index} keys={index} user={user} parent={this} data={cardChartData} style={cardChartOpts}/>
         )
       }
       </Row>

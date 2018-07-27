@@ -18,25 +18,17 @@ export default {
       },
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },  {
-
-
-          name: 'List đơn',
-          url: '/absencemanage',
-          icon: 'cui-clipboard icons',
-      },  {
-          name: 'Viết đơn',
-          url: '/absence',
+          name: 'Chấm công',
+          url: '/timekeeping',
           icon: 'icon-pencil',
-      }
+      },
       ,
       {
-          name: 'Home',
-          url: '/timekeeping',
-          icon: 'icon-calculator',
-      },
-
-      {
+<<<<<<< HEAD
           name: 'ListUsers',
+=======
+          name: 'Quản lý nhân viên ',
+>>>>>>> ed1e83720d1138c8f0214bfe7380db03a06b0fb3
           url: '/users',
           icon: 'icon-people',
       },

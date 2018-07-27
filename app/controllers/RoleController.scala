@@ -13,7 +13,7 @@ class RoleController @Inject()(actorSystem: ActorSystem, role : RoleService, cc:
     role.insert(request.body)
   }
 
-  def update = Action.async(parse.json[RoleData]) { request =>
+  def update = Action.async(parse.json[RoleForm]) { request =>
     role.update(request.body)
   }
 

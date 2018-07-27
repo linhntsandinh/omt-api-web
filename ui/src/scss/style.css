@@ -9939,6 +9939,7 @@ body {
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
+<<<<<<< HEAD
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
@@ -10016,5 +10017,7 @@ body {
 #rowcaleda {
   margin-left: 0px; }
 
+=======
+>>>>>>> ed1e83720d1138c8f0214bfe7380db03a06b0fb3
 html body .app.flex-row.align-items-center {
   height: 100vh; }
