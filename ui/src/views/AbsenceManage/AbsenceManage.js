@@ -1,9 +1,13 @@
+<<<<<<< HEAD
+
+=======
 /**
  * Created by Vu Tien Dai on 27/06/2018.
  */
 /**
  * Created by Vu Tien Dai on 25/06/2018.
  */
+>>>>>>> ed1e83720d1138c8f0214bfe7380db03a06b0fb3
 import React, {Component} from 'react';
 import usersData from './UsersData'
 import {Redirect, Route, Switch} from 'react-router-dom';
@@ -357,3 +361,7 @@ class AbsenceManage extends Component {
   }
 }
 export default AbsenceManage;
+<<<<<<< HEAD
+
+=======
+>>>>>>> ed1e83720d1138c8f0214bfe7380db03a06b0fb3

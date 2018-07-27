@@ -190,9 +190,38 @@ const Timekeeping = Loadable({
 
 
 
+const Profiles = Loadable(
+    {
+        loader:()=>import('./views/Profile/Profiles'),
+        loading: Loading,
+    }
+);
+const ProfileAdmin = Loadable(
+    {
+        loader:()=>import('./views/Profile/Profile'),
+        loading: Loading,
+    }
+);
 
+const ProfileUser = Loadable(
+
+    {
+        loader:()=>import('./views/Profile/ProfileUser'),
+        loading: Loading,
+    }
+
+);
+const ProfileFormEdit = Loadable(
+
+    {
+        loader:()=>import('./views/Profile/ProfileAdminedit'),
+        loading: Loading,
+    }
+
+);
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
+
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
@@ -235,6 +264,12 @@ const routes = [
   { path: '/users', exact: true,  name: 'Nhân viên', component: Users },
   { path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User },
     { path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping },
+{path: '/listprofile', exact: true, name: 'Profiles', component: Profiles},
+{path: '/profiles/:id', exact: true, name: 'ProfileAdmin', component: ProfileAdmin},
+{path: '/profileUser/:id', exact: true, name:'ProfileUser', component:ProfileUser},
+{path: '/listprofile/:id', exact:true,name:'demoFormEdit', component: ProfileFormEdit},
+
+
 
 ];
 

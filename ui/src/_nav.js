@@ -22,12 +22,18 @@ export default {
           url: '/timekeeping',
           icon: 'icon-pencil',
       },
-      ,
       {
           name: 'Quản lý nhân viên ',
           url: '/users',
           icon: 'icon-people',
       },
+
+      {
+          name: 'ListProfile',
+          url: '/listprofile',
+          icon: 'icon-people',
+      },
+
     {
       name: 'Colors',
       url: '/theme/colors',

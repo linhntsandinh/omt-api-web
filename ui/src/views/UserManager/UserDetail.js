@@ -9,6 +9,7 @@ class User extends Component {
     }
   }
 
+
   componentDidMount() {
     fetch("https://daivt.000webhostapp.com/get_user.php", {
       method: 'POST',
@@ -59,6 +60,7 @@ console.log(userDetails);
       </div>
     )
   }
+
 }
 
 export default User ;
