@@ -1,5 +1,20 @@
 import React, {Component} from 'react';
-import {Row, Col, Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink} from 'reactstrap';
+import {
+    Row,
+    Table,
+    Col,
+    Card,
+    CardBody,
+    Badge,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Nav,
+    Label,
+    NavItem,
+    NavLink
+} from 'reactstrap';
+import firebase from '../../firebase_config'
 import PropTypes from 'prop-types';
 
 import {AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler} from '@coreui/react';
@@ -8,16 +23,25 @@ import sygnet from '../../assets/img/brand/sygnet.svg'
 
 import {logout} from '../../DataUser'
 import {connect} from "react-redux";
+import Buttons from "../../views/Buttons/Buttons";
 
 const propTypes = {
     children: PropTypes.node,
 };
 
 const defaultProps = {};
-
+const noti = firebase.database().ref('/test')
 class DefaultHeader extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            data: []
+        }
+        noti.on('value', (vl) => {
+            this.setState({
+                data: vl.val()
+            })
+        });
     }
 
     Logout() {
@@ -27,8 +51,39 @@ class DefaultHeader extends Component {
 
     render() {
         const {children, ...attributes} = this.props;
-
-
+        const list = [];
+        var count=0 ;
+        if (this.state.data) {
+            for (var v in this.state.data['test']) {
+                list.push(
+                    <tr key={v}>
+                        <td>
+                            <a target="_blank" rel="noopener noreferrer" style={{textDecoration: "none",width:70}}
+                               // href={this.state.data['test'][v]['path']}
+                               onClick={()=>{
+                                console.log(noti.child(v).child('status').set(null))
+                            }}>
+                              <Row>
+                                <Col md={"2"}> <img src={'assets/img/avatars/6.jpg'} className="img-avatar"
+                                           alt="admin@bootstrapmaster.com"/>
+                                </Col>
+                                <Col md={"8"}>
+                                    <strong>{this.state.data['test'][v]['sender']}</strong>    &nbsp;
+                                    <span>{this.state.data['test'][v]['des']}</span>
+                                </Col>
+                                <Col md={"2"}>
+                                    <Badge color="info">42</Badge>
+                                </Col>
+                              </Row>
+                            </a>
+                        </td>
+                    </tr>
+                )
+                if(this.state.data['test'][v]['status']==false){
+                     count++;
+                }
+            }
+        }
         // eslint-disable-next-line
         return (
             <React.Fragment>
@@ -53,55 +108,30 @@ class DefaultHeader extends Component {
                 <Nav className="ml-auto" navbar>
                     <AppHeaderDropdown direction="down">
                         <DropdownToggle nav>
-                            <i className="icon-bell"></i><Badge pill color="danger">5</Badge>
+                            <i className="icon-bell"></i><Badge pill color="danger">{count>0?count:null}</Badge>
                         </DropdownToggle>
                         <DropdownMenu right style={{right: 'auto'}}>
-                            <div
-                                style={{
-                                    width: "400px",
-                                    height: "500px",
-                                    overflow: "auto",
-                                }}
+                            <DropdownItem header className={"noti-header"}><strong>Thông báo</strong></DropdownItem>
+                            <div className={"noti-view"}
+                                 style={{
+                                     width: "430px",
+                                     height: "450px",
+                                     overflowY:"auto",
+                                     overflowX:"hidden"
+                                 }}
 
                             >
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <li>Dai</li>
-                                <DropdownItem header tag="div"
-                                              className="text-center"><strong>Account</strong></DropdownItem>
-                                <DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge
-                                    color="info">42</Badge></DropdownItem>
-                                <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge
-                                    color="success">42</Badge></DropdownItem>
-                                <DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge
-                                    color="danger">42</Badge></DropdownItem>
-                                <DropdownItem><i className="fa fa-comments"></i> Comments<Badge
-                                    color="warning">42</Badge></DropdownItem>
-                                <DropdownItem header tag="div"
-                                              className="text-center"><strong>Settings</strong></DropdownItem>
-                                <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
-                                <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
-                                <DropdownItem><i className="fa fa-usd"></i> Payments<Badge
-                                    color="secondary">42</Badge></DropdownItem>
-                                <DropdownItem><i className="fa fa-file"></i> Projects<Badge
-                                    color="primary">42</Badge></DropdownItem>
-                                <DropdownItem divider/>
-                                <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-                                <DropdownItem onClick={(e) => {
-                                    this.Logout(e)
-                                }}><i
-                                    className="fa fa-lock"></i> Logout</DropdownItem>
+                                <Table className="noti-table">
+                                    <tbody style={{width:430,height:450}}>
+                                    {
+                                        list
+                                    }
+                                    </tbody>
+                                </Table>
                             </div>
+                            <DropdownItem header className={"noti-header text-center"}>
+                                <a href={""}>Xem thêm</a>
+                            </DropdownItem>
                         </DropdownMenu>
 
                     </AppHeaderDropdown>
@@ -119,8 +149,10 @@ class DefaultHeader extends Component {
                         <DropdownMenu right style={{right: 'auto'}}>
                             <DropdownItem header tag="div"
                                           className="text-center"><strong>Account</strong></DropdownItem>
-                            <DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge
-                                color="info">42</Badge></DropdownItem>
+                            <DropdownItem><img src={'assets/img/avatars/6.jpg'} className="img-avatar"
+                                               alt="admin@bootstrapmaster.com"/>
+                                Updates<Badge
+                                    color="info">42</Badge></DropdownItem>
                             <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>
                             <DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge
                                 color="danger">42</Badge></DropdownItem>

@@ -3,11 +3,13 @@ export  class  notification {
     private receiver:number;
     private des:string;
     private path:string;
-    constructor(sender,receiver,des,path){
+    private status:false;
+    constructor(sender,receiver,des,path,status){
         this.sender=sender;
         this.receiver=receiver;
         this.des=des;
         this.path=path;
+        this.status=status;
     }
 
 }

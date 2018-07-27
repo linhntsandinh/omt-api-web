@@ -57,10 +57,10 @@ class App extends Component {
                 <Switch>
                     {!this.props.isLogin ?
                         <Route path="/login" name="Login Page" component={Login}/> : null}
-                    {!this.props.isLogin ? <Redirect from="/" to="/login"/> : null}
                     <Route exact path="/register" name="Register Page" component={Register}/>
                     <Route exact path="/404" name="Page 404" component={Page404}/>
                     <Route exact path="/500" name="Page 500" component={Page500}/>
+                    {!this.props.isLogin ? <Redirect from="/" to="/login"/> : null}
                     {this.props.isLogin ? <Route path="/" name="Home" component={DefaultLayout}/> : null}
                 </Switch> : null}
             </HashRouter>

@@ -34,7 +34,14 @@ import FormCard from "./FormCard"
 import {formEncode} from '../../../DataUser'
 
 import {connect} from "react-redux";
-
+function scrollTop() {
+    let y = document.body.scrollTop;
+    while (y>0){
+        y--;
+        setTimeout(window.scrollTo(0,y),50)
+        console.log(y)
+    } 
+}
 function Pagin(data) {
     let p = data.parent;
     let check = data.check;
@@ -164,7 +171,7 @@ class AbsenceSend extends Component {
             pagin: 1,
             check: 1,
             pagin_number: 8,
-            permission: true
+            permission: false
 
         }
 
@@ -249,6 +256,7 @@ class AbsenceSend extends Component {
                 }
             )
         }
+        
     }
 
     onRight() {
@@ -267,7 +275,7 @@ class AbsenceSend extends Component {
                     }
                 )
             }
-
+            
         }
 
     }
@@ -277,6 +285,7 @@ class AbsenceSend extends Component {
             check: value
         }, function () {
             this.getData();
+            
         })
 
     }
@@ -300,6 +309,7 @@ class AbsenceSend extends Component {
                 this.getData();
             });
         }
+
     }
 
     handleSearch(e) {
