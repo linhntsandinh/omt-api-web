@@ -15,6 +15,10 @@ class Proflie extends Component {
                 show: false
             };
     }
+
+
+
+
     render() {
 
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)

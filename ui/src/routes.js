@@ -207,7 +207,7 @@ const Profiles = Loadable(
 );
 const ProfileAdmin = Loadable(
     {
-        loader:()=>import('./views/Profile/ProfileAdmin'),
+        loader:()=>import('./views/Profile/Profile'),
         loading: Loading,
     }
 );

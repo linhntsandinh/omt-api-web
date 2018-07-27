@@ -2,7 +2,7 @@
 
 
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, InputGroup, InputGroupAddon,Input} from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, InputGroup, InputGroupAddon,Input, Label, Table} from 'reactstrap';
 
 import proflieData from './tool/ProfileData'
 
@@ -11,13 +11,29 @@ class ProflieUser extends Component {
         super(props)
         this.state =
             {
-                show: false
+                data: new Array()
             };
+    }
+
+
+
+    componentDidMount() {
+        console.log("componentDidMount ")
+        fetch("/profile/info/1", {
+            method: 'GET',
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                console.log(JSON.stringify(responseJson));
+                this.setState({data: JSON.stringify(responseJson)})
+            })
+
+
     }
     render() {
 
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)
-
+        console.log()
         const userDetails = user ? Object.entries(user) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
 
         return (
@@ -47,7 +63,7 @@ class ProflieUser extends Component {
                                 <Col  md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Tài khoản</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label  >{user.user_id}</label>
+                                        <p  >{user.user_id}</p>
                                     </InputGroup>
                                 </Col>
 
@@ -58,27 +74,27 @@ class ProflieUser extends Component {
                                 <Col md={"6"} className={"Colabcprofile1"} ><label  className={"lableabc"} >Họ và Tên</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup >
-                                        <label >{user.full_name}</label>
+                                        <p >{user.full_name}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
 
                             <Row>
                                 <Col md={"6"} className={"Colabcprofile1"}>
-                                    <label  className={"lableabc"}>Số điện thoại</label>
+                                    <p  className={"lableabc"}>Số điện thoại</p>
                                 </Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label >{user.phone_number} </label>
+                                        <p >{user.phone_number} </p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col  md={"6"} className={"Colabcprofile1"}>
-                                    <label  className={"lableabc"}>Ngày sinh</label></Col>
+                                    <p  className={"lableabc"}>Ngày sinh</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.birth_date}</label>
+                                        <p>{user.birth_date}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -86,7 +102,7 @@ class ProflieUser extends Component {
                                 <Col md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Địa chỉ</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <lable>{ user.address } </lable>
+                                        <p>{ user.address } </p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -94,85 +110,103 @@ class ProflieUser extends Component {
                                 <Col md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Gmail</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{ user.Gmail }</label>
+                                        <p>{ user.Gmail }</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label  className={"lableabc"}>Nghề nghiệp (job_title_id)</label></Col>
+                                <p  className={"lableabc"}>Nghề nghiệp (job_title_id)</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{ user.job_title_id }</label>
+                                        <p>{ user.job_title_id }</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label  className={"lableabc"}>Bộ phận (job_position_id)</label></Col>
+                                <p  className={"lableabc"}>Bộ phận (job_position_id)</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.job_position_id} </label>
+                                        <p>{user.job_position_id} </p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label  className={"lableabc"}>Trạng thái(status)</label></Col>
+                                <p  className={"lableabc"}>Trạng thái(status)</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.status}</label>
+                                        <p>{user.status}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label  className={"lableabc"}>Ngày vào làm</label></Col>
+                                <p  className={"lableabc"}>Ngày vào làm</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.join_date}</label>
+                                        <p>{user.join_date}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
 
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label className={"lableabc"}>Giới Tính</label></Col>
+                                <p className={"lableabc"}>Giới Tính</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.gender}</label>
+                                        <p>{user.gender}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
 
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label className={"lableabc"}>Created_at</label></Col>
+                                <p className={"lableabc"}>Created_at</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.created_at}</label>
+                                        <p>{user.created_at}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label className={"lableabc"}>Update_at</label></Col>
+                                <p className={"lableabc"}>Update_at</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.updated_at}</label>
+                                        <p>{user.updated_at}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label className={"lableabc"}>Created_by</label></Col>
+                                <p className={"lableabc"}>Created_by</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.created_by}</label>
+                                        <p>{user.created_by}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <label className={"lableabc"}>Updated_by</label></Col>
+                                <p className={"lableabc"}>Updated_by</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <label>{user.updated_by}</label>
+                                        <p>{user.updated_by}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
 
+                        </Card>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={5}>
+                        <Card>
+                            <CardHeader>
+                                <strong><i className="icon-info pr-1"></i></strong>
+                            </CardHeader>
+                            <CardBody>
+                                <Table responsive striped hover>
+                                    <tbody>
+                                    {
+
+                                    }
+                                    </tbody>
+                                </Table>
+                            </CardBody>
                         </Card>
                     </Col>
                 </Row>

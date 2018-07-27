@@ -11,26 +11,32 @@ class User extends Component {
     }
 
     componentDidMount() {
+        console.log("componentDidMount");
         fetch("https://daivt.000webhostapp.com/get_user.php", {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
             body: formEncode({id: this.props.match.params.id}),
         }).then(function (response) {
+                console.log ("response 1: " + response);
                 return response.json();
             }
         ).then((result) => {
+                console.log("setState")
                 this.setState({data: result});
-                console.log(this.state.data);
+                console.log( "result "+this.state.data);
             }
         )
+        console.log("end component");
+
     }
 
     render() {
+        console.log("render 1: " + this.state.data);
         const user = this.state.data.find(user => user.user_id.toString() === this.props.match.params.id);
-
+        console.log("render 2: " + user);
         const userDetails = user ? Object.entries(user) : [['id', (
             <span><i className="text-muted icon-ban"></i> Not found</span>)]]
-        console.log(userDetails);
+        console.log("render 3: " + userDetails);
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -43,6 +49,7 @@ class User extends Component {
                                 <Table responsive striped hover>
                                     <tbody>
                                     {
+
                                         userDetails.map(([key, value], index) => {
                                             return (
                                                 <tr key={index}>
