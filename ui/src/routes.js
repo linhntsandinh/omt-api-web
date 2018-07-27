@@ -198,7 +198,10 @@ const AbsenceDetail = Loadable({
     loader: () => import('./views/AbsenceManage/AbsenceDetail'),
     loading: Loading,
 });
-
+const AddUser = Loadable({
+    loader: () => import('./views/UserManager/AddUser'),
+    loading: Loading,
+    });
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -241,12 +244,14 @@ const routes = [
     {path: '/notifications/modals', name: 'Modals', component: Modals},
     {path: '/widgets', name: 'Widgets', component: Widgets},
     {path: '/charts', name: 'Charts', component: Charts},
-    {path: '/users', exact: true, name: 'Nhân viên', component: Users},
-    {path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User},
+    {path: '/users', exact: true, name: 'Quản lí hồ sơ', component: Users}  ,
+    {path: '/users/:id', exact: true, name: 'Hồ sơ', component: User},
     {path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping},
     {path: '/absence', exact: true, name: 'Viết đơn', component: Absence},
     {path: '/absencemanage', exact: true, name: 'List đơn', component: AbsenceManage},
     {path: '/absencemanage/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetail},
+    {path:'/adduser', exact:true, name:'Thêm tài khoản', component: AddUser},
+
 
 
 ];

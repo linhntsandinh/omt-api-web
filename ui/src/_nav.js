@@ -36,9 +36,32 @@ export default {
       },
 
       {
-          name: 'Profile',
+          name: 'Tài khoản',
           url: '/users',
           icon: 'icon-people',
+          children:[
+              {
+                  name:'Hồ sơ',
+                  url:'/users/:id',
+                  icon:'icon-people',
+              },
+              {
+                name:'Đổi mật khẩu',
+                url:'/changePassword',
+                icon:'icon-lock',
+              },
+              {
+                name:'Tạo tài khoản',
+                url:'/adduser',
+                icon:'icon-user-follow',
+              },
+              {
+                name:'Quản lí hồ sơ',
+                url:'/users',
+                icon:'icon-list',
+              },
+
+          ],
       },
     {
       name: 'Colors',

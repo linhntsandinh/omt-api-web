@@ -50,7 +50,7 @@ class Register extends Component {
                       <Button className="btn-facebook" block><span>facebook</span></Button>
                     </Col>
                     <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block><span>twitter</span></Button>
+                      <Button className="btn-twitt  er" block><span>twitter</span></Button>
                     </Col>
                   </Row>
                 </CardFooter>
