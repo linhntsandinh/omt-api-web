@@ -375,8 +375,8 @@ class Users extends Component {
                                 <th  width="6%"
                                     onClick={(e) => this.handleSort("id", 0, e)}>STT
                                     <a className="icon-sort">
-                                        {(sort[0] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[0] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                        {(sort[0] % 3 === 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[0] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
                                                 <i className="fa fa-sort-up"></i>
                                         }</a>
                                 </th>
@@ -384,8 +384,8 @@ class Users extends Component {
                                 <th  width="15%"
                                     onClick={(e) => this.handleSort("full_name", 1, e)}>Họ và Tên
                                     <a className="icon-sort">
-                                    {(sort[1] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[1] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                    {(sort[1] % 3 === 0) ? <i className="fa fa-sort"></i> :
+                                        (sort[1] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
                                             <i className="fa fa-sort-up"></i>
                                     }</a>
                                 </th>
@@ -393,32 +393,32 @@ class Users extends Component {
                                 <th  width="20%"
                                     onClick={(e) => this.handleSort("email", 2, e)}>Email
                                     <a className="icon-sort">
-                                    {(sort[2] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[2] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                    {(sort[2] % 3 === 0) ? <i className="fa fa-sort"></i> :
+                                        (sort[2] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
                                             <i className="fa fa-sort-up"></i>
                                     }</a>
                                 </th>
                                 <th className=" text-lg-center" width="15%"
                                     onClick={(e) => this.handleSort("phone_number", 3, e)}>Số điện thoại
                                     <a className="icon-sort">
-                                    {(sort[3] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[3] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                    {(sort[3] % 3 === 0) ? <i className="fa fa-sort"></i> :
+                                        (sort[3] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
                                             <i className="fa fa-sort-up"></i>
                                     }</a>
                                 </th>
                                 <th  width="15%"
                                     onClick={(e) => this.handleSort("jpb_position", 4, e)}>Chuyên môn
                                     <a className="icon-sort">
-                                    {(sort[4] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[4] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                    {(sort[4] % 3 === 0) ? <i className="fa fa-sort"></i> :
+                                        (sort[4] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
                                             <i className="fa fa-sort-up"></i>
                                     }</a>
                                 </th>
                                 <th  width="10%"
                                     onClick={(e) => this.handleSort("status", 5, e)}>Status
                                     <a className="icon-sort">
-                                    {(sort[5] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[5] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                    {(sort[5] % 3 === 0) ? <i className="fa fa-sort"></i> :
+                                        (sort[5] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
                                             <i className="fa fa-sort-up"></i>
                                     }</a>
                                 </th>

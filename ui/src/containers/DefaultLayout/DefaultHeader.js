@@ -13,6 +13,7 @@ import {
     Label,
     NavItem,
     NavLink,
+    Dropdown
 } from 'reactstrap';
 import firebase from '../../firebase_config'
 import PropTypes from 'prop-types';
@@ -24,6 +25,7 @@ import sygnet from '../../assets/img/brand/sygnet.svg'
 import {logout} from '../../DataUser'
 import {connect} from "react-redux";
 import Buttons from "../../views/Buttons/Buttons";
+import CardNoti from "./CardNoti";
 
 const propTypes = {
     children: PropTypes.node,
@@ -57,84 +59,46 @@ class DefaultHeader extends Component {
         this.props.dispatch({type: "logout", data: []});
         localStorage.clear();
     }
-    setSeen=(e)=>{
+
+    setSeen = (e) => {
         console.log(e.target)
         // this.state.firebase.child(e.target.name).child('status').set(true);
     }
+
     render() {
         const {children, ...attributes} = this.props;
         const list_1 = [];
         const list_2 = [];
         var count = 0;
-        list_1.push(<tr className={"label-icon"} disabled  key={"label"}>
-            <td style={{backgroundColor:"#f3f3f3",padding:"0.35em"}}>
-               MỚI
-            </td>
-        </tr>)
-        list_2.push(<tr className={"label-icon"} disabled key={"label"}>
-            <td style={{backgroundColor:"#f3f3f3",padding:"0.35em"}}>
+        list_1.push(
+            <DropdownItem className={"label-icon"} disabled key={"label"}
+                          style={{backgroundColor: "#f3f3f3", padding: "0.35em"}}>
+                MỚI
+            </DropdownItem>)
+        list_2.push(
+            <DropdownItem className={"label-icon"} disabled key={"label"}
+                          style={{backgroundColor: "#f3f3f3", padding: "0.35em"}}>
                 TRƯỚC ĐÓ
-            </td>
-        </tr>)
+            </DropdownItem>)
         if (this.state.data) {
             for (var v in this.state.data) {
                 if (this.state.data[v]['status'] == false) {
                     list_1.push(
-                        <tr  namez={v}  key={v} onClick={this.setSeen}>
-                            <td>
-                                <a target="_blank" rel="noopener noreferrer" style={{textDecoration: "none", width: 70}}
-                                    // href={this.state.data['test'][v]['path']}
-                                   >
-                                    <Row >
-                                        <Col md={"2"}> <img src={'assets/img/avatars/6.jpg'} className="img-avatar"
-                                                            alt="admin@bootstrapmaster.com"/>
-                                        </Col>
-                                        <Col md={"8"}>
-                                            <strong>{this.state.data[v]['sender']}</strong>    &nbsp;
-                                            <span>{this.state.data[v]['des']}</span>
-                                        </Col>
-                                        <Col md={"2"}>
-                                            <Badge color="info">42</Badge>
-                                        </Col>
-                                    </Row>
-                                </a>
-                            </td>
-                        </tr>
+                      <CardNoti seen={false} key={v} data={v} parent={this}/>
                     )
                 }
                 else {
                     list_2.push(
-                        <tr key={v}>
-                            <td>
-                                <a target="_blank" rel="noopener noreferrer" style={{textDecoration: "none", width: 70}}
-                                    // href={this.state.data['test'][v]['path']}
-                                   onClick={() => {
-                                       console.log(v)
-                                       this.state.firebase.child(v).child('status').set(true);
-                                   }}>
-                                    <Row>
-                                        <Col md={"2"}> <img src={'assets/img/avatars/6.jpg'} className="img-avatar"
-                                                            alt="admin@bootstrapmaster.com"/>
-                                        </Col>
-                                        <Col md={"8"}>
-                                            <strong>{this.state.data[v]['sender']}</strong>    &nbsp;
-                                            <span>{this.state.data[v]['des']}</span>
-                                        </Col>
-                                        <Col md={"2"}>
-                                            <Badge color="info">42</Badge>
-                                        </Col>
-                                    </Row>
-                                </a>
-                            </td>
-                        </tr>
+                        <CardNoti seen={true}  key={v} data={v} parent={this}/>
                     )
                 }
-                console.log(v)
                 if (this.state.data[v]['status'] == false) {
                     count++;
                 }
             }
         }
+        list_1.reverse();
+        list_2.reverse();
         // eslint-disable-next-line
         return (
             <React.Fragment>
@@ -157,8 +121,8 @@ class DefaultHeader extends Component {
                     </NavItem>
                 </Nav>
                 <Nav className="ml-auto" navbar>
-                    <AppHeaderDropdown direction="down">
-                        <DropdownToggle nav>
+                    <AppHeaderDropdown  direction="down">
+                        <DropdownToggle  nav>
                             <i className="icon-bell"></i><Badge pill color="danger">{count > 0 ? count : null}</Badge>
                         </DropdownToggle>
                         <DropdownMenu right style={{right: 'auto'}}>
@@ -170,24 +134,18 @@ class DefaultHeader extends Component {
                                      overflowY: "auto",
                                      overflowX: "hidden"
                                  }}
-
                             >
-                                <Table className="noti-table">
-                                    <tbody style={{width: 430, height: 450}}>
                                     {
                                         list_1
                                     }
                                     {
                                         list_2
                                     }
-                                    </tbody>
-                                </Table>
                             </div>
                             <DropdownItem header className={"noti-header text-center"}>
                                 <a href={""}>Xem thêm</a>
                             </DropdownItem>
                         </DropdownMenu>
-
                     </AppHeaderDropdown>
                     <NavItem className="d-md-down-none">
                         <NavLink href="#"><i className="icon-list"></i></NavLink>
