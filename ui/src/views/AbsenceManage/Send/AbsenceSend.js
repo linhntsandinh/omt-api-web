@@ -178,36 +178,45 @@ class AbsenceSend extends Component {
     }
 
     componentDidMount() {
-        fetch('https://daivt.000webhostapp.com/get_profile.php', {
-            method: 'POST',
-            headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode(
-                {
-                    id: this.state.id,
-                    full_name: this.state.writer,
-                    receiver: this.state.receiver,
-                    reason: this.state.reason,
-                    start: this.state.start,
-                    total: this.state.total,
-                    limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
-                })
+        let limit = localStorage.getItem('limit');
+        if (!limit) {
+            limit = 10;
+        }
+        this.setState({
+            limit: limit
+        }, () => {
+            fetch('https://daivt.000webhostapp.com/get_profile.php', {
+                method: 'POST',
+                headers: {"Content-type": "application/x-www-form-urlencoded"},
+                body: formEncode(
+                    {
+                        id: this.state.id,
+                        writer: this.state.writer,
+                        receiver: this.state.receiver,
+                        reason: this.state.reason,
+                        start: this.state.start,
+                        total: this.state.total,
+                        limit: this.state.limit,
+                        offset: ((this.state.check - 1) * this.state.limit)
+                    })
 
-        }).then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-                this.setState({data: result});
-            }
-        )
-        fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-                this.setState({length: result[0]['count']});
+            }).then(function (response) {
+                    return response.json();
+                }
+            ).then((result) => {
+                    this.setState({data: result});
+                }
+            )
+            fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
+                    return response.json();
+                }
+            ).then((result) => {
+                    this.setState({length: result[0]['count']});
 
-            }
-        )
+                }
+            )
+
+        })
 
     }
 
@@ -231,8 +240,14 @@ class AbsenceSend extends Component {
                 return response.json();
             }
         ).then((result) => {
-            console.log(result)
-                this.setState({data: result});
+                this.setState({data: result},()=>{
+                    window.scroll({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+
+                });
             }
         )
     }
@@ -266,6 +281,7 @@ class AbsenceSend extends Component {
                     check: this.state.check + 1
                 }, function () {
                     this.getData();
+
                 }
             )
             if (this.state.pagin + this.state.pagin_number - 1 === this.state.check) {
@@ -288,6 +304,7 @@ class AbsenceSend extends Component {
             
         })
 
+
     }
 
     handleChange(e) {
@@ -303,11 +320,15 @@ class AbsenceSend extends Component {
             this.setState({limit: e.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
+            localStorage.setItem('limit',e.value);
+
         }
         else {
             this.setState({limit: 10, check: 1, pagin: 1}, function () {
                 this.getData();
             });
+            localStorage.setItem('limit',10);
+
         }
 
     }
@@ -333,7 +354,7 @@ class AbsenceSend extends Component {
             orderby: name,
             ordervalue: (this.state.sort[i] % 3 === 1 ? 'ASC' : this.state.sort[i] % 3 === 2 ? 'DESC' : '')
         })
-        console.log(this.state.orderby + ":" + this.state.ordervalue)
+        // console.log(this.state.orderby + ":" + this.state.ordervalue)
     }
 
     render() {

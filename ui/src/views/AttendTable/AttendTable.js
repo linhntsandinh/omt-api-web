@@ -205,7 +205,13 @@ class AttendTable extends Component {
                 return response.json();
             }
         ).then((result) => {
-                this.setState({data: result});
+                this.setState({data: result},()=>{
+                    window.scroll({
+                        top: 670,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                });
             }
         )
     }
