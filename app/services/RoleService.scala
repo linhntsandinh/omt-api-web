@@ -11,9 +11,9 @@ class RoleService @Inject()(drole: DRole){
   def insert(roleForm: RoleForm): Future[Result] = {
     val roleData = new RoleData(1,roleForm.code,roleForm.name,Some(System.currentTimeMillis()/1000),null)
     drole.insert(roleData)
-    Future(JS.OK("data" -> "delete Success!!"))
+    Future(JS.OK("data" -> "insert Success!!"))
   }
-  def update(roleData: RoleData): Future[Result] = {
-    drole.update(roleData)
+  def update(roleForm: RoleForm): Future[Result] = {
+    drole.update(roleForm)
   }
 }

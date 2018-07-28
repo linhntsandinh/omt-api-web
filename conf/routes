@@ -20,6 +20,10 @@ GET         /absenceReason/delete/:id                   controllers.AbsenceReaso
 GET         /absence/loadDetail/:id                   controllers.AbsenceApplicationController.loadDetail(id: Int)
 GET         /absence/loadForm/:id                   controllers.AbsenceApplicationController.loadForm(id: Int)
 GET         /jobTitle/delete/:id                   controllers.JobTitleController.delete(id: Int)
+GET         /Drole/delete/:id                   controllers.RoleController.delete(id: Int)
+GET         /rolePermission/delete/:id                   controllers.RoleController.delete(id: Int)
+GET         /department/delete/:id                   controllers.DepartmentController.delete(id: Int)
+GET         /holiday/delete/:id                   controllers.DepartmentController.delete(id: Int)
 
 +nocsrf
 POST        /user/insert                        controllers.UserController.insert
@@ -47,10 +51,36 @@ POST        /absenceReason/update                     controllers.AbsenceReasons
 # Profile:
 +nocsrf
 POST        /profile/insert                     controllers.ProfileController.insert
+
 +nocsrf
 POST        /profile/update                     controllers.ProfileController.update
 
 GET         /profile/info/:id                       controllers.ProfileController.getProfile(id: Int)
+
++nocsrf
+POST        /DRole/update                     controllers.RoleController.update
+
++nocsrf
+POST        /DRole/insert                     controllers.RoleController.insert
+
++nocsrf
+POST        /holiday/update                     controllers.HolidayController.update
+
++nocsrf
+POST        /holiday/insert                     controllers.HolidayController.insert
+
+
++nocsrf
+POST        /rolePermission/update                     controllers.RolePermissionController.update
+
++nocsrf
+POST        /rolePermission/insert                     controllers.RolePermissionController.insert
+
++nocsrf
+POST        /department/update                     controllers.DepartmentController.update
+
++nocsrf
+POST        /department/insert                     controllers.DepartmentController.insert
 
 +nocsrf
 POST        /absence/load                  controllers.AbsenceApplicationController.load
