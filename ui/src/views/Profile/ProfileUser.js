@@ -43,7 +43,6 @@ class ProflieUser extends Component {
         }).then((response) =>
             response.json())
             .then((responseJson) => {
-
                 console.log(JSON.stringify(responseJson));
                // console.log("repo ", responseJson.profile.id)
 
