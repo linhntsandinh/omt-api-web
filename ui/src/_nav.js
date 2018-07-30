@@ -23,6 +23,11 @@ export default {
           icon: 'icon-pencil',
       },
       {
+        name:'Tạo tài khoản',
+        url:'/adduser',
+        icon:'icon-user-follow',
+      },
+      {
           name: 'Quản lý nhân viên ',
           url: '/users',
           icon: 'icon-people',

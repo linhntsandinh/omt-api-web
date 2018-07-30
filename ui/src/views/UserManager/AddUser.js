@@ -11,13 +11,10 @@ class AddUser extends Component{
         super(props);
         this.state = {
             username:'',
-            team:'',
+            password:'',
         }
     }
     render(){
-        const {
-            username, team
-        }=this.state
         return(
             <div className="app flex-row align-items-center">
                 <Container>
@@ -51,70 +48,7 @@ class AddUser extends Component{
                                         <Input type="password" placeholder="Repeat password" />
                                     </InputGroup>
                                     <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-user"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="text" placeholder="Họ tên" />
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-location-pin"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="text" placeholder="Địa chỉ" />
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>@</InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="text" placeholder="Email" />
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-screen-smartphone"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="text" placeholder="Số điện thoại" />
-                                    </InputGroup>
-                                   <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-people"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="select" name="team" id="selectTeam">
-                                            {/*{team.map((value, index) =>*/}
-                                                {/*<Optioncard key ={index} index={index} value={value}/>*/}
-                                            {/*)}*/}
-                                        </Input>
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-people"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="select" name="team" id="selectTeam">
-                                            {/*{team.map((value, index) =>*/}
-                                            {/*<Optioncard key ={index} index={index} value={value}/>*/}
-                                            {/*)}*/}
-                                        </Input>
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-people"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input type="select" name="team" id="selectTeam">
-                                            {/*{team.map((value, index) =>*/}
-                                            {/*<Optioncard key ={index} index={index} value={value}/>*/}
-                                            {/*)}*/}
-                                        </Input>
+
                                     </InputGroup>
                                 </CardBody>
                                 <CardFooter className="p-4">
