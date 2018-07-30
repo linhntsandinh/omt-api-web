@@ -55,7 +55,12 @@ export default function navi(p) {
                     name: 'Profile',
                     url: '/users',
                     icon: 'icon-people',
+                },  {
+                    name: 'ListProfile',
+                    url: '/listprofile',
+                    icon: 'icon-people',
                 },
+
                 {
                     name: 'Colors',
                     url: '/theme/colors',
