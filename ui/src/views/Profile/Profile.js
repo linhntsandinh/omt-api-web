@@ -9,7 +9,7 @@ import createSagaMiddleware from "redux-saga";
 import { Provider } from "react-redux";
 
 import { reducer } from "./redux/redux";
-import { watcherSaga } from "./redux/sagas";
+import { watcherSaga, watcherSaga1 } from "./redux/sagas";
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -27,7 +27,7 @@ let store = createStore(
 
 // run the saga
 sagaMiddleware.run(watcherSaga);
-
+sagaMiddleware.run(watcherSaga1);
  class Proflie extends Component {
 
 
