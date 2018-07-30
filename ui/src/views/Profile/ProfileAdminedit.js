@@ -300,7 +300,6 @@ import proflieData from './tool/ProfileData'
                 </div>
             );
          }else {
-
              return (
                  <Card>
                      <CardBody>
