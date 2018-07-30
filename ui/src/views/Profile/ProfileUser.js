@@ -23,7 +23,6 @@ class ProflieUser extends Component {
             method: 'GET',
         }).then((response) => response.json())
             .then((responseJson) => {
-
                 console.log(JSON.stringify(responseJson));
                 this.setState({data: JSON.stringify(responseJson)})
             })
