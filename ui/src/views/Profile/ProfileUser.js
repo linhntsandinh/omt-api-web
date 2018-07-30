@@ -11,20 +11,67 @@ class ProflieUser extends Component {
         super(props)
         this.state =
             {
-                data: null
+                id:'',
+                user_id:'',
+                full_name:'',
+                phone_number:'',
+                birth_date:'',
+                address:'',
+                departmenti_id:'',
+                job_title_id:'',
+                job_position_id:'',
+                status:'',
+                join_date:'',
+                gender:'',
+                job_position:'',
+                job_title:'',
+
+                created_at:'',
+                updated_at:'',
+                created_by:'',
+                updated_by:''
             };
     }
 
 
 
     componentDidMount() {
-        console.log("componentDidMount ")
-        fetch("/profile/info/1", {
+        const ul = "/profile/info/"+this.props.match.params.id;
+        console.log("componentDidMoun011t " + ul)
+        fetch(ul, {
             method: 'GET',
-        }).then((response) => response.json())
+        }).then((response) =>
+            response.json())
             .then((responseJson) => {
                 console.log(JSON.stringify(responseJson));
-                this.setState({data: JSON.stringify(responseJson)})
+               // console.log("repo ", responseJson.profile.id)
+
+                if (responseJson) {
+                    const profile = {
+                        id: responseJson.profile.id,
+                        full_name: responseJson.profile.full_name,
+                        phone_number: responseJson.profile.phone_number,
+                        birth_date: responseJson.profile.birth_date,
+                        address: responseJson.profile.address,
+                        departmenti_id: responseJson.profile.departmenti_id,
+                        job_title_id: responseJson.profile.job_title_id,
+                        job_position_id: responseJson.profile.job_position_id,
+                        status: responseJson.profile.status,
+                        join_date: responseJson.profile.join_date,
+                        gender: responseJson.profile.gender,
+                        job_position: responseJson.job_position.title,
+                        job_title: responseJson.job_title.title,
+                        created_at: responseJson.profile.created_at,
+                        updated_at: responseJson.profile.updated_at,
+                        created_by: responseJson.profile.created_by,
+                        updated_by: responseJson.profile.updated_by
+
+                    };
+                    //this.setState({data: JSON.stringify(responseJson)})
+                    // console.log(profile.id + " demo " + profile.name)
+                    // console.log("ket " + Object.entries(profile)[1])
+                    this.setState(profile)
+                }
             })
 
 
@@ -34,6 +81,13 @@ class ProflieUser extends Component {
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)
       
         const userDetails = user ? Object.entries(user) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
+       // const pr = this.state.data ? Object.entries(this.state.data) :  [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
+        console.log("1 "+this.state.id);
+        if (this.state.data){
+            console.log("2 " + this.state.id + "  "+ this.state.name )
+
+        }
+
 
         return (
             <div className="animated fadeIn">
@@ -62,7 +116,7 @@ class ProflieUser extends Component {
                                 <Col  md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Tài khoản</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p  >{user.user_id}</p>
+                                        <p  >{this.state.id}</p>
                                     </InputGroup>
                                 </Col>
 
@@ -73,7 +127,7 @@ class ProflieUser extends Component {
                                 <Col md={"6"} className={"Colabcprofile1"} ><label  className={"lableabc"} >Họ và Tên</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup >
-                                        <p >{user.full_name}</p>
+                                        <p >{this.state.full_name}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -84,7 +138,7 @@ class ProflieUser extends Component {
                                 </Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p >{user.phone_number} </p>
+                                        <p >{this.state.phone_number} </p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -93,7 +147,7 @@ class ProflieUser extends Component {
                                     <p  className={"lableabc"}>Ngày sinh</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.birth_date}</p>
+                                        <p>{this.state.birth_date}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -101,31 +155,31 @@ class ProflieUser extends Component {
                                 <Col md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Địa chỉ</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{ user.address } </p>
+                                        <p>{ this.state.address } </p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Gmail</label></Col>
+                                <Col md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>departmenti_id</label></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{ user.Gmail }</p>
+                                        <p>{ this.state.departmenti_id }</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <p  className={"lableabc"}>Nghề nghiệp (job_title_id)</p></Col>
+                                <p  className={"lableabc"}>Chức vụ(job title)</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{ user.job_title_id }</p>
+                                        <p>{ this.state.job_title }</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
                             <Row> <Col md={"6"} className={"Colabcprofile1"}>
-                                <p  className={"lableabc"}>Bộ phận (job_position_id)</p></Col>
+                                <p  className={"lableabc"}>Chức vụ (job position)</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.job_position_id} </p>
+                                        <p>{this.state.job_position} </p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -133,7 +187,7 @@ class ProflieUser extends Component {
                                 <p  className={"lableabc"}>Trạng thái(status)</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.status}</p>
+                                        <p>{this.state.status}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -141,7 +195,7 @@ class ProflieUser extends Component {
                                 <p  className={"lableabc"}>Ngày vào làm</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.join_date}</p>
+                                        <p>{this.state.join_date}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -150,7 +204,7 @@ class ProflieUser extends Component {
                                 <p className={"lableabc"}>Giới Tính</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.gender}</p>
+                                        <p>{this.state.gender}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -159,7 +213,7 @@ class ProflieUser extends Component {
                                 <p className={"lableabc"}>Created_at</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.created_at}</p>
+                                        <p>{this.state.created_at}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -167,7 +221,7 @@ class ProflieUser extends Component {
                                 <p className={"lableabc"}>Update_at</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.updated_at}</p>
+                                        <p>{this.state.updated_at}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -175,7 +229,7 @@ class ProflieUser extends Component {
                                 <p className={"lableabc"}>Created_by</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.created_by}</p>
+                                        <p>{this.state.created_by}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -183,7 +237,7 @@ class ProflieUser extends Component {
                                 <p className={"lableabc"}>Updated_by</p></Col>
                                 <Col md={"6"}>
                                     <InputGroup>
-                                        <p>{user.updated_by}</p>
+                                        <p>{this.state.updated_by}</p>
                                     </InputGroup>
                                 </Col>
                             </Row>
@@ -191,24 +245,7 @@ class ProflieUser extends Component {
                         </Card>
                     </Col>
                 </Row>
-                <Row>
-                    <Col lg={5}>
-                        <Card>
-                            <CardHeader>
-                                <strong><i className="icon-info pr-1"></i></strong>
-                            </CardHeader>
-                            <CardBody>
-                                <Table responsive striped hover>
-                                    <tbody>
-                                    {
 
-                                    }
-                                    </tbody>
-                                </Table>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
             </div>
         )
     }
