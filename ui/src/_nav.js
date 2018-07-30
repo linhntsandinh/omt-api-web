@@ -31,7 +31,7 @@ export default function navi(p) {
                             icon: 'fa fa-send-o',
                         },
                         {
-                            name: 'Đơn nhân',
+                            name: 'Đơn nhận',
                             url: '/absencemanage/receiver',
                             icon: 'fa fa-envelope-o',
                         }
@@ -39,7 +39,7 @@ export default function navi(p) {
                 }, {
                     name: 'FireBase',
                     url: '/firebase',
-                    icon: 'icon-list',
+                    icon: 'fa fa-assistive-listening-systems',
                 }, {
                     name: 'Viết đơn',
                     url: '/absence',

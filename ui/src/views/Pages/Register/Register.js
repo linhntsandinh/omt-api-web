@@ -36,7 +36,7 @@ class Register extends Component {
 
     Register() {
         if (this.state.password === this.state.rep_password) {
-            fetch('http://localhost:9000/user/insert', {
+            fetch('/user/insert', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

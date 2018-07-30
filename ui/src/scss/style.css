@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /*!
  * CoreUI - Open Source Dashboard UI Kit
- * @version v2.0.2
+ * @version v2.0.3
  * @link https://coreui.io
  * Copyright (c) 2018 creativeLabs Łukasz Holeczek
  * Licensed under MIT (https://coreui.io/license)
@@ -9939,6 +9939,22 @@ body {
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
+.lableabc {
+  margin-left: 30px; }
+
+.rowsoid {
+  border-bottom: solid; }
+
+.Colabcprofile {
+  margin-top: 8px;
+  text-align: right; }
+
+.Colabcprofile1 {
+  text-align: right; }
+
+#rowcaleda {
+  margin-left: 0px; }
+
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
@@ -9964,20 +9980,33 @@ html body .app.flex-row.align-items-center {
   max-width: 30%; }
 
 table.private-table tr:hover {
-  background: #e4ffd3; }
+  outline: 2px solid rgba(0, 0, 0, 0.5);
+  outline-offset: -2px; }
+
+table.noti-table tr:hover {
+  background: #f6faff; }
+
+table.noti-table {
+  margin-bottom: 0 !important; }
 
 table.private-table tr.header-table th:hover {
-  background: #fffa2f; }
+  background-color: #f9ffc3; }
+
+.table.small-table th, .table.small-table td {
+  padding: 0.4em; }
 
 .main-avatar {
   width: 70%; }
+
+.block-formcard {
+  background-color: rgba(0, 0, 0, 0.05); }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   padding: 0;
   color: #fff;
-  background: linear-gradient(to bottom right, #002bff, #ff00d9); }
+  background: linear-gradient(to bottom right, #0f22ff, #6497ff); }
 
 .lable_search {
   width: 100%;
@@ -9999,61 +10028,47 @@ table.private-table tr.header-table th:hover {
 
 body {
   background: #f6faff; }
-.lableabc {
-    margin-left: 30px; }
 
-.rowsoid {
-    border-bottom: solid; }
+.attend-table {
+  margin-top: 2em; }
 
-.Colabcprofile {
-    margin-top: 8px;
-    text-align: right; }
+.noti-view::-webkit-scrollbar {
+  width: 10px; }
 
-.Colabcprofile1 {
-    text-align: right; }
+.noti-view::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; }
 
-#rowcaleda {
-    margin-left: 0px; }
+.noti-view::-webkit-scrollbar-thumb {
+  height: 6px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  -webkit-border-radius: 7px;
+  background-color: rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
+
+.noti-view::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.44); }
+
+.noti-view::-webkit-scrollbar-corner {
+  background-color: transparent; }
+
+.noti-view::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none; }
+
+.noti-header.dropdown-header {
+  height: 40px;
+  padding: 13px 20px;
+  background: #f0f3f5;
+  border-bottom: 1px solid #c8ced3; }
+
+.setting-noti {
+  opacity: 0; }
+
+.setting-noti:hover {
+  opacity: 1; }
 
 html body .app.flex-row.align-items-center {
   height: 100vh; }
-.attend-table {
-    margin-top: 2em; }
-
-.noti-view::-webkit-scrollbar {
-    width: 10px; }
-
-.noti-view::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px; }
-
-.noti-view::-webkit-scrollbar-thumb {
-    height: 6px;
-    border: 2px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    -webkit-border-radius: 7px;
-    background-color: rgba(0, 0, 0, 0.15);
-    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
-
-.noti-view::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.44); }
-
-.noti-view::-webkit-scrollbar-corner {
-    background-color: transparent; }
-
-.noti-view::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none; }
-
-.noti-header.dropdown-header {
-    height: 40px;
-    padding: 13px 20px;
-    background: #f0f3f5;
-    border-bottom: 1px solid #c8ced3; }
-
-.setting-noti {
-    opacity: 0; }
-
-.setting-noti:hover {
-    opacity: 1; }
