@@ -70,16 +70,7 @@ class DefaultHeader extends Component {
         const list_1 = [];
         const list_2 = [];
         var count = 0;
-        list_1.push(
-            <DropdownItem className={"label-icon"} disabled key={"label"}
-                          style={{backgroundColor: "#f3f3f3", padding: "0.35em"}}>
-                MỚI
-            </DropdownItem>)
-        list_2.push(
-            <DropdownItem className={"label-icon"} disabled key={"label"}
-                          style={{backgroundColor: "#f3f3f3", padding: "0.35em"}}>
-                TRƯỚC ĐÓ
-            </DropdownItem>)
+
         if (this.state.data) {
             for (var v in this.state.data) {
                 if (this.state.data[v]['status'] == false) {
@@ -97,6 +88,16 @@ class DefaultHeader extends Component {
                 }
             }
         }
+        list_1.push(
+            <DropdownItem className={"label-icon"} disabled key={"label"}
+                          style={{backgroundColor: "#f3f3f3", padding: "0.35em"}}>
+                MỚI
+            </DropdownItem>)
+        list_2.push(
+            <DropdownItem className={"label-icon"} disabled key={"label"}
+                          style={{backgroundColor: "#f3f3f3", padding: "0.35em"}}>
+                TRƯỚC ĐÓ
+            </DropdownItem>)
         list_1.reverse();
         list_2.reverse();
         // eslint-disable-next-line
