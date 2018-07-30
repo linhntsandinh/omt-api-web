@@ -1,5 +1,7 @@
 package services
 
+import java.util.Date
+
 import javax.inject.Inject
 import models.{LoginForm, User, UserData, UserForm}
 import play.api.libs.json.Json
@@ -27,7 +29,7 @@ class UserService @Inject()(user: User) {
       userForm.avatar,
       userForm.holidayRemaining,
       userForm.status,
-      null,
+      Some(new Date().getTime()),
       Some(System.currentTimeMillis() / 1000),
       Some(1),
       Some(1))

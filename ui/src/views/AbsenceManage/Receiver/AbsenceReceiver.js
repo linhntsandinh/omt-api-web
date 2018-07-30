@@ -5,7 +5,11 @@
  * Created by Vu Tien Dai on 25/06/2018.
  */
 import React, {Component} from 'react';
+
 import Select from 'react-select';
+import FormCard from "./FormCard"
+import {formEncode} from '../../../DataUser'
+import {connect} from "react-redux";
 import {
     Badge,
     Card,
@@ -28,14 +32,10 @@ import {
     Row,
     Form,
     FormGroup,
-    Label
+    Label,
 } from 'reactstrap';
-import UserCard from "./UserCard"
-import {formEncode} from '../../DataUser'
 
 function Pagin(data) {
-
-
     let p = data.parent;
     let check = data.check;
     let pagin = data.pagin;
@@ -46,7 +46,6 @@ function Pagin(data) {
         </PaginationItem>
     )
 
-
 }
 
 function More(data) {
@@ -54,33 +53,52 @@ function More(data) {
         <Row>
             <Col md="7">
             </Col>
-            <Col md="5">
+            <Col md="4">
                 <Card>
                     <CardBody>
                         <Row>
                             <Col md="4">
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Email
+                                        Người nhận
                                     </InputGroupText>
                                 </Row>
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Số điện thoại
+                                        Loại
                                     </InputGroupText>
                                 </Row>
                                 <Row>
                                     <InputGroupText className="lable_search">
-                                        Chuyên môn
+                                        Ngày viết
+                                    </InputGroupText>
+                                </Row>
+                                <Row>
+                                    <InputGroupText className="lable_search">
+                                        Số ngày
                                     </InputGroupText>
                                 </Row>
                             </Col>
-                            <Col>
+                            <Col md="8">
                                 <Row>
                                     <Col>
-                                        <Input className="lable_search" name="email" value={data.pr.state.email}
+                                        <Input className="lable_search" name="receiver"
+                                               value={data.pr.state.receiver}
+                                               onChange={(e) => data.pr.handleChange(e)}
+                                               onKeyPress={(ev, e) => {
+
+                                                   if (ev.key === 'Enter') {
+                                                       document.getElementById("btn-search").click();
+                                                       ev.preventDefault();
+                                                   }
+                                               }}/>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Input className="lable_search" name="reason"
+                                               value={data.pr.state.reason}
                                                onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
-                                            console.log(`Pressed keyCode ${ev.key}`);
                                             if (ev.key === 'Enter') {
                                                 document.getElementById("btn-search").click();
                                                 ev.preventDefault();
@@ -90,95 +108,105 @@ function More(data) {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <Input className="lable_search" name="phone_number"
-                                               value={data.pr.state.phone_number}
-                                               onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
-                                            console.log(`Pressed keyCode ${ev.key}`);
-                                            if (ev.key === 'Enter') {
-                                                document.getElementById("btn-search").click();
-                                                ev.preventDefault();
-                                            }
-                                        }}/>
+                                        <Input value={data.pr.state.start} name="start"
+                                               onChange={(e) => data.pr.handleChange(e)} type="date"
+                                               placeholder="date"
+                                               onKeyPress={(ev, e) => {
+                                                   if (ev.key === 'Enter') {
+                                                       document.getElementById("btn-search").click();
+                                                       ev.preventDefault();
+                                                   }
+                                               }}
+                                        />
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <Input className="lable_search" name="job_position"
-                                               value={data.pr.state.job_position}
-                                               onChange={(e) => data.pr.handleChange(e)} onKeyPress={(ev, e) => {
-                                            console.log(`Pressed keyCode ${ev.key}`);
-                                            if (ev.key === 'Enter') {
-                                                document.getElementById("btn-search").click();
-                                                ev.preventDefault();
-                                            }
-                                        }}/>
+                                        <Input className="lable_search" name="total"
+                                               value={data.pr.state.total}
+                                               onChange={(e) => data.pr.handleChange(e)}
+                                               onKeyPress={(ev, e) => {
+                                                   if (ev.key === 'Enter') {
+                                                       document.getElementById("btn-search").click();
+                                                       ev.preventDefault();
+                                                   }
+                                               }}/>
                                     </Col>
                                 </Row>
                             </Col>
                         </Row>
                     </CardBody>
                 </Card>
-
             </Col>
         </Row>
     )
 }
 
-class Users extends Component {
+class AbsenceReceiver extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: '',
+            writer: '',
+            receiver: '',
+            reason: '',
+            start: '',
+            total: '',
+            limit: 10,
+            length: 20,
+            orderby: '',
+            ordervalue: '',
+            data: [],
+            search: false,
+            sort: new Array(7).fill(0),
             pagin: 1,
             check: 1,
-            pagin_number:8,
-            data: [],
-            length: 20,
-            id: '',
-            full_name: '',
-            phone_number: '',
-            email: '',
-            job_title: '',
-            job_position: '',
-            limit: 10,
-            search: false,
-            sort: new Array(6).fill(0),
-            orderby: '',
-            ordervalue: ''
+            pagin_number: 8
+
         }
     }
 
     componentDidMount() {
-        console.log("getAll");
-        fetch('https://daivt.000webhostapp.com/get_profile.php', {
-            method: 'POST',
-            headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode(
-                {
-                    id: this.state.id,
-                    full_name: this.state.full_name,
-                    phone_number: this.state.phone_number,
-                    address: this.state.address,
-                    job_title: this.state.job_title,
-                    job_position: this.state.job_position,
-                    limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
-                })
+        let limit = localStorage.getItem('limit');
+        if (!limit) {
+            limit = 10;
+        }
+        this.setState({
+            limit: limit
+        }, () => {
+            fetch('https://daivt.000webhostapp.com/get_profile.php', {
+                method: 'POST',
+                headers: {"Content-type": "application/x-www-form-urlencoded"},
+                body: formEncode(
+                    {
+                        id: this.state.id,
+                        writer: this.state.writer,
+                        receiver: this.state.receiver,
+                        reason: this.state.reason,
+                        start: this.state.start,
+                        total: this.state.total,
+                        limit: this.state.limit,
+                        offset: ((this.state.check - 1) * this.state.limit)
+                    })
 
-        }).then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-                this.setState({data: result});
-            }
-        )
-        fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
-                return response.json();
-            }
-        ).then((result) => {
-                this.setState({length: result[0]['count']});
+            }).then(function (response) {
+                    return response.json();
+                }
+            ).then((result) => {
+                    this.setState({data: result});
+                }
+            )
+            fetch('https://daivt.000webhostapp.com/get_lengthprofile.php', {}).then(function (response) {
+                    return response.json();
+                }
+            ).then((result) => {
+                    this.setState({length: result[0]['count']});
 
-            }
-        )
+                }
+            )
+
+        })
+
     }
 
     getData() {
@@ -188,11 +216,11 @@ class Users extends Component {
             body: formEncode(
                 {
                     id: this.state.id,
-                    full_name: this.state.full_name,
-                    phone_number: this.state.phone_number,
-                    email: this.state.email,
-                    job_title: this.state.job_title,
-                    job_position: this.state.job_position,
+                    writer: this.state.writer,
+                    receiver: this.state.receiver,
+                    reason: this.state.reason,
+                    start: this.state.start,
+                    total: this.state.total,
                     limit: this.state.limit,
                     offset: ((this.state.check - 1) * this.state.limit)
                 })
@@ -201,8 +229,14 @@ class Users extends Component {
                 return response.json();
             }
         ).then((result) => {
-                this.setState({data: result});
-                console.log(result);
+                this.setState({data: result},()=>{
+                    window.scroll({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+
+                });
             }
         )
     }
@@ -230,7 +264,6 @@ class Users extends Component {
 
     onRight() {
         if (this.state.check < Math.ceil(this.state.length / this.state.limit)) {
-            console.log("Dm");
             this.setState(
                 {
                     check: this.state.check + 1
@@ -238,7 +271,7 @@ class Users extends Component {
                     this.getData();
                 }
             )
-            if (this.state.pagin + this.state.pagin_number-1 === this.state.check) {
+            if (this.state.pagin + this.state.pagin_number - 1 === this.state.check) {
                 this.setState(
                     {
                         pagin: this.state.pagin + this.state.pagin_number,
@@ -263,32 +296,35 @@ class Users extends Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    handleSearch(e) {
-        this.setState({check: 1, pagin: 1}, function () {
-            this.getData()
-        });
-    }
-
     handleChangeLimit(e) {
-        // console.log(e)
         if (e) {
-            let check = Math.ceil(((this.state.limit * this.state.check)-this.state.limit+1) / e.value);
-            let pagin =Math.floor(((this.state.limit * this.state.check)-this.state.limit+1) / (e.value*this.state.pagin_number))*this.state.pagin_number+1 ;
-            console.log(this.state.check+"  "+this.state.pagin)
-            console.log(check+"  "+pagin)
+            let check = Math.ceil(((this.state.limit * this.state.check) - this.state.limit + 1) / e.value);
+            let pagin = Math.floor(((this.state.limit * this.state.check) - this.state.limit + 1) / (e.value * this.state.pagin_number)) * this.state.pagin_number + 1;
+            console.log(this.state.check + "  " + this.state.pagin)
+            console.log(check + "  " + pagin)
             this.setState({limit: e.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
+            localStorage.setItem('limit', e.value);
+
         }
         else {
             this.setState({limit: 10, check: 1, pagin: 1}, function () {
                 this.getData();
             });
+            localStorage.setItem('limit', 10);
+
         }
     }
 
+    handleSearch(e) {
+        this.setState({check: 1, pagin: 1}, function () {
+            this.getData();
+        });
+    }
+
+
     handleSort(name, i, e) {
-        console.log(e.target.name);
         const newArray = this.state.sort.map((element, index) => {
             if (index === i) {
                 element = element + 1;
@@ -308,11 +344,11 @@ class Users extends Component {
 
     render() {
         const {
-            check, data, full_name, length, limit, pagin, search, sort, orderby, ordervalue
+            check, data, writer, length, limit, pagin, search, sort, pagin_number
         } = this.state
         const data_pagin = [];
         for (let i = 0; i < Math.ceil(length / limit); i++) {
-            if (i >= (pagin - 1) && i < pagin + this.state.pagin_number-1 && data_pagin.length < this.state.pagin_number)
+            if (i >= (pagin - 1) && i < pagin + pagin_number - 1 && data_pagin.length < pagin_number)
                 data_pagin.push(i);
         }
         return (
@@ -328,13 +364,12 @@ class Users extends Component {
                                     <InputGroupAddon addonType="prepend" disabled><Button>
                                         <i className="fa fa-search"></i>
                                     </Button></InputGroupAddon>
-                                    <Input value={full_name} onChange={(e) => this.handleChange(e)}
+                                    <Input value={writer} onChange={(e) => this.handleChange(e)}
                                            type="text"
                                            id="input1-group2"
-                                           name="full_name" placeholder="Username"
+                                           name="writer" placeholder="Người gửi"
                                            bsSize="lg"
                                            onKeyPress={(ev, e) => {
-                                               console.log(`Pressed keyCode ${ev.key}`);
                                                if (ev.key === 'Enter') {
                                                    document.getElementById("btn-search").click();
                                                    ev.preventDefault();
@@ -345,17 +380,12 @@ class Users extends Component {
                                             id="btn-search" onClick={(e) => {
                                             this.handleSearch(e)
                                         }}
-                                            color="primary"><i className="fa fa-full_name"> Search</i></Button>
+                                            color="primary"><i className="fa fa-writer"> Search</i></Button>
                                     </InputGroupAddon>
                                     <InputGroupAddon addonType="prepend">
                                         <Button size="sm" onClick={(e) => {
                                             if (search === true) {
-                                                this.setState({
-                                                    email: '',
-                                                    phone_number: '',
-                                                    job_title: '',
-                                                    job_position: ''
-                                                })
+                                                this.setState({reason: '', receiver: '', start: '', total: ''})
                                             }
                                             this.setState({search: !search})
                                         }} color="info"><i
@@ -369,64 +399,59 @@ class Users extends Component {
                     </CardHeader>
 
                     <CardBody>
-                        <Table className="private-table" responsive>
+                        <Table bordered responsive className="private-table small-table">
                             <thead>
                             <tr className="header-table text-center">
-                                <th  width="6%"
+                                <th width="6%" name="id"
                                     onClick={(e) => this.handleSort("id", 0, e)}>STT
                                     <a className="icon-sort">
-                                        {(sort[0] % 3 === 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[0] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
+                                        {(sort[0] % 3 == 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[0] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
                                                 <i className="fa fa-sort-up"></i>
                                         }</a>
                                 </th>
-                                <th className=" text-center"  width="10%"><i className="icon-people"></i></th>
-                                <th  width="15%"
-                                    onClick={(e) => this.handleSort("full_name", 1, e)}>Họ và Tên
+                                <th width="15%" onClick={(e) => this.handleSort("writer", 1, e)}>Họ và Tên
                                     <a className="icon-sort">
-                                    {(sort[1] % 3 === 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[1] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
-                                            <i className="fa fa-sort-up"></i>
-                                    }</a>
+                                        {(sort[1] % 3 == 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[1] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                                <i className="fa fa-sort-up"></i>
+                                        }</a>
                                 </th>
-                                <th  width="10%"></th>
-                                <th  width="20%"
-                                    onClick={(e) => this.handleSort("email", 2, e)}>Email
+                                <th width="8%"></th>
+                                <th width="13%" onClick={(e) => this.handleSort("reason", 3, e)}>Loại
                                     <a className="icon-sort">
-                                    {(sort[2] % 3 === 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[2] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
-                                            <i className="fa fa-sort-up"></i>
-                                    }</a>
+                                        {(sort[3] % 3 == 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[3] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                                <i className="fa fa-sort-up"></i>
+                                        }</a>
                                 </th>
-                                <th className=" text-lg-center" width="15%"
-                                    onClick={(e) => this.handleSort("phone_number", 3, e)}>Số điện thoại
+                                <th width="13%" className="text-lg-center"
+                                    onClick={(e) => this.handleSort("start", 4, e)}>Ngày viết
                                     <a className="icon-sort">
-                                    {(sort[3] % 3 === 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[3] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
-                                            <i className="fa fa-sort-up"></i>
-                                    }</a>
+                                        {(sort[4] % 3 == 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[4] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                                <i className="fa fa-sort-up"></i>
+                                        }</a>
                                 </th>
-                                <th  width="15%"
-                                    onClick={(e) => this.handleSort("jpb_position", 4, e)}>Chuyên môn
+                                <th width="10%" onClick={(e) => this.handleSort("total", 5, e)}>Số ngày
                                     <a className="icon-sort">
-                                    {(sort[4] % 3 === 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[4] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
-                                            <i className="fa fa-sort-up"></i>
-                                    }</a>
+                                        {(sort[5] % 3 == 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[5] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                                <i className="fa fa-sort-up"></i>
+                                        }</a>
                                 </th>
-                                <th  width="10%"
-                                    onClick={(e) => this.handleSort("status", 5, e)}>Status
+                                <th width="7%" onClick={(e) => this.handleSort("status", 6, e)}>Status
                                     <a className="icon-sort">
-                                    {(sort[5] % 3 === 0) ? <i className="fa fa-sort"></i> :
-                                        (sort[5] % 3 === 1) ? <i className="fa fa-sort-down"></i> :
-                                            <i className="fa fa-sort-up"></i>
-                                    }</a>
+                                        {(sort[6] % 3 == 0) ? <i className="fa fa-sort"></i> :
+                                            (sort[6] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
+                                                <i className="fa fa-sort-up"></i>
+                                        }</a>
                                 </th>
                             </tr>
                             </thead>
                             <tbody>{
-                                data.map((user, index) =>
-                                    < UserCard key={index} user={user}
+                                data.map((absence, index) =>
+                                    < FormCard key={index} data={absence} duty='send'
                                                stt={index + (check - 1) * limit + 1}/>)}
                             </tbody>
                         </Table>
@@ -471,4 +496,10 @@ class Users extends Component {
     }
 }
 
-export default Users;
+
+function mapStatetoProps(state) {
+    return {profile: state.profile}
+
+}
+
+export default connect(mapStatetoProps)(AbsenceReceiver);

@@ -1,0 +1,48 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'run',
+1 verbose cli   'start-js' ]
+2 info using npm@4.1.2
+3 info using node@v7.7.0
+4 verbose run-script [ 'prestart-js', 'start-js', 'poststart-js' ]
+5 info lifecycle @coreui/coreui-free-react-admin-template@2.0.5~prestart-js: @coreui/coreui-free-react-admin-template@2.0.5
+6 silly lifecycle @coreui/coreui-free-react-admin-template@2.0.5~prestart-js: no script for prestart-js, continuing
+7 info lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: @coreui/coreui-free-react-admin-template@2.0.5
+8 verbose lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: unsafe-perm in lifecycle true
+9 verbose lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: PATH: C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;E:\omt\ui\node_modules\.bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;E:\omt\ui\node_modules\.bin;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Java\jdk1.8.0_102\bin;E:\New Folder\runtime\win64;E:\New Folder\bin;E:\Matlap2016d\runtime\win64;E:\Matlap2016d\bin;E:\Matlap2016d\polyspace\bin;C:\Program Files\MATLAB\R2016a\runtime\win64;C:\Program Files\MATLAB\R2016a\bin;C:\Program Files\MATLAB\R2016a\polyspace\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\nodejs\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\xampp\php\php.exe;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\apktool;C:\Program Files\Git\cmd;C:\Program Files (x86)\sbt\bin;C:\RailsInstaller\Git\cmd;C:\RailsInstaller\Ruby2.2.0\bin;C:\Users\Vu Tien Dai\AppData\Local\Microsoft\WindowsApps;C:\Users\Vu Tien Dai\AppData\Roaming\npm;E:\code\sdk\android\platform-tools;E:\code\sdk\gradle\bin;C:\Users\Vu Tien Dai\AppData\Roaming\Composer\vendor\bin;C:\Program Files\Heroku\bin
+10 verbose lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: CWD: E:\omt\ui
+11 silly lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: Args: [ '/d /s /c', 'react-scripts start' ]
+12 silly lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: Returned: code: 1  signal: null
+13 info lifecycle @coreui/coreui-free-react-admin-template@2.0.5~start-js: Failed to exec start-js script
+14 verbose stack Error: @coreui/coreui-free-react-admin-template@2.0.5 start-js: `react-scripts start`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\lifecycle.js:279:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:194:7)
+14 verbose stack     at ChildProcess.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:194:7)
+14 verbose stack     at maybeClose (internal/child_process.js:899:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+15 verbose pkgid @coreui/coreui-free-react-admin-template@2.0.5
+16 verbose cwd E:\omt\ui
+17 error Windows_NT 10.0.16299
+18 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "start-js"
+19 error node v7.7.0
+20 error npm  v4.1.2
+21 error code ELIFECYCLE
+22 error @coreui/coreui-free-react-admin-template@2.0.5 start-js: `react-scripts start`
+22 error Exit status 1
+23 error Failed at the @coreui/coreui-free-react-admin-template@2.0.5 start-js script 'react-scripts start'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the @coreui/coreui-free-react-admin-template package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     react-scripts start
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs @coreui/coreui-free-react-admin-template
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls @coreui/coreui-free-react-admin-template
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]

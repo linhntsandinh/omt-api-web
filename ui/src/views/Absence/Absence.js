@@ -8,7 +8,7 @@
  * Created by Vu Tien Dai on 25/06/2018.
  */
 import React, {Component} from 'react';
-import {getData, formEncode} from '../../DataUser'
+import {formEncode} from '../../DataUser'
 import * as Datetime from 'react-datetime';
 
 import {
@@ -36,23 +36,48 @@ import {
     Label,
     Row,
 } from 'reactstrap';
+import {connect} from "react-redux";
 
 var yesterday = Datetime.moment().subtract(1, 'day');
 var valid1 = function (current) {
     return current.day() !== 0 && current.day() !== 6;
 };
+function Optioncard(data) {
+    let value = data.value.title;
+    return (
+        <option value={data.value.id}>{value}</option>
+    )
+}
 
+function curentDate() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds()
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    var today1 = dd + '/' + mm + '/' + yyyy + '   ' + h + ':' + m + ':' + s;
+
+    return today1;
+}
 
 class Absence extends Component {
 
     constructor(props) {
         super(props);
-        console.log(yesterday)
         this.state = {
             reasonTitle: [],
             receiver: [],
             titleform: '',
-            username: getData('full_name'),
+            username: this.props.profile['full_name'],
             job_position: '',
             job_title: '',
             today: '',
@@ -83,7 +108,7 @@ class Absence extends Component {
         fetch('https://daivt.000webhostapp.com/get_job_title.php', {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode({id: getData('job_title_id')}),
+            body: formEncode({id: this.props.profile['job_title_id']}),
         }).then(function (response) {
                 return response.json();
             }
@@ -98,7 +123,7 @@ class Absence extends Component {
         fetch('https://daivt.000webhostapp.com/get_job_position.php', {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode({id: getData('job_position_id')}),
+            body: formEncode({id: this.props.profile['job_position_id']}),
         }).then(function (response) {
                 return response.json();
             }
@@ -113,7 +138,7 @@ class Absence extends Component {
         fetch('https://daivt.000webhostapp.com/get_receive.php', {
             method: 'POST',
             headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode({id: getData('job_position_id')}),
+            body: formEncode({id: this.props.profile['job_position_id']}),
         }).then(function (response) {
                 return response.json();
             }
@@ -270,7 +295,7 @@ class Absence extends Component {
                 <CardFooter>
                     <Button onClick={(e) => this.Send(e)} type="submit" size="lg" color="primary"><i
                         className="icon-cursor"></i> Send</Button>
-                    <Button type="reset" size="lg" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
+                    <Button  type="reset" size="lg" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
                 </CardFooter>
             </Card>
 
@@ -279,31 +304,10 @@ class Absence extends Component {
 
 }
 
-function Optioncard(data) {
-    let value = data.value.title;
-    return (
-        <option value={data.value.id}>{value}</option>
-    )
+
+function mapStatetoProps(state) {
+    return {profile: state.profile}
+
 }
 
-function curentDate() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds()
-    if (dd < 10) {
-        dd = '0' + dd
-    }
-
-    if (mm < 10) {
-        mm = '0' + mm
-    }
-    var today1 = dd + '/' + mm + '/' + yyyy + '   ' + h + ':' + m + ':' + s;
-
-    return today1;
-}
-
-export default Absence;
+export default connect(mapStatetoProps)(Absence);
