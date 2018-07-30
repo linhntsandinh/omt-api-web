@@ -20,7 +20,7 @@ function UserRow(props) {
         <th scope="row"><a href={userLink}>{user.id}</a></th>
         <td><a href={userLink}>{user.name}</a></td>
         <td>{user.registered}</td>
-        <td>{user.timecheckout}</td>
+        <td>{user.role}</td>
         <td><Badge href={userLink} color={getBadge(user.status)}>{user.status}</Badge></td>
     </tr>
   )

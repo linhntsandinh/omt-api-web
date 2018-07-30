@@ -32,7 +32,7 @@ class FormCard extends Component {
 
     return (
       <tr onDoubleClick={() => {
-        document.location = userLink
+
       }} onMouseEnter={(e) => {
         if (this.state.show === false)
           this.setState({show: true})

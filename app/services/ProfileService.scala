@@ -5,17 +5,27 @@ import java.text.SimpleDateFormat
 
 import javax.inject.Inject
 import models.{Profile, ProfileData, ProfileForm}
+import play.api.libs.json.Json
+import play.api.mvc.Result
+import utils.JS
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ProfileService @Inject()(profile: Profile) {
   def delete(id: Int): Future[Int] = profile.delete(id)
 
-//  def getProfileAll(): Future[Int] = {
-//    profile.
-//  }
+  def getProfile(id: Int): Future[Result] = {
+    val result = profile.getProfile(id)
+    result.map{
+      case Some(x) => {
+        JS.OK("profile" -> Json.toJson(x._1), "job_position" -> Json.toJson(x._2), "job_title" -> Json.toJson(x._3))
+      }
+      case None => JS.KO("Khong tim thay profile.")
+    }
+  }
 
-  def insert(profileForm: ProfileForm): Future[Int] = {
+  def insert(profileForm: ProfileForm): Future[Result] = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
 
     val sqlBirthDate = new Date(sdf1.parse(profileForm.birth_date).getTime)
@@ -26,6 +36,7 @@ class ProfileService @Inject()(profile: Profile) {
       profileForm.phone_number,
       sqlBirthDate,
       profileForm.address,
+      profileForm.departmenti_id,
       profileForm.job_title_id,
       profileForm.job_position_id,
       profileForm.status,
@@ -33,13 +44,13 @@ class ProfileService @Inject()(profile: Profile) {
       profileForm.gender,
       Some(System.currentTimeMillis() / 1000),
       Some(System.currentTimeMillis() / 1000),
-      null,
+      profileForm.created_by,
       null
     )
     profile.insert(profileData)
   }
 
-  def update(profileForm: ProfileForm): Future[Int] = {
+  def update(profileForm: ProfileForm): Future[Result] = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
 
     val sqlBirthDate = new Date(sdf1.parse(profileForm.birth_date).getTime)
@@ -51,6 +62,7 @@ class ProfileService @Inject()(profile: Profile) {
       profileForm.phone_number,
       sqlBirthDate,
       profileForm.address,
+      profileForm.departmenti_id,
       profileForm.job_title_id,
       profileForm.job_position_id,
       profileForm.status,

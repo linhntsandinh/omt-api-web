@@ -18,51 +18,22 @@ export default {
       },
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },  {
-
-
-          name: 'List đơn',
-          url: '/absencemanage',
-          icon: 'cui-clipboard icons',
-      },  {
-          name: 'Viết đơn',
-          url: '/absence',
-          icon: 'icon-pencil',
-      }
-      ,
-      {
-          name: 'Home',
+          name: 'Chấm công',
           url: '/timekeeping',
-          icon: 'icon-calculator',
+          icon: 'icon-pencil',
       },
-
       {
-          name: 'Tài khoản',
+          name: 'Quản lý nhân viên ',
           url: '/users',
           icon: 'icon-people',
-          children:[
-              {
-                  name:'Hồ sơ',
-                  url:'/users/:id',
-                  icon:'icon-people',
-              },
-              {
-                name:'Đổi mật khẩu',
-                url:'/changePassword',
-                icon:'icon-lock',
-              },
-              {
-                name:'Tạo tài khoản',
-                url:'/adduser',
-                icon:'icon-user-follow',
-              },
-              {
-                name:'Quản lí hồ sơ',
-                url:'/users',
-                icon:'icon-list',
-              },
-
-          ],
       },
+
+      {
+          name: 'ListProfile',
+          url: '/listprofile',
+          icon: 'icon-people',
+      },
+
     {
       name: 'Colors',
       url: '/theme/colors',

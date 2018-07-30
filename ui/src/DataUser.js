@@ -8,12 +8,14 @@ export function getData(data) {
 }
 export function isLogin() {
   var storage =JSON.parse(localStorage.getItem('data'))
+  if(storage!=null)
+    return true;
   return false;
 }
 
 export function ClearData() {
   localStorage.removeItem('data')
-    localStorage.removeItem('Login')
+
 }
 export function login(result) {
   localStorage.setItem('data',JSON.stringify(result))

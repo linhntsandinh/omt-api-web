@@ -9964,20 +9964,13 @@ html body .app.flex-row.align-items-center {
   max-width: 30%; }
 
 table.private-table tr:hover {
-  outline: 2px solid rgba(0, 0, 0, 0.5);
-  outline-offset: -2px; }
+  background: #e4ffd3; }
 
 table.private-table tr.header-table th:hover {
-  background-color: #f9ffc3; }
-
-.table.small-table th, .table.small-table td {
-  padding: 0.4em; }
+  background: #fffa2f; }
 
 .main-avatar {
   width: 70%; }
-
-.block-formcard {
-  background-color: rgba(0, 0, 0, 0.05); }
 
 .sidebar {
   display: flex;
@@ -10007,8 +10000,21 @@ table.private-table tr.header-table th:hover {
 body {
   background: #f6faff; }
 
-.attend-table {
-  margin-top: 2em; }
+.lableabc {
+  margin-left: 30px; }
+
+.rowsoid {
+  border-bottom: solid; }
+
+.Colabcprofile {
+  margin-top: 8px;
+  text-align: right; }
+
+.Colabcprofile1 {
+  text-align: right; }
+
+#rowcaleda {
+  margin-left: 0px; }
 
 html body .app.flex-row.align-items-center {
   height: 100vh; }

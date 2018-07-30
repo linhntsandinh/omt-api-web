@@ -1,5 +1,6 @@
 // Here you can add other styles
 
+
 .app-header .navbar-nav .dropdown-menu-right {
   right: auto; }
 
@@ -24,62 +25,63 @@ html body .app.flex-row.align-items-center {
   max-width: 30%;
 }
 
-table.private-table tr:hover {
-  outline: 2px solid rgba(0, 0, 0, 0.5);
-  outline-offset: -2px;
+table.private-table tr:hover{
+  background: rgb(228, 255, 211);
 }
-
-//table.private-table tr{
-//  margin-bottom: 10px;
-//}
-table.private-table tr.header-table th:hover {
-  background-color: #f9ffc3;
+table.private-table tr.header-table th:hover{
+  background: #fffa2f;
 }
-.table.small-table th, .table.small-table td {
-  padding: 0.4em;
-}
-.main-avatar {
+.main-avatar{
   width: 70%;
 }
-
-.block-formcard {
-  background-color: rgba(0, 0, 0, 0.05);
-  //box-shadow: 0 -1px 0;
-}
-
 .sidebar {
   display: flex;
   flex-direction: column;
   padding: 0;
   color: #fff;
-  background: linear-gradient(to bottom right, #002bff, #ff00d9);
-}
-
-.lable_search {
-  width: 100%;
+  background: linear-gradient(to bottom right, #002bff, #ff00d9); }
+.lable_search{
+ width:100%;
   margin-bottom: 2px;
 }
-
 .sidebar .nav-link .nav-icon {
   display: inline-block;
   width: 1.09375rem;
   margin: 0 0.5rem 0 0;
   font-size: 0.875rem;
   color: #fff;
-  text-align: center;
-}
-
+  text-align: center; }
 .sidebar .nav-link:hover .nav-icon {
-  color: #fff;
+  color: #fff; }
+.icon-sort{
+  float:right;
 }
-
-.icon-sort {
-  float: right;
-}
-
-body {
+body{
   background: #f6faff;
 }
-.attend-table{
-  margin-top: 2em;
+
+
+
+.lableabc{
+  margin-left: 30px;
 }
+.rowsoid{
+  border-bottom: solid;
+
+}
+
+.Colabcprofile{
+  margin-top:8px;
+  text-align: right;
+}
+
+.Colabcprofile1{
+
+  text-align: right;
+}
+
+#rowcaleda{
+  margin-left: 0px;
+}
+
+
