@@ -14,7 +14,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import './scss/style.css'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import '../node_modules/react-datetime/css/react-datetime.css'
-import '../node_modules/react-select/dist/react-select.css';
+// import '../node_modules/react-select/dist/react-select.css';
 // Containers
 import {DefaultLayout} from './containers';
 // Pages
@@ -33,15 +33,17 @@ class App extends Component {
     }
 
     isLogin() {
-        fetch("https://daivt.000webhostapp.com/login.php", {
+      fetch("/user/login", {
             method: 'POST',
-            headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode({user: localStorage.getItem("username"), pass: localStorage.getItem("password")}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'},
+            body: JSON.stringify({username: localStorage.getItem("username"), password: localStorage.getItem("password")}),
         }).then((response) => response.json())
             .then((responseJson) => {
-                if (responseJson) {
+                console.log(responseJson)
+                if (responseJson['status']==='OK') {
                     this.props.dispatch({type: "profile", data: responseJson})
-
                 }
                 this.setState({
                     loading: true

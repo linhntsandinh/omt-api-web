@@ -211,8 +211,10 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       profileLoad = rss1
       r1.foreach {
         item => {
-          val itemName: String = item._2.full_name
-          listName += itemName
+          if(item._2.user_id != id) {
+            val itemName: String = item._2.full_name
+            listName += itemName
+          }
         }
       }
       listReason = rs1

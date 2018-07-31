@@ -285,6 +285,7 @@ const routes = [
     {path: '/users', exact: true, name: 'Nhân viên', component: Users},
     {path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User},
     {path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping},
+    {path: '/absence', exact: true, name: 'Viết đơn', component: Absence},
     {path: '/absencemanage/send/', exact: true, name: 'Đơn gửi', component: AbsenceSend},
     {path: '/absencemanage/receiver/', exact: true, name: 'Đơn nhận', component: AbsenceReciver},
     {path: '/absencemanage/send/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailSend},

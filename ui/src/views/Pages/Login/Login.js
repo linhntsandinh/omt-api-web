@@ -32,16 +32,22 @@ class Login extends Component {
     }
 
     handleClick(pop, e) {
-        fetch("https://daivt.000webhostapp.com/login.php", {
+        fetch("/user/login", {
             method: 'POST',
-            headers: {"Content-type": "application/x-www-form-urlencoded"},
-            body: formEncode({user: this.state.username, pass: this.state.password}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'},
+            body: JSON.stringify({username: this.state.username, password: this.state.password}),
         }).then((response) => response.json())
             .then((responseJson) => {
-                if (responseJson) {
+                console.log(responseJson)
+                if (responseJson['status']==='OK') {
                     localStorage.setItem('username',this.state.username);
                     localStorage.setItem('password',this.state.password);
                     this.props.dispatch({type:"profile",data:responseJson})
+                }
+                else{
+                    alert(responseJson['reason'])
                 }
             })
 
