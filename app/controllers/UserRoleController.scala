@@ -27,16 +27,16 @@ class UserRoleController  @Inject()(deadbolt: DeadboltActions, actorSystem: Acto
 
   def update = Action.async(parse.json[UserRoleData]){request=>
     userRoleService.update(request.body)
-    Future(JS.OK("value"->"update Success!!"))
+    Future(JS.OK("data"->"update Success!!"))
   }
   def delete (id: Int)= Action.async{
     userRoleService.delete(id)
-    Future(JS.OK("value"->"delete Success!!"))
+    Future(JS.OK("data"->"delete Success!!"))
   }
 
   def deleteByUserId (id: Int)= Action.async{
     userRoleService.deleteByUserId(id)
-    Future(JS.OK("value"->"delete Success!!"))
+    Future(JS.OK("data"->"delete Success!!"))
   }
 
 }

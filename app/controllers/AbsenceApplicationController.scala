@@ -18,8 +18,8 @@ class AbsenceApplicationController@Inject() (deadbolt: DeadboltActions, actorSys
   def loadDetail(id: Int)=Action.async{
     absenceapplicationService.loadDetail(id)
   }
-  def loadForm()=Action.async{
-    absenceapplicationService.loadForm()
+  def loadForm(id : Int)=Action.async{
+    absenceapplicationService.loadForm(id)
   }
   def insert =Action.async(parse.json[AbsenceApplicationsForm]) { request =>
     val x = absenceapplicationService.insert(request.body)
@@ -34,12 +34,14 @@ class AbsenceApplicationController@Inject() (deadbolt: DeadboltActions, actorSys
     Future(Redirect(routes.UserController.index))
   }
   def update = Action.async(parse.json[AbsenceApplicationsData]){request=>
-    absenceapplicationService.update(request.body)
-    Future(JS.OK("value"->"update Success!!"))
+    absenceapplicationService.update(request.body).map{ x=>
+      JS.OK("data"->"update Success!!")
+    }
   }
   def delete (id: Int)= Action.async{
-    absenceapplicationService.delete(id)
-    Future(JS.OK("value"->"delete Success!!"))
+    absenceapplicationService.delete(id).map{ x=>
+      JS.OK("data"->"delete Success!!")
+    }
   }
 
 }

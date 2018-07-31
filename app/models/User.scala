@@ -1,17 +1,18 @@
 package models
 
-
-import java.util.Calendar
-
 import javax.inject.Inject
 import be.objectify.deadbolt.scala.models.Subject
+import controllers.ProfileController
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
+import play.api.mvc.Result
 import security.{SecurityPermission, SecurityRole}
+import services.ProfileService
 
 import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
+import utils.JS
 
 import scala.collection.mutable.ListBuffer
 
@@ -20,13 +21,18 @@ object LoginForm {
   implicit val reader = Json.reads[LoginForm]
 }
 
-/***/
+case class UserForm(id: Int, username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, update_by: Option[Int], create_by: Option[Int])
+object UserForm {
+  implicit val reader = Json.reads[UserForm]
+  implicit val writer = Json.writes[UserForm]
+}
+
 case class UserData(id: Int, username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
 object UserData {
   implicit val reader = Json.reads[UserData]
   implicit val writer = Json.writes[UserData]
-
 }
+
 class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
   def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
   def username = column[String]("username")
@@ -43,45 +49,19 @@ class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
     (id, username, password, email, avatar, holidayRemaining, status, created_at, updated_at, created_by, updated_by) <>((UserData.apply _).tupled, UserData.unapply)
 }
 
-/***/
-case class UserForm(var username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int)
-object UserForm {
-  implicit val reader = Json.reads[UserForm]
-  implicit val writer = Json.writes[UserForm]
-
-}
-class UserFormDef(tag: Tag) extends Table[UserForm](tag, "users") {
-
-  def username = column[String]("username")
-  def password = column[String]("password")
-  def email = column[String]("email")
-  def avatar = column[String]("avatar")
-  def holidayRemaining = column[Float]("holiday_remaining")
-  def status = column[Int]("status")
-  override def * =
-    (username, password, email, avatar, holidayRemaining, status) <> ((UserForm.apply _).tupled, UserForm.unapply)
-}
-
-/***/
 class UserAuth(username: String, roleList: List[SecurityRole], permissionList: List[SecurityPermission]) extends Subject {
   override def roles: List[SecurityRole] = roleList
-//    List(SecurityRole("foo"),
-//      SecurityRole("bar"))
 
   override def permissions: List[SecurityPermission] = permissionList
-//    List(SecurityPermission("printers.edit"))
 
   override def identifier: String = username
 }
 
-/***/
-class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
-                               (implicit executionContext: ExecutionContext)
+class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: DatabaseConfigProvider)
+                    (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
-//  private val UserForm  = TableQuery[UserFormDef]
-
-  private val UserTable  = TableQuery[UserTableDef]
+  private val UserTable = TableQuery[UserTableDef]
 
   def getAuthInfo(username: String): Future[Option[(UserData, ListBuffer[SecurityPermission])]] = {
     val role = TableQuery[RoleTableDef]
@@ -90,7 +70,7 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     val rolePermission = TableQuery[RolePermissionFormDef]
 
 
-    val q = (UserTable join userRole on(_.id === _.userId) join role on(_._2.roleId === _.id) join
+    val q = (UserTable join userRole on (_.id === _.userId) join role on (_._2.roleId === _.id) join
       rolePermission on (_._1._2.roleId === _.roleId) join permission on (_._2.permissionId === _.id)).filter(_._1._1._1._1.username === username).result
     q.statements.foreach(println) // print query
     val rs = db.run {
@@ -106,7 +86,7 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
             val roles = ListBuffer.empty[SecurityRole]
             val permissions = ListBuffer.empty[SecurityPermission]
             list.foreach {
-              item =>{
+              item => {
                 val ((((user, userRole), role), rolePermission), permission) = item
                 roles += SecurityRole(role.code)
                 permissions += SecurityPermission(permission.code)
@@ -114,7 +94,7 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
 
             }
             println(permissions)
-            Some(list.head._1._1._1._1,permissions)
+            Some(list.head._1._1._1._1, permissions)
           }
         }
 
@@ -122,16 +102,28 @@ class User @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     }
   }
 
-  def insert(userData: UserData): Future[Int] = {
-    db.run(UserTable += userData)
+  def insert(userData: UserData) = {
+    val q = UserTable.filter(_.username === userData.username).result
+    val rs = db.run(q)
+    rs.flatMap { l =>
+      l.size match {
+        case 0 => db.run(UserTable returning UserTable.map(_.id) += userData).flatMap { id =>
+            val profileForm = new ProfileForm(Some(1), id, "", "", "1-1-1997", "", 0, 0, 0, 1, "1-1-1997", 1, userData.created_by)
+            Profile.insert(profileForm).map(rs => id)
+          }
+        case _ => Future(0)
+      }
+    }
   }
 
-  def delete(userId: Int) ={
+  def delete(userId: Int) = {
     db.run(UserTable.filter(_.id === userId).delete)
   }
 
-  def update(userData: UserData)={
-    val q = UserTable.filter(_.id === userData.id).update(userData)
+  def update(userData: UserData) = {
+    val q = UserTable.filter(_.id === userData.id)
+      .map(p => (p.username, p.password, p.email, p.holidayRemaining, p.updated_at))
+      .update(userData.username, userData.password, userData.email, userData.holidayRemaining, userData.updated_at)
     db.run(q)
   }
 }

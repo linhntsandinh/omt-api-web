@@ -24,13 +24,14 @@ class UserController @Inject()(deadbolt: DeadboltActions, actorSystem: ActorSyst
 
   def delete(id: Int) = Action.async {
     userService.delete(id)
-    Future(JS.OK("value" -> "delete Success!!"))
+    Future(JS.OK("data" -> "delete Success!!"))
   }
 
 
-  def update = Action.async(parse.json[UserData]) { request =>
-    userService.update(request.body)
-    Future(JS.OK("value" -> "update Success!!"))
+  def update = Action.async(parse.json[UserForm]) { request =>
+    userService.update(request.body).map{ x =>
+      JS.OK("data" -> "update Success!!")
+    }
   }
 
   def index = deadbolt.Restrict(List(Array("admin")))() { authRequest =>
@@ -39,15 +40,9 @@ class UserController @Inject()(deadbolt: DeadboltActions, actorSystem: ActorSyst
   }
 
   def insert = Action.async(parse.json[UserForm]) { request =>
-    val x = userService.insert(request.body)
-
-    x.onComplete {
-      rs => {
-        println(rs)
-      }
+    userService.insert(request.body).map{ x =>
+      if(x != 0) JS.OK("data" -> "success")
+      else JS.KO("username exited")
     }
-
-
-    Future(Redirect(routes.UserController.index))
   }
 }
