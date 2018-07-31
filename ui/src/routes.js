@@ -218,12 +218,6 @@ const Profiles = Loadable(
         loading: Loading,
     }
 );
-const ProfileAdmin = Loadable(
-    {
-        loader:()=>import('./views/Profile/Profile'),
-        loading: Loading,
-    }
-);
 
 const ProfileUser = Loadable(
 
@@ -291,9 +285,9 @@ const routes = [
     {path: '/absencemanage/receiver/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailReceiver},
     {path: '/firebase', exact: true, name: 'FireBase', component: FireBase},
     {path: '/listprofile', exact: true, name: 'Profiles', component: Profiles},
-    {path: '/profiles/:id', exact: true, name: 'ProfileAdmin', component: ProfileAdmin},
+
     {path: '/profileUser/:id', exact: true, name:'ProfileUser', component:ProfileUser},
-    {path: '/listprofile/:id', exact:true,name:'demoFormEdit', component: ProfileFormEdit},
+    {path: '/listprofile/:id', exact:true,name:'profile', component: ProfileFormEdit},
 
 
 ];

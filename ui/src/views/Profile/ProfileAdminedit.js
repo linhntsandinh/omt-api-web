@@ -34,17 +34,18 @@ import proflieData from './tool/ProfileData'
 
      componentDidMount() {
          const ul = "/profile/info/"+this.props.match.params.id;
-         console.log("componentDidMoun011t " + ul)
+
+
          fetch(ul, {
              method: 'GET',
          }).then((response) =>
              response.json())
              .then((responseJson) => {
 
-                 console.log(JSON.stringify(responseJson));
-                 // console.log("repo ", responseJson.profile.id)
-                 console.log(responseJson.job_position + " kt")
-                 if (responseJson) {
+
+                console.log(responseJson.status + "  kq" + JSON.stringify(responseJson))
+                 if (responseJson.status === "OK") {
+
                      const profile = {
                          id: responseJson.profile.id,
                          full_name: responseJson.profile.full_name,
@@ -65,9 +66,7 @@ import proflieData from './tool/ProfileData'
                          updated_by: responseJson.profile.updated_by
 
                      };
-                     //this.setState({data: JSON.stringify(responseJson)})
-                     // console.log(profile.id + " demo " + profile.name)
-                     // console.log("ket " + Object.entries(profile)[1])
+
                      this.setState(profile)
                  }
              })
@@ -108,7 +107,7 @@ import proflieData from './tool/ProfileData'
 
      onFormSubmit = (e) => {
          e.preventDefault()
-         console.log(this.emailInputValue);
+
          console.log(this.state.user_id+ " " +
              this.state.full_name + " " +
          this.state.phone_number
@@ -132,14 +131,12 @@ import proflieData from './tool/ProfileData'
                  'Nam/nu'
      }
 
-
-
      render() {
 
         const permit = "admin";
         const user = proflieData.find( user => user.id.toString() === this.props.match.params.id)
 
-         if (permit==="admin"){
+         if (permit==="admins"){
             return (
                 <div className="animated fadeIn">
                     <Row>
@@ -152,28 +149,17 @@ import proflieData from './tool/ProfileData'
                                             <i className="fa fa-align-justify"></i> Thông tin
                                         </Col>
                                         <Col md="5">
-
-
                                         </Col>
                                     </Row>
-
                                 </CardHeader>
-
-
-
                                 <Row >
-
-
                                     <Col  md={"6"} className={"Colabcprofile1"}><label  className={"lableabc"}>Tài khoản</label></Col>
                                     <Col md={"6"}>
                                         <InputGroup>
-                                            <p  >{this.state.id}</p>
+                                            <p disabled>{this.state.id}</p>
                                         </InputGroup>
                                     </Col>
-
-
                                 </Row>
-
                                 <Row >
                                     <Col md={"6"} className={"Colabcprofile1"} ><label  className={"lableabc"} >Họ và Tên</label></Col>
                                     <Col md={"6"}>
@@ -182,7 +168,6 @@ import proflieData from './tool/ProfileData'
                                         </InputGroup>
                                     </Col>
                                 </Row>
-
                                 <Row>
                                     <Col md={"6"} className={"Colabcprofile1"}>
                                         <p  className={"lableabc"}>Số điện thoại</p>
@@ -299,7 +284,8 @@ import proflieData from './tool/ProfileData'
 
                 </div>
             );
-         }else {
+         }
+         else {
              return (
                  <Card>
                      <CardBody>
@@ -312,7 +298,7 @@ import proflieData from './tool/ProfileData'
                                          onChange={(e) => this.handleChange(e)}
                                          name="user_id"
                                          innerRef={(node) => this.emailInputValue = node}
-                                         placeholder={user.user_id}/>
+                                         placeholder={""}/>
                                  </FormGroup>
 
                                  <FormGroup>
@@ -322,7 +308,7 @@ import proflieData from './tool/ProfileData'
                                          onChange={(e) => this.handleChange(e)}
                                          name="full_name"
                                          innerRef={(node) => this.emailInputValue = node}
-                                         placeholder={user.full_name}
+                                         placeholder={this.state.full_name}
 
 
                                      />
@@ -334,7 +320,7 @@ import proflieData from './tool/ProfileData'
                                          onChange={(e) => this.handleChange(e)}
                                          name="phone_number"
                                          innerRef={(node) => this.emailInputValue = node}
-                                         placeholder={user.phone_number}/>
+                                         placeholder={this.state.phone_number}/>
                                  </FormGroup>
 
                                  <FormGroup>
@@ -355,7 +341,7 @@ import proflieData from './tool/ProfileData'
                                          onChange={(e) => this.handleChange(e)}
                                          name="address"
                                          innerRef={(node) => this.emailInputValue = node}
-                                         placeholder={user.address}/>
+                                         placeholder={this.state.address}/>
                                  </FormGroup>
 
                                  <FormGroup>
@@ -399,7 +385,7 @@ import proflieData from './tool/ProfileData'
                                          name="status"
                                          innerRef={(node) => this.emailInputValue = node}
 
-                                         placeholder={user.status}/>
+                                         placeholder={this.state.status}/>
 
                                  </FormGroup>
 
@@ -413,7 +399,6 @@ import proflieData from './tool/ProfileData'
                                      />
                                  </FormGroup>
 
-
                                  <FormGroup>
                                      <Label for="exampleSelect">Giới tính</Label>
                                      <Input
@@ -423,7 +408,7 @@ import proflieData from './tool/ProfileData'
                                          innerRef={(node) => this.emailInputValue = node}
 
                                          type="select" name="select" id="exampleSelect">
-                                         <option value={""}>{this.getGender(user.gender)} </option>
+                                         <option value={""}>{this.getGender(this.state.gender)} </option>
                                          <option value={1}>Nam</option>
                                          <option value={2}>Nu</option>
                                          <option value={3}>Nam/Nam</option>
@@ -432,25 +417,24 @@ import proflieData from './tool/ProfileData'
                                      </Input>
                                  </FormGroup>
 
-
                                  <FormGroup>
                                      <Label for="exampleEmail">Created_at</Label>
-                                     <Input disabled placeholder={user.created_at}/>
+                                     <Input disabled placeholder={this.state.created_at}/>
                                  </FormGroup>
 
                                  <FormGroup>
                                      <Label for="exampleEmail">Updated_at</Label>
-                                     <Input disabled placeholder={user.updated_at}/>
+                                     <Input disabled placeholder={this.state.updated_at}/>
                                  </FormGroup>
 
                                  <FormGroup>
                                      <Label for="exampleEmail">Created_by</Label>
-                                     <Input disabled placeholder={user.created_by}/>
+                                     <Input disabled placeholder={this.state.created_by}/>
                                  </FormGroup>
 
                                  <FormGroup>
                                      <Label for="exampleEmail">Updated_by</Label>
-                                     <Input disabled placeholder={user.updated_by}/>
+                                     <Input disabled placeholder={this.state.updated_by}/>
                                  </FormGroup>
 
 
