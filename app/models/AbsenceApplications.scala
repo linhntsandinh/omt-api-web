@@ -151,9 +151,9 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
   def delete(Id: Int): Future[Int] = {
     db.run(AbsenceTable.filter(_.id === Id).delete)
   }
-  def loadForm(id : Int): Future[Option[(Seq[AbsenceReasonsData], ListBuffer[String], (String,String))]] = {
+  def loadForm(id : Int): Future[Option[(Seq[AbsenceReasonsData], ListBuffer[(String,Option[Int])], (String,String))]] = {
 //
-    var listName = new ListBuffer[String]
+    var listName = new ListBuffer[(String,Option[Int])]
     var listReason : Seq[AbsenceReasonsData] = null
     var profileLoad :(String,String)= null
     val q = AbsenceReasonsTable.result
@@ -215,7 +215,7 @@ class AbsenceApplications @Inject() (protected val dbConfigProvider: DatabaseCon
       profileLoad = (rss1.head._1._1._2.name,rss1.head._2.title)
       r1.foreach {
         item => {
-          val itemName: String = item._2.full_name
+          val itemName: (String,Option[Int]) = (item._2.full_name,item._2.id)
           listName += itemName
         }
       }
