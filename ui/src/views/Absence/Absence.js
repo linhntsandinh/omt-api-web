@@ -74,6 +74,7 @@ class Absence extends Component {
 
     constructor(props) {
         super(props);
+        console.log(props.profile)
         this.state = {
             reasonTitle: [],
             receiver: [],
@@ -152,35 +153,30 @@ class Absence extends Component {
     }
 
     Send(e) {
-        fetch(`/absence/insert/`, {
+        console.log("Ahihi"+this.state.from)
+        let from =new Date(this.state.from).getTime()
+        let to = new Date(this.state.to).getTime()
+        fetch(`/absence/insert`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(
-                {reasonId: this.state.titleform,
+                     {reasonId: this.state.titleform,
                     description: this.state.des,
-                    startTime:this.state.from.getTime(),
-                    endTime:new Date(this.state.to).getTime()
-                    ,}
+                    startTime:from,
+                    endTime:to,
+                    status:0,
+                    userId:this.props.profile['user_data']['id'],
+                    totalTime:(to-from)/86400000}
                 ),
         }).then(function (response) {
                 return response.json();
             }
         ).then((result) => {
                 console.log(result)
-                if (result['status'] === 'OK') {
-                    this.setState({
-                        reasonTitle: result['Reasons'],
-                        titleform: result['Reasons'][0]['id'],
-                        username: result['profile'][0]['full_name'],
-                        rec: result['Receiver'][0]
-                    })
-                }
-                else {
-                    this.setState({loading: false})
-                }
+
             }
         )
 

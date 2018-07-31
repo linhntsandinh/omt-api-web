@@ -28,7 +28,7 @@ class FormCard extends Component {
 
   render() {
     const user = this.props.user;
-    const userLink = `#/usersmanage/${user.user_id}`
+    const userLink = `#/users/${user.user_id}`
 
     return (
       <tr onDoubleClick={() => {
