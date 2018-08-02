@@ -4,13 +4,14 @@ import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
 import play.api.mvc.Result
+import services.AbsenceApproveService
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
-class AbsenceApplications @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, protected val dbConfigProvider: DatabaseConfigProvider)
                                    (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
   private val AbsenceTable = TableQuery[AbsenceApplicationsTableDef]
@@ -142,8 +143,11 @@ class AbsenceApplications @Inject()(protected val dbConfigProvider: DatabaseConf
     }
   }
 
-  def insert(result: AbsenceApplicationsData): Future[Int] = {
-    db.run(AbsenceTable += result)
+  def insert(result: AbsenceApplicationsData,absenceForm : AbsenceApplicationsForm) = {
+    db.run(AbsenceTable returning AbsenceTable.map(_.id)+= result).flatMap{ id =>
+      val absenceApproveForm = AbsenceApproveForm(id,0,absenceForm.approver_id,null,null,null,result.created_by)
+      absenceApprove.insert(absenceApproveForm)
+    }
   }
 
   def delete(Id: Int): Future[Int] = {
@@ -287,29 +291,11 @@ class AbsenceApplicationsTableDef(tag: Tag) extends Table[AbsenceApplicationsDat
     (id, reasonId, description, startTime, endTime, status, userId, totalTime, created_at, updated_at, updated_by, created_by) <> ((AbsenceApplicationsData.apply _).tupled, AbsenceApplicationsData.unapply)
 }
 
-case class AbsenceApplicationsForm(reasonId: Int, description: String, startTime: Int, endTime: Int, status: Int, userId: Int, totalTime: Float)
+case class AbsenceApplicationsForm(reasonId: Int, description: String, startTime: Int, endTime: Int, status: Int, userId: Int, totalTime: Float, approver_id: Option[Int])
 
 object AbsenceApplicationsForm {
   implicit val reader = Json.reads[AbsenceApplicationsForm]
   implicit val writes = Json.writes[AbsenceApplicationsForm]
 }
 
-class AbsenceApplicationFormTableDef(tag: Tag) extends Table[AbsenceApplicationsForm](tag, "absence_applications") {
-  def reasonId = column[Int]("reason_id")
-
-  def description = column[String]("description")
-
-  def startTime = column[Int]("start_time")
-
-  def endTime = column[Int]("end_time")
-
-  def status = column[Int]("status")
-
-  def userId = column[Int]("user_id")
-
-  def totalTime = column[Float]("total_time")
-
-  override def * =
-    (reasonId, description, startTime, endTime, status, userId, totalTime) <> ((AbsenceApplicationsForm.apply _).tupled, AbsenceApplicationsForm.unapply)
-}
 

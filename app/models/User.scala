@@ -63,15 +63,15 @@ class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: D
 
   private val UserTable = TableQuery[UserTableDef]
 
-  def getAuthInfo(username: String): Future[Option[(UserData, ListBuffer[SecurityPermission])]] = {
+  def getAuthInfo(username: String): Future[Option[(UserData, ListBuffer[SecurityPermission],ProfileData)]] = {
     val role = TableQuery[RoleTableDef]
     val permission = TableQuery[PermissionTableDef]
     val userRole = TableQuery[UserRoleTableDef]
     val rolePermission = TableQuery[RolePermissionFormDef]
+    val profileTable = TableQuery[ProfileTableDef]
 
-
-    val q = (UserTable join userRole on (_.id === _.userId) join role on (_._2.roleId === _.id) join
-      rolePermission on (_._1._2.roleId === _.roleId) join permission on (_._2.permissionId === _.id)).filter(_._1._1._1._1.username === username).result
+    val q = ((UserTable join userRole on (_.id === _.userId) join role on (_._2.roleId === _.id) join
+      rolePermission on (_._1._2.roleId === _.roleId) join permission on (_._2.permissionId === _.id)) join profileTable on(_._1._1._1._1.id === _.user_id)).filter(_._1._1._1._1._1.username === username).result
     q.statements.foreach(println) // print query
     val rs = db.run {
       q
@@ -82,19 +82,19 @@ class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: D
         list.size match {
           case 0 => None
           case _ => {
-            val username = list.head._1._1._1._1.username
+            val username = list.head._1._1._1._1._1.username
             val roles = ListBuffer.empty[SecurityRole]
             val permissions = ListBuffer.empty[SecurityPermission]
             list.foreach {
               item => {
-                val ((((user, userRole), role), rolePermission), permission) = item
+                val (((((user, userRole), role), rolePermission), permission),profile)= item
                 roles += SecurityRole(role.code)
                 permissions += SecurityPermission(permission.code)
               }
 
             }
             println(permissions)
-            Some(list.head._1._1._1._1, permissions)
+            Some(list.head._1._1._1._1._1, permissions,list.head._2)
           }
         }
 

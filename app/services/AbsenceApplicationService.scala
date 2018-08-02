@@ -22,16 +22,17 @@ class AbsenceApplicationService @Inject() (absence : AbsenceApplications){
     }
   }
   def insert(absenceApplicationsForm: AbsenceApplicationsForm): Future[Int] = {
-    val result : AbsenceApplicationsData= new AbsenceApplicationsData(1,absenceApplicationsForm.reasonId, absenceApplicationsForm.description, absenceApplicationsForm.startTime, absenceApplicationsForm.endTime, absenceApplicationsForm.status, absenceApplicationsForm.userId, absenceApplicationsForm.totalTime,Some(System.currentTimeMillis()/1000),Some(1),Some(1),Some(1))
+    val result : AbsenceApplicationsData=
+      new AbsenceApplicationsData(1,absenceApplicationsForm.reasonId, absenceApplicationsForm.description, absenceApplicationsForm.startTime, absenceApplicationsForm.endTime, absenceApplicationsForm.status, absenceApplicationsForm.userId, absenceApplicationsForm.totalTime,Some(System.currentTimeMillis()/1000),Some(1),Some(1),Some(1))
 
-    absence.insert(result)
+    absence.insert(result,absenceApplicationsForm)
   }
   def loadForm(id : Int): Future[Result] =  {
     val load = absence.loadForm(id)
     load.map{
       case Some(x) => {
         println(x)
-        JS.OK("Reasons"->Json.toJson(x._1), "Reciver"->Json.toJson(x._2) , "possition"->Json.toJson(x._3._2),"title"->Json.toJson(x._3._1))
+        JS.OK("Reasons"->Json.toJson(x._1), "Receiver"->Json.toJson(x._2) , "position"->Json.toJson(x._3._2),"title"->Json.toJson(x._3._1))
 //
       }
       case None => JS.KO("Không có đơn nào hợp lệ!")

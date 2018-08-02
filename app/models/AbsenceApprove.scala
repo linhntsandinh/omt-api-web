@@ -12,7 +12,7 @@ import slick.jdbc.MySQLProfile.api._
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
-case class AbsenceApproveData(id: Int, application_id: Int, types: Int, approve_id: Int, approve_time: Int,comment: Option[String],created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], update_by: Option[Int])
+case class AbsenceApproveData(id: Int, application_id: Int, types: Int, approve_id: Option[Int], approve_time: Option[Int],comment: Option[String],created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], update_by: Option[Int])
 object AbsenceApproveData {
   implicit val reader = Json.reads[AbsenceApproveData]
   implicit val writer = Json.writes[AbsenceApproveData]
@@ -21,8 +21,8 @@ class AbsenceApproveTableDef(tag: Tag) extends Table[AbsenceApproveData](tag, "a
   def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
   def application_id = column[Int]("application_id")
   def types = column[Int]("type")
-  def approve_id = column[Int]("approver_id")
-  def approve_time = column[Int]("approve_time")
+  def approve_id = column[Option[Int]]("approver_id")
+  def approve_time = column[Option[Int]]("approve_time")
   def comment = column[Option[String]]("comment")
   def created_at = column[Option[Long]]("created_at")
   def updated_at = column[Option[Long]]("updated_at")
@@ -32,7 +32,7 @@ class AbsenceApproveTableDef(tag: Tag) extends Table[AbsenceApproveData](tag, "a
     (id, application_id, types, approve_id, approve_time,comment,created_at, updated_at, created_by, updated_by) <>((AbsenceApproveData.apply _).tupled, AbsenceApproveData.unapply)
 }
 
-case class AbsenceApproveForm(application_id: Int, types: Int, approve_id: Int, approve_time: Int,comment: Option[String],update_by: Option[Int],create_by: Option[Int])
+case class AbsenceApproveForm(application_id: Int, types: Int, approve_id: Option[Int], approve_time: Option[Int],comment: Option[String],update_by: Option[Int],create_by: Option[Int])
 object AbsenceApproveForm {
   implicit val reader = Json.reads[AbsenceApproveForm]
   implicit val writes = Json.writes[AbsenceApproveForm]
