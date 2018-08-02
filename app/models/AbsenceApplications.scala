@@ -216,8 +216,10 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
       val profileLoad: (String, String) = (rss1.head._1._1._2.name, rss1.head._2.title)
       r1.foreach {
         item => {
-          val itemName: AbsenceReciverRequest = new AbsenceReciverRequest( item._2.id, item._2.full_name)
-          listName += itemName
+          if(item._2.id != id) {
+            val itemName: AbsenceReciverRequest = new AbsenceReciverRequest(item._2.id, item._2.full_name)
+            listName += itemName
+          }
         }
       }
       val listReason: Seq[AbsenceReasonsData] = rs1
