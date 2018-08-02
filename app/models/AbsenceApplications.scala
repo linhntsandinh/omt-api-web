@@ -150,7 +150,7 @@ class AbsenceApplications @Inject()(protected val dbConfigProvider: DatabaseConf
     db.run(AbsenceTable.filter(_.id === Id).delete)
   }
 
-  def loadForm(id: Int): Future[Option[(Seq[AbsenceReasonsData], ListBuffer[(String, Option[Int])], (String, String))]] = {
+  def loadForm(id: Int): Future[Option[(Seq[AbsenceReasonsData], ListBuffer[AbsenceReciverRequest], (String, String))]] = {
     //
     val q = AbsenceReasonsTable.result
     val rs = db.run {
@@ -208,11 +208,11 @@ class AbsenceApplications @Inject()(protected val dbConfigProvider: DatabaseConf
       rs1 <- rs
       rss1 <- rss
     } yield {
-      val listName = new ListBuffer[(String, Option[Int])]
+      val listName = new ListBuffer[AbsenceReciverRequest]
       val profileLoad: (String, String) = (rss1.head._1._1._2.name, rss1.head._2.title)
       r1.foreach {
         item => {
-          val itemName: (String, Option[Int]) = (item._2.full_name, item._2.id)
+          val itemName: AbsenceReciverRequest = new AbsenceReciverRequest( item._2.id, item._2.full_name)
           listName += itemName
         }
       }
@@ -242,6 +242,13 @@ object AbsenceRequestLoad {
   implicit val reader = Json.reads[AbsenceRequestLoad]
   implicit val writer = Json.writes[AbsenceRequestLoad]
 }
+
+case class AbsenceReciverRequest(id: Option[Int],title: String)
+object AbsenceReciverRequest {
+  implicit val reader = Json.reads[AbsenceReciverRequest]
+  implicit val writer = Json.writes[AbsenceReciverRequest]
+}
+
 
 case class AbsenceApplicationsData(id: Int, reasonId: Int, description: String, startTime: Int, endTime: Int, status: Int, userId: Int, totalTime: Float, created_at: Option[Long], updated_at: Option[Long], update_by: Option[Int], created_by: Option[Int])
 
