@@ -7,7 +7,7 @@ import play.api.mvc.Result
 import scala.concurrent.Future
 
 class UserRoleService @Inject()(user: UserRole) {
-  def insert(userRoleForm: UserRoleForm): Future[Result] = user.insert(userRoleForm)
+  def insert(userRoleForm: UserRoleForm) = user.insert(userRoleForm)
   def update(userRoleData: UserRoleData): Future[Int] = user.update(userRoleData)
 
   def delete(userRoleId: Int): Future[Int] = user.delete(userRoleId)

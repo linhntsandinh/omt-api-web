@@ -11,14 +11,20 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class JobTitleController @Inject()(actorSystem: ActorSystem, jobTitle: JobTitleService, cc: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
   def insert = Action.async(parse.json[TitleData]) { request =>
-    jobTitle.insert(request.body)
+    jobTitle.insert(request.body).map{x=>
+      JS.OK("data" -> "Insert Success!!")
+    }
   }
 
   def update = Action.async(parse.json[TitleData]) { request =>
-    jobTitle.update(request.body)
+    jobTitle.update(request.body).map{x=>
+      JS.OK("data" -> "update Success!!")
+    }
   }
 
   def delete (id: Int)= Action.async{
-    jobTitle.delete(id)
+    jobTitle.delete(id).map{x=>
+      JS.OK("data" -> "Delete Success!!")
+    }
   }
 }

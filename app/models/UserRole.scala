@@ -51,7 +51,7 @@ class UserRole @Inject() (protected val dbConfigProvider: DatabaseConfigProvider
 
   private val UserRoleData = TableQuery[UserRoleTableDef]
 
-  def insert(userRoleForm: UserRoleForm): Future[Result] = {
+  def insert(userRoleForm: UserRoleForm) = {
     val q = ((UserRole.filter(_.roleId === userRoleForm.roleId)).filter(_.userId === userRoleForm.userId)).result
     val rs = db.run {
       q
