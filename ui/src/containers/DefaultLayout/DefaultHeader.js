@@ -40,23 +40,17 @@ class DefaultHeader extends Component {
             data: [],
             firebase: firebase.database().ref('/test/' + this.props.profile['username'])
         }
+
+    }
+    componentDidMount(){
         this.state.firebase.on('value', (vl) => {
             this.setState({
                 data: vl.val()
             })
-            // if (vl.val()) {
-            //     for (var v in vl.val()['test']) {
-            //         for (var l in vl.val()['test'][v]) {
-            //             console.log(vl.val()['test'][[v]])
-            //             console.log(vl.val()['test'][v][l]);
-            //         }
-            //     }
-            // }
         });
     }
-
     Logout() {
-        this.props.dispatch({type: "logout", data: []});
+        this.props.dispatch({type:"logout",data: []});
         localStorage.clear();
     }
 

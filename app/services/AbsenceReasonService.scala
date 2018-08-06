@@ -1,6 +1,5 @@
 package services
 
-
 import javax.inject.Inject
 import models._
 

@@ -99,12 +99,8 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   private val TitleTable = TableQuery[TitleTableDef]
 
-  def insert(timelogData: TimelogData): Future[Result] = {
-    val r = db.run(TimelogTable += timelogData)
-    r.onComplete(
-      data => println(data)
-    )
-    Future(JS.OK("data" -> "Insert Success!!"))
+  def insert(timelogData: TimelogData): Future[Int] = {
+    db.run(TimelogTable += timelogData)
   }
 
   def delete(timelogId: Int) = {

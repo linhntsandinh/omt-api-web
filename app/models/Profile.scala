@@ -12,13 +12,13 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import utils.JS
 
-case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int, created_by: Option[Long])
+case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int, created_by: Option[Int])
 object ProfileForm {
   implicit val reader = Json.reads[ProfileForm]
   implicit val writer = Json.writes[ProfileForm]
 }
 
-case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Date, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: Date, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Long], updated_by: Option[Long])
+case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Date, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: Date, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
 object ProfileData {
   implicit val reader = Json.reads[ProfileData]
   implicit val writer = Json.writes[ProfileData]
@@ -52,9 +52,9 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
 
   def updated_at = column[Option[Long]]("updated_at")
 
-  def created_by = column[Option[Long]]("created_by")
+  def created_by = column[Option[Int]]("created_by")
 
-  def updated_by = column[Option[Long]]("updated_by")
+  def updated_by = column[Option[Int]]("updated_by")
 
   override def * =
     (id, user_id, full_name, phone_number, birth_date, address, departmenti_id, job_title_id, job_position_id, status, join_date, gender, created_at, updated_at, created_by, updated_by) <> ((ProfileData.apply _).tupled, ProfileData.unapply)
@@ -84,9 +84,8 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     }
   }
 
-  def insert(profileData: ProfileData): Future[Result] = {
+  def insert(profileData: ProfileData): Future[Int] = {
     db.run(ProfileTable += profileData)
-    Future(JS.OK("data" -> "insert success!!"))
   }
 
   def delete(profileId: Int) = {
@@ -98,6 +97,5 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       .map(p => (p.full_name, p.phone_number, p.birth_date, p.address, p.departmenti_id, p.job_title_id, p.job_position_id, p.status, p.gender, p.updated_at))
       .update(profileData.full_name, profileData.phone_number, profileData.birth_date, profileData.address, profileData.departmenti_id, profileData.job_title_id, profileData.job_position_id, profileData.status, profileData.gender, profileData.updated_at)
     db.run(q)
-    Future(JS.OK("data" -> "update success!!"))
   }
 }

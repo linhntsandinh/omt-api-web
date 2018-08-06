@@ -56,7 +56,7 @@ class DefaultLayout extends Component {
                                             : (null);
                                     },
                                 )}
-                                <Redirect from="/" to="/firebase"/>
+                                <Redirect from="/" to="/absencemanage/receiver"/>
                             </Switch>
                         </Container>
                     </main>

@@ -25,24 +25,16 @@ class Department  @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
                                 (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
   private val DepartmentTable = TableQuery[DepartmentTableDef]
-  def insert(result: DepartmentData): Future[Result] = {
-    val q = db.run(DepartmentTable += result)
-    q.onComplete{
-      rs=>{
-        println(rs)
-      }
-    }
-    Future(JS.OK("data" -> "insert Success!!"))
+  def insert(result: DepartmentData) = {
+    db.run(DepartmentTable += result)
   }
-  def delete(Id: Int): Future[Result] = {
+  def delete(Id: Int)= {
     db.run(DepartmentTable.filter(_.id === Id).delete)
-    Future(JS.OK("data" -> "delete Success!!"))
   }
   def update(result: DepartmentData)={
     val q = DepartmentTable.filter(_.id === result.id)
       .map(p => (p.id,p.name))
       .update((result.id,result.name))
     db.run(q)
-    Future(JS.OK("data" -> "update Success!!"))
   }
 }

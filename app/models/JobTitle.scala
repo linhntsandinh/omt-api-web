@@ -29,14 +29,12 @@ class JobTitle@Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends HasDatabaseConfigProvider[JdbcProfile] {
   private val TitleTable = TableQuery[TitleTableDef]
 
-  def insert(titleData: TitleData): Future[Result] = {
+  def insert(titleData: TitleData) = {
     db.run(TitleTable += titleData)
-    Future(JS.OK("data" -> "Insert Success!!"))
   }
 
-  def delete(titlelogId: Int): Future[Result] = {
+  def delete(titlelogId: Int) = {
     db.run(TitleTable.filter(_.id === titlelogId).delete)
-    Future(JS.OK("data" -> "Delete Success!!"))
   }
 
   def update(titleData: TitleData)={
@@ -44,7 +42,6 @@ class JobTitle@Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       .map(p => (p.id,p.title))
       .update((titleData.id,titleData.title))
     db.run(q)
-    Future(JS.OK("data" -> "update Success!!"))
   }
 
 }

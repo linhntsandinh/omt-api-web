@@ -1,6 +1,5 @@
 package models
 
-
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
@@ -57,9 +56,8 @@ class DRole @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     case ex: Exception => ex.getCause.getMessage
   }
 
-  def deleteById(id: Int): Future[Result] = {
+  def deleteById(id: Int)= {
     db.run(RoleData.filter(_.id === id).delete)
-    Future(JS.OK("data" -> "delete Success!!"))
   }
 
   def update(roleForm: RoleForm)={
@@ -67,6 +65,5 @@ class DRole @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
       .map(p => (p.code,p.name,p.update_at))
       .update((roleForm.code,roleForm.name,Some(System.currentTimeMillis()/1000)))
     db.run(q)
-    Future(JS.OK("data" -> "update Success!!"))
   }
 }

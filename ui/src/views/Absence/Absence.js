@@ -10,7 +10,6 @@
 import React, {Component} from 'react';
 import {formEncode} from '../../DataUser'
 import * as Datetime from 'react-datetime';
-
 import {
     Badge,
     Button,
@@ -37,7 +36,6 @@ import {
     Row,
 } from 'reactstrap';
 import {connect} from "react-redux";
-
 var yesterday = Datetime.moment().subtract(1, 'day');
 var valid1 = function (current) {
     return current.day() !== 0 && current.day() !== 6;
@@ -83,7 +81,7 @@ class Absence extends Component {
             job_position: '',
             job_title: '',
             today: '',
-            from: new Date(),
+            from: new Date().setHours(8,0,0,0),
             to: '',
             des: '',
             rec: '',
@@ -105,9 +103,12 @@ class Absence extends Component {
                 if (result['status'] === 'OK') {
                     this.setState({
                         reasonTitle: result['Reasons'],
+                        receiver: result['Reciver'],
                         titleform: result['Reasons'][0]['id'],
-                        username: result['profile'][0]['full_name'],
-                        rec: result['Receiver'][0]
+                        username: this.props.profile['user_data']['username'],
+                        rec: result['Reciver'][0],
+                        job_position:result['possition'],
+                        job_title:result['title']
                     })
                 }
                 else {
@@ -123,7 +124,8 @@ class Absence extends Component {
     }
 
     handleChangeDateFrom(e) {
-        if (e._d) {
+
+            if (e._d) {
             this.setState({from: e._d.getTime()});
             if (e._d.getTime() >= this.state.to) {
                 this.setState({fadeIn: true});
@@ -132,11 +134,12 @@ class Absence extends Component {
             }
         }
         else {
-            this.setState({from: new Date()});
+            this.setState({from: null});
         }
     }
 
     handleChangeDateTo(e) {
+        this.setState({to:''})
         if (e._d) {
             this.setState({to: e._d.getTime()});
             if (this.state.from >= e._d.getTime()) {
@@ -147,15 +150,17 @@ class Absence extends Component {
             }
         }
 
-        else {
-            this.setState({to: new Date(new Date(this.state.from).getTime() + 86400000)});
+        else{
+            // this.setState({to: new Date(new Date(this.state.from).getTime() + 86400000/2).setHours(18,0,0,0)});
+            this.setState({to: null});
         }
     }
 
     Send(e) {
-        console.log("Ahihi"+this.state.from)
+
         let from =new Date(this.state.from).getTime()
         let to = new Date(this.state.to).getTime()
+        console.log(from)
         fetch(`/absence/insert`, {
             method: 'POST',
             headers: {
@@ -165,11 +170,11 @@ class Absence extends Component {
             body: JSON.stringify(
                      {reasonId: this.state.titleform,
                     description: this.state.des,
-                    startTime:from,
-                    endTime:to,
+                    startTime:1,
+                    endTime:1,
                     status:0,
                     userId:this.props.profile['user_data']['id'],
-                    totalTime:(to-from)/86400000}
+                    totalTime:1.1231313213}
                 ),
         }).then(function (response) {
                 return response.json();
@@ -181,7 +186,7 @@ class Absence extends Component {
         )
 
     }
-
+  
     render() {
         const {
             reasonTitle, receiver, titleform, username, job_position, job_title, today,
@@ -250,9 +255,10 @@ class Absence extends Component {
                                     </Col>
                                     <Col xs="12" md="4">
                                         <Datetime
+                                            disabled
                                             isValidDate={valid1} value={from} inputProps={{id: "from"}}
                                             onChange={(e) => this.handleChangeDateFrom(e)}/>
-                                        {fadeIn ?
+                                        {fadeIn || from==null?
                                             <p className="text-danger"> Thời gian không hợp lệ</p> : null}
 
                                     </Col>
@@ -265,7 +271,7 @@ class Absence extends Component {
                                         <Datetime isValidDate={(e) => valid2(e, from)} value={to}
                                                   inputProps={{id: "to"}}
                                                   onChange={(e) => this.handleChangeDateTo(e)}/>
-                                        {fadeIn ?
+                                        {fadeIn || to==null ?
                                             <p className="text-danger"> Thời gian không hợp lệ</p> : null}
 
                                     </Col>

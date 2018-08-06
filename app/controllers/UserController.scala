@@ -29,8 +29,9 @@ class UserController @Inject()(deadbolt: DeadboltActions, actorSystem: ActorSyst
 
 
   def update = Action.async(parse.json[UserForm]) { request =>
-    userService.update(request.body)
-    Future(JS.OK("data" -> "update Success!!"))
+    userService.update(request.body).map{ x =>
+      JS.OK("data" -> "update Success!!")
+    }
   }
 
   def index = deadbolt.Restrict(List(Array("admin")))() { authRequest =>
@@ -39,7 +40,9 @@ class UserController @Inject()(deadbolt: DeadboltActions, actorSystem: ActorSyst
   }
 
   def insert = Action.async(parse.json[UserForm]) { request =>
-    val x = userService.insert(request.body)
-    Future(JS.OK("data" -> "Insert Success."))
+    userService.insert(request.body).map{ x =>
+      if(x != 0) JS.OK("data" -> "success")
+      else JS.KO("username exited")
+    }
   }
 }

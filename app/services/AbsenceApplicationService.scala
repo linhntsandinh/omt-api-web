@@ -1,6 +1,5 @@
 package services
 
-
 import javax.inject.Inject
 import models._
 import play.api.libs.json.Json
@@ -32,7 +31,7 @@ class AbsenceApplicationService @Inject() (absence : AbsenceApplications){
     load.map{
       case Some(x) => {
         println(x)
-        JS.OK("Reasons"->Json.toJson(x._1), "Receiver"->Json.toJson(x._2) , "profile"->Json.toJson(x._3))
+        JS.OK("Reasons"->Json.toJson(x._1), "Reciver"->Json.toJson(x._2) , "possition"->Json.toJson(x._3._2),"title"->Json.toJson(x._3._1))
 //
       }
       case None => JS.KO("Không có đơn nào hợp lệ!")

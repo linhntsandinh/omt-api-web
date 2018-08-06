@@ -5,7 +5,6 @@
  * Created by Vu Tien Dai on 25/06/2018.
  */
 import React, {Component} from 'react';
-import Select from 'react-select';
 import {
     Badge,
     Card,
@@ -32,7 +31,13 @@ import {
 } from 'reactstrap';
 import UserCard from "./UserCard"
 import {formEncode} from '../../DataUser'
-
+const list_limit=[10,20,30,40,50]
+function Optioncard(data) {
+    let value = data.value;
+    return (
+        <option value={value}>{value}</option>
+    )
+}
 function Pagin(data) {
 
 
@@ -270,20 +275,21 @@ class Users extends Component {
     }
 
     handleChangeLimit(e) {
-        // console.log(e)
         if (e) {
-            let check = Math.ceil(((this.state.limit * this.state.check)-this.state.limit+1) / e.value);
-            let pagin =Math.floor(((this.state.limit * this.state.check)-this.state.limit+1) / (e.value*this.state.pagin_number))*this.state.pagin_number+1 ;
-            console.log(this.state.check+"  "+this.state.pagin)
-            console.log(check+"  "+pagin)
-            this.setState({limit: e.value, check: check, pagin: pagin}, function () {
+            let check = Math.ceil(((this.state.limit * this.state.check) - this.state.limit + 1) / e.target.value);
+            let pagin = Math.floor(((this.state.limit * this.state.check) - this.state.limit + 1) / (e.target.value * this.state.pagin_number)) * this.state.pagin_number + 1;
+            this.setState({limit: e.target.value, check: check, pagin: pagin}, function () {
                 this.getData();
             });
+            localStorage.setItem('limit', e.target.value);
+
         }
         else {
             this.setState({limit: 10, check: 1, pagin: 1}, function () {
                 this.getData();
             });
+            localStorage.setItem('limit', 10);
+
         }
     }
 
@@ -450,18 +456,13 @@ class Users extends Component {
                                 </Pagination>
                             </Col>
                             <Col>
-                                <Select
-                                    name="limit"
-                                    value={limit}
-                                    onChange={(e) => this.handleChangeLimit(e)}
-                                    options={[
-                                        {value: 10, label: '10'},
-                                        {value: 20, label: '20'},
-                                        {value: 30, label: '30'},
-                                        {value: 40, label: '40'},
-                                        {value: 50, label: '50'},
-                                    ]}
-                                />
+                                <Input value={limit} onChange={(e) => this.handleChangeLimit(e)}
+                                       type="select"
+                                       name="titleform" id="selectLg" bsSize="small">
+                                    {list_limit.map((value, index) =>
+                                        <Optioncard key={index} index={index} value={value}/>
+                                    )}
+                                </Input>
                             </Col>
                         </Row>
                     </CardBody>

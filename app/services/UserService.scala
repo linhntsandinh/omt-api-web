@@ -1,7 +1,5 @@
 package services
 
-import java.util.Date
-
 import javax.inject.Inject
 import models.{LoginForm, User, UserData, UserForm}
 import play.api.libs.json.Json
@@ -17,7 +15,7 @@ class UserService @Inject()(user: User) {
   def delete(id: Int): Future[Int] = user.delete(id)
 
   def insert(userForm: UserForm): Future[Int] = {
-    val userData: UserData = new UserData(null, userForm.username, userForm.password, userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), userForm.create_by, Some(1))
+    val userData: UserData = new UserData(1, userForm.username, userForm.password, userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), userForm.create_by, Some(1))
     user.insert(userData)
   }
 
@@ -29,7 +27,7 @@ class UserService @Inject()(user: User) {
       userForm.avatar,
       userForm.holidayRemaining,
       userForm.status,
-      Some(new Date().getTime()),
+      null,
       Some(System.currentTimeMillis() / 1000),
       Some(1),
       Some(1))

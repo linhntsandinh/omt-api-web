@@ -31,8 +31,6 @@ import {
 
 } from 'reactstrap';
 import {connect} from "react-redux";
-import Select from 'react-select';
-
 class Firebase extends Component {
     constructor(props) {
         super(props);
@@ -70,7 +68,7 @@ class Firebase extends Component {
 
     handleChangeChoise(e) {
         this.setState({
-            choise: e.value
+            choise: e.target.value
         })
     }
 
@@ -98,19 +96,16 @@ class Firebase extends Component {
                                 Test Nofiy
                             </Col>
                             <Col md="4">
-                                <Select
-                                    name="choise"
-                                    value={this.state.choise}
-                                    onChange={(e) => this.handleChangeChoise(e)}
-                                    options={[
-                                        {value: 'push', label: 'push'},
-                                        {value: 'set', label: 'set'},
-                                        {value: 'update', label: 'update'},
-                                        {value: 'detele', label: 'detele'},
-                                        // {value: 40, label: '40'},
-                                        // {value: 50, label: '50'},
-                                    ]}
-                                />
+                                <Input value={this.state.choise} onChange={(e) => this.handleChangeChoise(e)}
+                                       type="select"
+                                       name="titleform" id="selectLg" bsSize="small">
+                                    <option  value={'push'}>push</option>
+                                    <option  value={'set'}>set</option>
+                                    <option  value={'update'}>update</option>
+                                    <option  value={'detele'}>detele</option>
+
+                                </Input>
+
                             </Col>
                         </Row>
                     </CardHeader>

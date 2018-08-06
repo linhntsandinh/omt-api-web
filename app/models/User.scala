@@ -1,15 +1,18 @@
 package models
 
-
 import javax.inject.Inject
 import be.objectify.deadbolt.scala.models.Subject
+import controllers.ProfileController
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
+import play.api.mvc.Result
 import security.{SecurityPermission, SecurityRole}
+import services.ProfileService
 
 import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
+import utils.JS
 
 import scala.collection.mutable.ListBuffer
 
@@ -18,20 +21,20 @@ object LoginForm {
   implicit val reader = Json.reads[LoginForm]
 }
 
-case class UserForm(id: Option[Int], username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, update_by: Option[Int], create_by: Option[Int])
+case class UserForm(id: Int, username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, update_by: Option[Int], create_by: Option[Int])
 object UserForm {
   implicit val reader = Json.reads[UserForm]
   implicit val writer = Json.writes[UserForm]
 }
 
-case class UserData(id: Option[Int], username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
+case class UserData(id: Int, username: String, password: String, email: String, avatar: String, holidayRemaining: Float, status: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
 object UserData {
   implicit val reader = Json.reads[UserData]
   implicit val writer = Json.writes[UserData]
 }
 
 class UserTableDef(tag: Tag) extends Table[UserData](tag, "users") {
-  def id = column[Option[Int]]("id", O.PrimaryKey,O.AutoInc)
+  def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
   def username = column[String]("username")
   def password = column[String]("password")
   def email = column[String]("email")
@@ -54,7 +57,7 @@ class UserAuth(username: String, roleList: List[SecurityRole], permissionList: L
   override def identifier: String = username
 }
 
-class User @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: DatabaseConfigProvider)
                     (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
@@ -99,8 +102,18 @@ class User @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     }
   }
 
-  def insert(userData: UserData): Future[Int] = {
-    db.run(UserTable += userData)
+  def insert(userData: UserData) = {
+    val q = UserTable.filter(_.username === userData.username).result
+    val rs = db.run(q)
+    rs.flatMap { l =>
+      l.size match {
+        case 0 => db.run(UserTable returning UserTable.map(_.id) += userData).flatMap { id =>
+            val profileForm = new ProfileForm(Some(1), id, "", "", "1-1-1997", "", 0, 0, 0, 1, "1-1-1997", 1, userData.created_by)
+            Profile.insert(profileForm).map(rs => id)
+          }
+        case _ => Future(0)
+      }
+    }
   }
 
   def delete(userId: Int) = {

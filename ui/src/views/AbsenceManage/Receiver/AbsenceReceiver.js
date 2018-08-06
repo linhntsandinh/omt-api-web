@@ -5,55 +5,23 @@
  * Created by Vu Tien Dai on 25/06/2018.
  */
 import React, {Component} from 'react';
-
-import Select from 'react-select';
 import FormCard from "./FormCard"
 import {formEncode} from '../../../DataUser'
 import {connect} from "react-redux";
+import PaginBar from '../../PaginBar/PaginBar'
 import {
-    Badge,
     Card,
     CardBody,
     CardHeader,
     Col,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Table,
     Button,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    ButtonDropdown,
     InputGroup,
     InputGroupAddon,
     InputGroupText,
     Input,
     Row,
-    Form,
-    FormGroup,
-    Label,
 } from 'reactstrap';
-const list_limit=[10,20,30,40,50]
-function Optioncard(data) {
-    let value = data.value;
-    return (
-        <option value={value}>{value}</option>
-    )
-}
-function Pagin(data) {
-    let p = data.parent;
-    let check = data.check;
-    let pagin = data.pagin;
-    return (
-        <PaginationItem active={(check - pagin) === (data.index)}>
-            <PaginationLink tag="button"
-                            onClick={(e) => p.handleClick((pagin + data.index), e)}>{pagin + data.index}</PaginationLink>
-        </PaginationItem>
-    )
-
-}
-
 function More(data) {
     return (
         <Row>
@@ -147,7 +115,6 @@ function More(data) {
         </Row>
     )
 }
-
 class AbsenceReceiver extends Component {
     constructor(props) {
         super(props);
@@ -158,16 +125,13 @@ class AbsenceReceiver extends Component {
             reason: '',
             start: '',
             total: '',
-            limit: 10,
             length: 20,
             orderby: '',
             ordervalue: '',
             data: [],
             search: false,
             sort: new Array(7).fill(0),
-            pagin: 1,
             check: 1,
-            pagin_number: 8
 
         }
     }
@@ -191,8 +155,8 @@ class AbsenceReceiver extends Component {
                         reason: this.state.reason,
                         start: this.state.start,
                         total: this.state.total,
-                        limit: this.state.limit,
-                        offset: ((this.state.check - 1) * this.state.limit)
+                        limit: this.props.limit,
+                        offset: ((this.state.check - 1) * this.props.limit)
                     })
 
             }).then(function (response) {
@@ -227,15 +191,15 @@ class AbsenceReceiver extends Component {
                     reason: this.state.reason,
                     start: this.state.start,
                     total: this.state.total,
-                    limit: this.state.limit,
-                    offset: ((this.state.check - 1) * this.state.limit)
+                    limit: this.props.limit,
+                    offset: ((this.state.check - 1) * this.props.limit)
                 })
 
         }).then(function (response) {
                 return response.json();
             }
         ).then((result) => {
-                this.setState({data: result},()=>{
+                this.setState({data: result}, () => {
                     window.scroll({
                         top: 0,
                         left: 0,
@@ -247,78 +211,8 @@ class AbsenceReceiver extends Component {
         )
     }
 
-    onLeft() {
-        if (this.state.check > 1 && this.state.pagin !== this.state.check) {
-            this.setState(
-                {check: this.state.check - 1}, function () {
-                    this.getData();
-                }
-            )
-
-        }
-        else if (this.state.check > 1 && this.state.pagin === this.state.check) {
-            this.setState(
-                {
-                    pagin: this.state.pagin - this.state.pagin_number,
-                    check: this.state.check - 1
-                }, function () {
-                    this.getData()
-                }
-            )
-        }
-    }
-
-    onRight() {
-        if (this.state.check < Math.ceil(this.state.length / this.state.limit)) {
-            this.setState(
-                {
-                    check: this.state.check + 1
-                }, function () {
-                    this.getData();
-                }
-            )
-            if (this.state.pagin + this.state.pagin_number - 1 === this.state.check) {
-                this.setState(
-                    {
-                        pagin: this.state.pagin + this.state.pagin_number,
-                    }
-                )
-            }
-
-        }
-
-    }
-
-    handleClick(value) {
-        this.setState({
-            check: value
-        }, function () {
-            this.getData();
-        })
-
-    }
-
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
-    }
-
-    handleChangeLimit(e) {
-        if (e) {
-            let check = Math.ceil(((this.state.limit * this.state.check) - this.state.limit + 1) / e.target.value);
-            let pagin = Math.floor(((this.state.limit * this.state.check) - this.state.limit + 1) / (e.target.value * this.state.pagin_number)) * this.state.pagin_number + 1;
-            this.setState({limit: e.target.value, check: check, pagin: pagin}, function () {
-                this.getData();
-            });
-            localStorage.setItem('limit', e.target.value);
-
-        }
-        else {
-            this.setState({limit: 10, check: 1, pagin: 1}, function () {
-                this.getData();
-            });
-            localStorage.setItem('limit', 10);
-
-        }
     }
 
     handleSearch(e) {
@@ -326,7 +220,6 @@ class AbsenceReceiver extends Component {
             this.getData();
         });
     }
-
 
     handleSort(name, i, e) {
         const newArray = this.state.sort.map((element, index) => {
@@ -347,15 +240,9 @@ class AbsenceReceiver extends Component {
     }
 
     render() {
+        const limit = this.props.limit
+        const {check, data, writer, length,search,sort} = this.state
 
-        const {
-            check, data, writer, length, limit, pagin, search, sort, pagin_number
-        } = this.state
-        const data_pagin = [];
-        for (let i = 0; i < Math.ceil(length / limit); i++) {
-            if (i >= (pagin - 1) && i < pagin + pagin_number - 1 && data_pagin.length < pagin_number)
-                data_pagin.push(i);
-        }
         return (
             <Col xs="12" lg="12">
                 <Card>
@@ -460,35 +347,14 @@ class AbsenceReceiver extends Component {
                                                stt={index + (check - 1) * limit + 1}/>)}
                             </tbody>
                         </Table>
-                        <Row>
-                            <Col md="11">
-                                <Pagination>
-                                    <PaginationItem>
-                                        <PaginationLink previous tag="button"
-                                                        onClick={(e) => this.onLeft(e)}></PaginationLink>
-                                    </PaginationItem>
-                                    {
-                                        data_pagin.map((value, index) =>
-                                            <Pagin key={index} index={index} parent={this} pagin={pagin}
-                                                   check={check}/>
-                                        )
-                                    }
-                                    <PaginationItem>
-                                        <PaginationLink next tag="button"
-                                                        onClick={(e) => this.onRight(e)}></PaginationLink>
-                                    </PaginationItem>
-                                </Pagination>
-                            </Col>
-                            <Col>
-                                <Input value={limit} onChange={(e) => this.handleChangeLimit(e)}
-                                       type="select"
-                                       name="titleform" id="selectLg" bsSize="small">
-                                    {list_limit.map((value, index) =>
-                                        <Optioncard key={index} index={index} value={value}/>
-                                    )}
-                                </Input>
-                            </Col>
-                        </Row>
+                        <PaginBar name={"check"} onChange={(e) => {
+                            this.props.dispatch({type: 'set_limit', data: e.target.limit})
+                            this.setState({
+                                check: e.target.check,
+                            }, () => {
+                                this.getData()
+                            })
+                        }} value={this.state.check} limit={limit} pagin_number={8} length={length}/>
                     </CardBody>
                 </Card>
             </Col>
@@ -498,8 +364,7 @@ class AbsenceReceiver extends Component {
 
 
 function mapStatetoProps(state) {
-    return {profile: state.profile}
+    return {profile: state.profile, limit: state.limit}
 
 }
-
 export default connect(mapStatetoProps)(AbsenceReceiver);

@@ -34,8 +34,6 @@ import {
 
 
 } from 'reactstrap';
-
-import notify from  './../../notification'
 BigCalendar.momentLocalizer(moment);
 
 class Timekeeping extends Component {

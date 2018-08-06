@@ -25,7 +25,7 @@ class ProfileService @Inject()(profile: Profile) {
     }
   }
 
-  def insert(profileForm: ProfileForm): Future[Result] = {
+  def insert(profileForm: ProfileForm): Future[Int] = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
 
     val sqlBirthDate = new Date(sdf1.parse(profileForm.birth_date).getTime)
@@ -50,7 +50,7 @@ class ProfileService @Inject()(profile: Profile) {
     profile.insert(profileData)
   }
 
-  def update(profileForm: ProfileForm): Future[Result] = {
+  def update(profileForm: ProfileForm) = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
 
     val sqlBirthDate = new Date(sdf1.parse(profileForm.birth_date).getTime)

@@ -33,7 +33,6 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import {getData, formEncode} from '../../../DataUser'
 import * as Datetime from 'react-datetime';
 
 var yesterday = Datetime.moment().subtract(1, 'day');

@@ -14,7 +14,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import './scss/style.css'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import '../node_modules/react-datetime/css/react-datetime.css'
-// import '../node_modules/react-select/dist/react-select.css';
+
 // Containers
 import {DefaultLayout} from './containers';
 // Pages
@@ -29,27 +29,31 @@ class App extends Component {
         this.state = {
             loading: false
         }
-        this.isLogin();
+
     }
 
-    isLogin() {
-      fetch("/user/login", {
+
+    componentDidMount() {
+        fetch("/user/login", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'},
-            body: JSON.stringify({username: localStorage.getItem("username"), password: localStorage.getItem("password")}),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: localStorage.getItem("username") + "",
+                password: localStorage.getItem("password") + ""
+            }),
         }).then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson)
-                if (responseJson['status']==='OK') {
-                    this.props.dispatch({type: "profile", data: responseJson})
+                if (responseJson['status'] === 'OK') {
+                    this.props.dispatch({type: "login", data: responseJson})
                 }
                 this.setState({
                     loading: true
                 })
             })
-
     }
 
     render() {

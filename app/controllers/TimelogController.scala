@@ -13,17 +13,21 @@ import scala.concurrent.{ExecutionContext, Future}
 class TimelogController @Inject()(actorSystem: ActorSystem, timelogService: TimelogService, cc: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
 
   def insert = Action.async(parse.json[TimelogForm]) { request =>
-    timelogService.insert(request.body)
+    timelogService.insert(request.body).map{ x =>
+     JS.OK("data" -> "Insert Success!!")
+    }
   }
 
   def update = Action.async(parse.json[TimelogForm]) { request =>
-    timelogService.update(request.body)
-    Future(JS.OK("data" -> "update Success!!"))
+    timelogService.update(request.body).map { x =>
+     JS.OK("data" -> "update Success!!")
+    }
   }
 
   def delete (id: Int)= Action.async{
-    timelogService.delete(id)
-    Future(JS.OK("data" -> "delete Success!!"))
+    timelogService.delete(id).map{x=>
+      JS.OK("data" -> "delete Success!!")
+    }
   }
 
   def load = Action.async(parse.json[TimelogLoadRequest]) { request =>

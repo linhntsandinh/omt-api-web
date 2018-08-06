@@ -24,28 +24,25 @@ class HolidayTableDef(tag: Tag) extends Table[HolidayData](tag, "holidays") {
   override def * =
     (id, start_date, end_date, types, is_salary) <>((HolidayData.apply _).tupled, HolidayData.unapply)
 }
+case class HolidayForm( start_date: Option[Long], end_date: Option[Long], types: Option[Int], is_salary: Option[Int])
+object HolidayForm {
+  implicit val reader = Json.reads[HolidayForm]
+  implicit val writer = Json.writes[HolidayForm]
+}
 class Holiday  @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
                             (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
   private val HolidayTable = TableQuery[HolidayTableDef]
-  def insert(result: HolidayData): Future[Result] = {
-    val q = db.run(HolidayTable += result)
-    q.onComplete{
-      rs=>{
-        println(rs)
-      }
-    }
-    Future(JS.OK("data" -> "insert Success!!"))
+  def insert(result: HolidayData) = {
+   db.run(HolidayTable += result)
   }
-  def delete(Id: Int): Future[Result] = {
+  def delete(Id: Int) = {
     db.run(HolidayTable.filter(_.id === Id).delete)
-    Future(JS.OK("data" -> "delete Success!!"))
   }
   def update(result: HolidayData)={
     val q = HolidayTable.filter(_.id === result.id)
       .map(p => (p.id,p.start_date,p.end_date,p.types,p.is_salary))
       .update((result.id,result.start_date,result.end_date,result.types,result.is_salary))
     db.run(q)
-    Future(JS.OK("data" -> "update Success!!"))
   }
 }

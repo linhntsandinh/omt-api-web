@@ -34,12 +34,14 @@ class AbsenceApplicationController@Inject() (deadbolt: DeadboltActions, actorSys
     Future(Redirect(routes.UserController.index))
   }
   def update = Action.async(parse.json[AbsenceApplicationsData]){request=>
-    absenceapplicationService.update(request.body)
-    Future(JS.OK("data"->"update Success!!"))
+    absenceapplicationService.update(request.body).map{ x=>
+      JS.OK("data"->"update Success!!")
+    }
   }
   def delete (id: Int)= Action.async{
-    absenceapplicationService.delete(id)
-    Future(JS.OK("data"->"delete Success!!"))
+    absenceapplicationService.delete(id).map{ x=>
+      JS.OK("data"->"delete Success!!")
+    }
   }
 
 }
