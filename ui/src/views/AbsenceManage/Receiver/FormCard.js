@@ -29,7 +29,7 @@ class FormCard extends Component {
 
     render() {
         const absence = this.props.data;
-        const absenceLink = `#/absencemanage/receiver/${absence.user_id}&&${absence.status}`
+        const absenceLink = `#/absencemanage/receiver/${absence.status}`
         let className = "text-center";
         if (absence.status !== '0') {
             className = "text-center block-formcard";

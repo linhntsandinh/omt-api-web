@@ -76,15 +76,15 @@ class Absence extends Component {
         this.state = {
             reasonTitle: [],
             receiver: [],
-            titleform: '',
-            username: '',
-            job_position: '',
-            job_title: '',
-            today: '',
+            titleform: null,
+            username: null,
+            job_position: null,
+            job_title: null,
+            today: null,
             from: new Date().setHours(8,0,0,0),
-            to: '',
-            des: '',
-            rec: '',
+            to: null,
+            des: null,
+            rec: null,
             fadeIn: false,
             loading: true
         }
@@ -95,7 +95,7 @@ class Absence extends Component {
         this.setState({
             today: curentDate()
         })
-        fetch(`/absence/loadForm/${this.props.profile['user_data']['id']}`).then(function (response) {
+        fetch(`/absence/loadForm/${this.props.profile.user_data.id}`).then(function (response) {
                 return response.json();
             }
         ).then((result) => {
@@ -105,7 +105,7 @@ class Absence extends Component {
                         reasonTitle: result['Reasons'],
                         receiver: result['Reciver'],
                         titleform: result['Reasons'][0]['id'],
-                        username: this.props.profile['user_data']['username'],
+                        username: this.props.profile.user_data.username,
                         rec: result['Reciver'][0],
                         job_position:result['possition'],
                         job_title:result['title']
@@ -139,7 +139,7 @@ class Absence extends Component {
     }
 
     handleChangeDateTo(e) {
-        this.setState({to:''})
+        this.setState({to:null})
         if (e._d) {
             this.setState({to: e._d.getTime()});
             if (this.state.from >= e._d.getTime()) {
@@ -173,7 +173,7 @@ class Absence extends Component {
                     startTime:1,
                     endTime:1,
                     status:0,
-                    userId:this.props.profile['user_data']['id'],
+                    userId:this.props.profile.user_data.id,
                     totalTime:1.1231313213}
                 ),
         }).then(function (response) {
@@ -199,7 +199,7 @@ class Absence extends Component {
             return (
                 <Card>
                     <CardHeader>
-                        <strong>Basic Form</strong> Elements
+                        <strong>Tạo đơn</strong>
                     </CardHeader>
 
                     <CardBody>

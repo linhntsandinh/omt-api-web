@@ -20,8 +20,8 @@ class Login extends Component {
         super(props)
         console.log(props)
         this.state = {
-            username: '',
-            password: ''
+            username: null,
+            password: null
         }
     }
 

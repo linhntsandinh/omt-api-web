@@ -53,14 +53,9 @@ export default function navi(p) {
                 },
                 {
                     name: 'Profile',
-                    url: '/users',
-                    icon: 'icon-people',
-                },  {
-                    name: 'ListProfile',
-                    url: '/listprofile',
+                    url: '/profiles',
                     icon: 'icon-people',
                 },
-
                 {
                     name: 'Colors',
                     url: '/theme/colors',

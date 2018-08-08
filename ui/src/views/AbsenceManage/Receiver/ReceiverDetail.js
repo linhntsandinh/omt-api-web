@@ -34,6 +34,7 @@ import {
     Row,
 } from 'reactstrap';
 import * as Datetime from 'react-datetime';
+import {connect} from "react-redux";
 
 var yesterday = Datetime.moment().subtract(1, 'day');
 var valid1 = function (current) {
@@ -41,13 +42,13 @@ var valid1 = function (current) {
 };
 
 
-class Absence extends Component {
+class ReceiverDetail extends Component {
 
     constructor(props) {
         super(props);
         console.log(yesterday)
         this.state = {
-            user_id: this.props.match.params.user_id,
+            user_id: this.props.profile.user_data.id,
             absence_id: this.props.match.params.absence_id,
             status: '',
             titleform: '',
@@ -92,51 +93,6 @@ class Absence extends Component {
                 }
             }
         )
-        // fetch('https://daivt.000webhostapp.com/get_reason.php').then(function (response) {
-        //         return response.json();
-        //     }
-        // ).then((result) => {
-        //         // console.log(result)
-        //         this.setState({
-        //             reasonTitle: result,
-        //             titleform: result[0]['id']
-        //         })
-        //     }
-        // )
-        // fetch('https://daivt.000webhostapp.com/get_job_title.php', {
-        //     method: 'POST',
-        //     headers: {"Content-type": "application/x-www-form-urlencoded"},
-        //     body: formEncode({id: getData('job_title_id')}),
-        // }).then(function (response) {
-        //         return response.json();
-        //     }
-        // ).then((result) => {
-        //         if (result) {
-        //             this.setState({
-        //                 job_title: result[0]['title']
-        //             })
-        //         }
-        //     }
-        // )
-        //
-        // fetch('https://daivt.000webhostapp.com/get_receive.php', {
-        //     method: 'POST',
-        //     headers: {"Content-type": "application/x-www-form-urlencoded"},
-        //     body: formEncode({id: getData('job_position_id')}),
-        // }).then(function (response) {
-        //         return response.json();
-        //     }
-        // ).then((result) => {
-        //         console.log(result)
-        // if (result) {
-        //     this.setState({
-        //         receiver: result,
-        //         rec: result[0]['id']
-        //     })
-        // }
-        // }
-        // )
-
     }
 
     Send(e) {
@@ -275,22 +231,17 @@ class Absence extends Component {
                         </Col>
                     </CardBody>
                     <CardFooter>
-                        <Row>
-                            <Col md="2">
-                                <Button type="reset" size="lg" color="success" onClick={() => {
-                                    if (window.confirm('Bạn duyệt đơn này chứ ?')){
-                                        console.log("Dm may");
-                                    }
-                                }}>Chấp nhận</Button>
-                            </Col>
-                            <Col md="2">
-                                <Button type="reset" size="lg" color="danger" onClick={() => {
-                                    if (window.confirm('Bạn không phê duyệt đơn này chứ ?')){
-                                        console.log("Dm may");
-                                    }
-                                }}>&nbsp;&nbsp;Từ chối&nbsp;&nbsp;&nbsp;</Button>
-                            </Col>
-                        </Row>
+                        <Button type="reset" size="lg" color="success" onClick={() => {
+                            if (window.confirm('Bạn duyệt đơn này chứ ?')) {
+                                console.log("Dm may");
+                            }
+                        }}>Chấp nhận</Button>
+
+                        <Button type="reset" size="lg" color="danger" onClick={() => {
+                            if (window.confirm('Bạn không phê duyệt đơn này chứ ?')) {
+                                console.log("Dm may");
+                            }
+                        }}>&nbsp;&nbsp;Từ chối&nbsp;&nbsp;&nbsp;</Button>
                     </CardFooter>
                 </Card>
             )
@@ -299,18 +250,7 @@ class Absence extends Component {
     }
 }
 
-function
-
-Optioncard(data) {
-    let value = data.value.title;
-    return (
-        <option value={data.value.id}>{value}</option>
-    )
-}
-
-function
-
-curentDate(x) {
+function curentDate(x) {
     var today = new Date(x);
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -330,4 +270,10 @@ curentDate(x) {
     return today1;
 }
 
-export default Absence;
+
+function mapStatetoProps(state) {
+    return {profile: state.profile}
+
+}
+
+export default connect(mapStatetoProps)(ReceiverDetail);

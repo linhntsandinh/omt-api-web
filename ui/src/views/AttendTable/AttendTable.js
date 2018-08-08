@@ -21,87 +21,29 @@ import {
 import AttendCard from "./AttendCard"
 import {connect} from "react-redux";
 import {formEncode} from '../../DataUser'
-import PaginBar from '../PaginBar/PaginBar'
-
-function More(props) {
-    return (
-        <Row>
-            <Col md="7">
-            </Col>
-            <Col md="4">
-                <Card>
-                    <CardBody>
-                        <Row>
-                            <Col md="4">
-                                <Row>
-                                    <InputGroupText className="lable_search">
-                                        Team
-                                    </InputGroupText>
-                                </Row>
-                                <Row>
-                                    <InputGroupText className="lable_search">
-                                        Ngày
-                                    </InputGroupText>
-                                </Row>
-                                <Row>
-                                    <InputGroupText className="lable_search">
-                                        Status
-                                    </InputGroupText>
-                                </Row>
-
-                            </Col>
-                            <Col md="8">
-                                <Row>
-                                    <Col>
-                                        <Input className="lable_search" name="team"
-                                               value={props.data.state.team}
-                                               onChange={(e) => props.data.handleChange(e)}
-                                               onKeyPress={(ev, e) => {
-                                                   if (ev.key === 'Enter') {
-                                                       document.getElementById("btn-search").click();
-                                                       ev.preventDefault();
-                                                   }
-                                               }}/>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <Input className="lable_search" name="date" type={"date"}
-                                               value={props.data.state.date}
-                                               onChange={(e) => props.data.handleChange(e)} onKeyPress={(ev, e) => {
-                                            if (ev.key === 'Enter') {
-                                                document.getElementById("btn-search").click();
-                                                ev.preventDefault();
-                                            }
-                                        }}/>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <Input value={props.data.state.status} name="status"
-                                               onChange={(e) => props.data.handleChange(e)}
-                                               onKeyPress={(ev, e) => {
-                                                   if (ev.key === 'Enter') {
-                                                       document.getElementById("btn-search").click();
-                                                       ev.preventDefault();
-                                                   }
-                                               }}
-                                        />
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </CardBody>
-                </Card>
-            </Col>
-        </Row>
-    )
-}
+import PaginBar from '../ExtendComponent/PaginBar'
+import HeaderTable from '../ExtendComponent/HeaderTable'
+import SearchMore from '../ExtendComponent/SearchMore'
+const headerTable = [
+    {title: 'STT', id: 'id', width: '6%'},
+    {title: 'Họ và tên ', id: 'username', width: '20%'},
+    {title: 'Team', id: 'team', width: '15%'},
+    {title: 'Time Check in', id: 'check_in', width: '13%'},
+    {title: 'Time Check out', id: 'check_out', width: '13%'},
+    {title: 'Ngày', id: 'date', width: '10%'},
+    {title: 'Status', id: 'status', width: '8%'}
+]
+const searchMore = [
+    {title: 'Loại', id: 'reason'},
+    {title: 'Ngày viết', id: 'start', type: 'date'},
+    {title: 'Số ngày', id: 'total'},
+    {title: 'Status', id: 'status',type:'select',option:[{id:0,title:'Chưa duyệt'},{id:1,title:'Duyệt'},{id:2,title:'Không duyệt'}]}
+]
 
 class AbsenceTable extends Component {
     constructor(props) {
         super(props);
-        console.log(props)
+        // console.log(props)
         this.state = {
             id: '',
             username: '',
@@ -117,9 +59,7 @@ class AbsenceTable extends Component {
             data: [],
             search: false,
             sort: new Array(7).fill(0),
-            pagin: 1,
             check: 1,
-            pagin_number: 8,
             permission:true
         }
 
@@ -206,22 +146,6 @@ class AbsenceTable extends Component {
         });
     }
 
-    handleSort(name, i, e) {
-        const newArray = this.state.sort.map((element, index) => {
-            if (index === i) {
-                element = element + 1;
-            }
-            else {
-                element = 0
-            }
-            return element;
-        });
-        this.setState({
-            sort: newArray,
-            orderby: name,
-            ordervalue: (this.state.sort[i] % 3 === 1 ? 'ASC' : this.state.sort[i] % 3 === 2 ? 'DESC' : '')
-        })
-    }
 
     render() {
         const {
@@ -272,67 +196,36 @@ class AbsenceTable extends Component {
 
                             </Col>
                         </Row>
-                        {search ? <More data={this}/> : null}
+                        {search ? <Col md={5} style={{float: 'right', paddingTop: 2}}>
+                            <SearchMore data={searchMore}
+                                        onChange={(e) => {
+                                            // console.log(e.target.value)
+                                            this.handleChange(e)
+                                        }}
+                                        onKeyPress={(ev, e) => {
+                                            if (ev.key === 'Enter') {
+                                                document.getElementById("btn-search").click();
+                                                ev.preventDefault();
+                                            }
+                                        }
+                                        }
+                            />
+                        </Col> : null}
                     </CardHeader>
 
 
                     <CardBody>
                         <Table bordered responsive className="private-table small-table">
-                            <thead>
-                            <tr className="header-table text-center">
-                                <th width="6%" name="id"
-                                    onClick={(e) => this.handleSort("id", 0, e)}>STT
-                                    <a className="icon-sort">
-                                        {(sort[0] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[0] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                                <th width="15%" onClick={(e) => this.handleSort("username", 1, e)}>Họ và Tên
-                                    <a className="icon-sort">
-                                        {(sort[1] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[1] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                                <th width="15%" onClick={(e) => this.handleSort("team", 2, e)}>Team
-                                    <a className="icon-sort">
-                                        {(sort[2] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[2] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                                <th width="13%" onClick={(e) => this.handleSort("check_in", 3, e)}>Time Check in
-                                    <a className="icon-sort">
-                                        {(sort[3] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[3] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                                <th width="13%" className="text-lg-center"
-                                    onClick={(e) => this.handleSort("check_out", 4, e)}>Time Check out
-                                    <a className="icon-sort">
-                                        {(sort[4] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[4] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                                <th width="10%" onClick={(e) => this.handleSort("date", 5, e)}>Ngày
-                                    <a className="icon-sort">
-                                        {(sort[5] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[5] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                                <th width="7%" onClick={(e) => this.handleSort("status", 6, e)}>Status
-                                    <a className="icon-sort">
-                                        {(sort[6] % 3 == 0) ? <i className="fa fa-sort"></i> :
-                                            (sort[6] % 3 == 1) ? <i className="fa fa-sort-down"></i> :
-                                                <i className="fa fa-sort-up"></i>
-                                        }</a>
-                                </th>
-                            </tr>
-                            </thead>
+                            <HeaderTable data={headerTable} onChange={(e)=>{
+                                // console.log(e.target.order+ "  "+e.target.by)
+                                this.setState({
+                                    order:e.target.order,
+                                    by:e.target.by
+                                },()=>{
+                                    this.getData()
+                                })
+                            }}/>
+
                             <tbody>{
                                 data.map((attend, index) =>
                                     < AttendCard key={index} attend={attend}

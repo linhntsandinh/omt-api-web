@@ -38,7 +38,7 @@ class DefaultHeader extends Component {
         super(props)
         this.state = {
             data: [],
-            firebase: firebase.database().ref('/test/' + this.props.profile['username'])
+            firebase: firebase.database().ref('/test/' + props.profile.username)
         }
 
     }

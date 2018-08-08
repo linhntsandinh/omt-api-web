@@ -29,13 +29,13 @@ class FormCard extends Component {
 
     render() {
         const absence = this.props.data;
-        const absenceLink = `#/absencemanage/send/${absence.user_id}&&${absence.status}`
+        const absenceLink = `#/absencemanage/send/${absence.status}`
         let className = "text-center";
         if (absence.status !== '0') {
             className = "text-center block-formcard";
         }
         return (
-            <tr className={className} style={{height: 20}} onMouseEnter={(e) => {
+            <tr className={className}  onMouseEnter={(e) => {
                 if (this.state.show === false)
                     this.setState({show: true})
             }} onMouseLeave={(e) => {
@@ -51,7 +51,7 @@ class FormCard extends Component {
                 {absence.status === '0' || this.props.permission===true ?
                     <td>
                         {(this.state.show === true) ?
-                            <i className="icon-trash" onClick={() => {
+                            <i className="icon-trash" style={{paddingTop:'0.1 em'}} onClick={() => {
                                 console.log("Xoa nha")
                             }}/> : null}  &nbsp;  &nbsp;  &nbsp;  &nbsp;
                         {(this.state.show === true) ?

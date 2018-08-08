@@ -172,13 +172,13 @@ const Widgets = Loadable({
     loading: Loading,
 });
 
-const Users = Loadable({
-    loader: () => import('./views/UserManager/UserManager'),
+const ProfilesManage = Loadable({
+    loader: () => import('./views/ProfilesManager/ProfilesManager'),
     loading: Loading,
 });
 
-const User = Loadable({
-    loader: () => import('./views/UserManager/UserDetail'),
+const ProfileDetail = Loadable({
+    loader: () => import('./views/ProfilesManager/ProfileDetail'),
     loading: Loading,
 });
 
@@ -199,11 +199,11 @@ const AbsenceReciver = Loadable({
     loading: Loading,
 });
 const AbsenceDetailSend = Loadable({
-    loader: () => import('./views/AbsenceManage/Send/AbsenceDetail'),
+    loader: () => import('./views/AbsenceManage/Send/SendDetail'),
     loading: Loading,
 });
 const AbsenceDetailReceiver = Loadable({
-    loader: () => import('./views/AbsenceManage/Receiver/AbsenceDetail'),
+    loader: () => import('./views/AbsenceManage/Receiver/ReceiverDetail'),
     loading: Loading,
 });
 const FireBase = Loadable({
@@ -211,36 +211,6 @@ const FireBase = Loadable({
     loading: Loading,
 });
 
-
-const Profiles = Loadable(
-    {
-        loader:()=>import('./views/Profile/Profiles'),
-        loading: Loading,
-    }
-);
-const ProfileAdmin = Loadable(
-    {
-        loader:()=>import('./views/Profile/Profile'),
-        loading: Loading,
-    }
-);
-
-const ProfileUser = Loadable(
-
-    {
-        loader:()=>import('./views/Profile/ProfileUser'),
-        loading: Loading,
-    }
-
-);
-const ProfileFormEdit = Loadable(
-
-    {
-        loader:()=>import('./views/Profile/ProfileAdminedit'),
-        loading: Loading,
-    }
-
-);
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
     {path: '/', exact: true, name: 'Home', component: DefaultLayout},
@@ -282,21 +252,15 @@ const routes = [
     {path: '/notifications/modals', name: 'Modals', component: Modals},
     {path: '/widgets', name: 'Widgets', component: Widgets},
     {path: '/charts', name: 'Charts', component: Charts},
-    {path: '/users', exact: true, name: 'Nhân viên', component: Users},
-    {path: '/users/:id', exact: true, name: 'Sơ yếu lý lịch', component: User},
+    {path: '/profiles', exact: true, name: 'Nhân viên', component: ProfilesManage},
+    {path: '/profiles/:id', exact: true, name: 'Sơ yếu lý lịch', component: ProfileDetail},
     {path: '/timekeeping', exact: true, name: 'Chấm công', component: Timekeeping},
     {path: '/absence', exact: true, name: 'Viết đơn', component: Absence},
     {path: '/absencemanage/send/', exact: true, name: 'Đơn gửi', component: AbsenceSend},
     {path: '/absencemanage/receiver/', exact: true, name: 'Đơn nhận', component: AbsenceReciver},
-    {path: '/absencemanage/send/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailSend},
-    {path: '/absencemanage/receiver/:user_id&&:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailReceiver},
+    {path: '/absencemanage/send/:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailSend},
+    {path: '/absencemanage/receiver/:absence_id', exact: true, name: 'Chi tiết', component: AbsenceDetailReceiver},
     {path: '/firebase', exact: true, name: 'FireBase', component: FireBase},
-    {path: '/listprofile', exact: true, name: 'Profiles', component: Profiles},
-    {path: '/profiles/:id', exact: true, name: 'ProfileAdmin', component: ProfileAdmin},
-    {path: '/profileUser/:id', exact: true, name:'ProfileUser', component:ProfileUser},
-    {path: '/listprofile/:id', exact:true,name:'demoFormEdit', component: ProfileFormEdit},
-
-
 ];
 
 export default routes;

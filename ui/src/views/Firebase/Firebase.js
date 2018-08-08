@@ -43,7 +43,7 @@ class Firebase extends Component {
             status:false,
             choise: 'push',
             data: {},
-            firebase:firebase.database().ref().child('/test/'+this.props.profile['username'])
+            firebase:firebase.database().ref().child('/test/'+this.props.profile.username)
         }
         this.state.firebase.on('value', (vl) => {
             this.setState({

@@ -1,28 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-    Badge,
-    Card,
-    CardBody,
-    CardHeader,
     Col,
     Pagination,
     PaginationItem,
     PaginationLink,
-    Table,
-    Button,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    ButtonDropdown,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
     Input,
     Row,
-    Form,
-    FormGroup,
-    Label,
 } from 'reactstrap';
 import {connect} from "react-redux";
 

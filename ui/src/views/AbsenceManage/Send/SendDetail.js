@@ -35,6 +35,7 @@ import {
 } from 'reactstrap';
 import {getData, formEncode} from '../../../DataUser'
 import * as Datetime from 'react-datetime';
+import {connect} from "react-redux";
 
 var yesterday = Datetime.moment().subtract(1, 'day');
 var valid1 = function (current) {
@@ -42,26 +43,26 @@ var valid1 = function (current) {
 };
 
 
-class Absence extends Component {
+class SendDetail extends Component {
 
     constructor(props) {
         super(props);
         console.log(yesterday)
         this.state = {
-            user_id: this.props.match.params.user_id,
+            user_id: this.props.profile['user_data']['id'],
             absence_id: this.props.match.params.absence_id,
             reasonTitle: [],
             receiver: [],
-            status: '',
-            titleform: '',
-            username: '',
-            job_position: '',
-            job_title: '',
-            today: '',
-            from: '',
-            to: '',
-            reason: '',
-            rec: '',
+            status: null,
+            titleform: null,
+            username: null,
+            job_position: null,
+            job_title: null,
+            today: null,
+            from: null,
+            to: null,
+            reason: null,
+            rec: null,
             fadeIn: false,
 
         }
@@ -84,64 +85,20 @@ class Absence extends Component {
                     this.setState({
                         reasonTitle: [],
                         receiver: [],
-                        status: '',
+                        status: null,
                         titleform: 'Nghỉ làm',
                         username: 'Đại',
-                        job_position: '',
-                        job_title: '',
+                        job_position: null,
+                        job_title: null,
                         today: curentDate(0),
                         from: curentDate(1),
                         to: curentDate(2),
-                        reason: '',
-                        rec: '',
+                        reason: null,
+                        rec: null,
                     })
                 }
             }
         )
-        // fetch('https://daivt.000webhostapp.com/get_reason.php').then(function (response) {
-        //         return response.json();
-        //     }
-        // ).then((result) => {
-        //         // console.log(result)
-        //         this.setState({
-        //             reasonTitle: result,
-        //             titleform: result[0]['id']
-        //         })
-        //     }
-        // )
-        // fetch('https://daivt.000webhostapp.com/get_job_title.php', {
-        //     method: 'POST',
-        //     headers: {"Content-type": "application/x-www-form-urlencoded"},
-        //     body: formEncode({id: getData('job_title_id')}),
-        // }).then(function (response) {
-        //         return response.json();
-        //     }
-        // ).then((result) => {
-        //         if (result) {
-        //             this.setState({
-        //                 job_title: result[0]['title']
-        //             })
-        //         }
-        //     }
-        // )
-        //
-        // fetch('https://daivt.000webhostapp.com/get_receive.php', {
-        //     method: 'POST',
-        //     headers: {"Content-type": "application/x-www-form-urlencoded"},
-        //     body: formEncode({id: getData('job_position_id')}),
-        // }).then(function (response) {
-        //         return response.json();
-        //     }
-        // ).then((result) => {
-        //         console.log(result)
-        // if (result) {
-        //     this.setState({
-        //         receiver: result,
-        //         rec: result[0]['id']
-        //     })
-        // }
-        // }
-        // )
 
     }
 
@@ -158,7 +115,7 @@ class Absence extends Component {
             }
         } else {
 
-            this.setState({from: '', fadeIn: true});
+            this.setState({from: null, fadeIn: true});
         }
     }
 
@@ -169,8 +126,8 @@ class Absence extends Component {
                 this.setState({fadeIn: true});
             }
         } else {
-            document.getElementById('to').value = ''
-            this.setState({to: '', fadeIn: true});
+            document.getElementById('to').value = null
+            this.setState({to: null, fadeIn: true});
         }
     }
 
@@ -323,10 +280,10 @@ class Absence extends Component {
                         </CardBody>
                         <CardFooter style={{float: "right"}}>
                             <Button onClick={(e) => this.Send(e)} type="submit" size="lg" color="primary"><i
-                                className="icon-cursor"></i> Send</Button>
+                                className="icon-cursor"></i>&nbsp;Gửi&nbsp;&nbsp;&nbsp;</Button>
                             <Button type="reset" size="lg" color="danger" onClick={() => {
                                 document.location = "#/absencemanage"
-                            }}><i className="fa fa-ban"></i> Cancel</Button>
+                            }}><i className="fa fa-ban"></i>&nbsp;Hủy&nbsp;&nbsp;&nbsp;</Button>
                         </CardFooter>
                     </Card>
                 )
@@ -437,7 +394,7 @@ class Absence extends Component {
                         <CardFooter>
                             <Button type="reset" size="lg" color="primary" onClick={() => {
                                 document.location = "#/absencemanage"
-                            }}><i className="	fa fa-angle-double-left">&nbsp;</i> Back</Button>
+                            }}><i className="	fa fa-angle-double-left">&nbsp;</i>Quay lại</Button>
                         </CardFooter>
                     </Card>
                 )
@@ -478,4 +435,10 @@ curentDate(x) {
     return today1;
 }
 
-export default Absence;
+
+function mapStatetoProps(state) {
+    return {profile: state.profile}
+
+}
+
+export default connect(mapStatetoProps)(SendDetail);

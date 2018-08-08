@@ -10070,5 +10070,8 @@ body {
 .setting-noti:hover {
   opacity: 1; }
 
+.info-profile.row {
+  margin-top: 40px; }
+
 html body .app.flex-row.align-items-center {
   height: 100vh; }
