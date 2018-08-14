@@ -33,4 +33,8 @@ class TimelogController @Inject()(actorSystem: ActorSystem, timelogService: Time
   def load = Action.async(parse.json[TimelogLoadRequest]) { request =>
     timelogService.load(request.body)
   }
+
+  def count(date: String) = Action.async{
+    timelogService.count(date)
+  }
 }

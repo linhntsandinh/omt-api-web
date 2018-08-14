@@ -108,6 +108,7 @@ POST        /jobTitle/insert                     controllers.JobTitleController.
 POST        /jobTitle/update                     controllers.JobTitleController.update
 
 GET         /timelog/delete/:id                 controllers.TimelogController.delete(id: Int)
+GET         /timelog/count/:date                controllers.TimelogController.count(date: String)
 
 
 GET         /*file                              controllers.HomeController.assetOrDefault(file)

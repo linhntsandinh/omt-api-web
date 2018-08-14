@@ -40,7 +40,7 @@ class UserService @Inject()(user: User) {
     userAuth.map {
       case Some(x) => {
         val js = Json.toJson(x)
-        JS.OK("user_data" -> Json.toJson(x._1), "permission" -> Json.toJson(x._2))
+        JS.OK("user_data" -> Json.toJson(x._1), "permission" -> Json.toJson(x._2),"Profile" -> Json.toJson((x._3)))
       }
       case None => JS.KO("Sai tên đăng nhập hoặc mật khẩu!")
     }

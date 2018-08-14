@@ -1,5 +1,6 @@
 package models
 
+import com.google.common.collect.SortedMapDifference
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
@@ -7,7 +8,8 @@ import play.api.mvc.Result
 import services.AbsenceApproveService
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
-
+import slick.lifted.TableQuery
+import slick.lifted.FlatShapeLevel
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +36,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
       else LiteralColumn(true)
     ).filter(row =>
       if (absenceRequestLoad.start != 0) row._1._1._1._1.startTime < absenceRequestLoad.start && (row._1._1._1._1.startTime + 86400) > absenceRequestLoad.start
-      else LiteralColumn(true)
+    else LiteralColumn(true)
     ).filter(row =>
       if (absenceRequestLoad.writer != "") row._1._1._2.full_name === absenceRequestLoad.writer
       else LiteralColumn(true)
@@ -44,13 +46,21 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     ).filter(row =>
       if (absenceRequestLoad.total != 0) row._1._1._1._1.totalTime === absenceRequestLoad.total
       else LiteralColumn(true)
-    ).filter(row =>
-      if (absenceRequestLoad.ordervalue > 0) row._1._1._1._1.status === absenceRequestLoad.ordervalue
-      else LiteralColumn(true)
-    ).drop(absenceRequestLoad.offset).take(absenceRequestLoad.limit).result
-    //
+    ).drop(absenceRequestLoad.offset).take(absenceRequestLoad.limit)
+    var r = q.result
+    if(absenceRequestLoad.ordervalue ==1){
+      if(absenceRequestLoad.sortvalue == 1) {
+        r = q.sortBy(_._1._1._1._1.id.desc).result
+      }
+      else {
+         r = q.sortBy(_._1._1._1._1.id.asc).result
+      }
+    }
+    else{
+       r = q.result
+    }
     val rs = db.run {
-      q
+      r
     }
     //    rs.map {
     //      list => {
@@ -73,7 +83,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     val p = (((((AbsenceTable join AbsenceReasonsTable)
       .on(_.reasonId === _.id) join ProfileTable)
       .on(_._1.userId === _.user_id) join AbsenceApproveTable)
-      .on(_._1._1.id === _.application_id) join ProfileTable)
+      .on(_._1._1.id === _.approve_id) join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(row =>
       if (absenceRequestLoad.reciever != "") row._2.full_name === absenceRequestLoad.reciever
       else LiteralColumn(true)
@@ -88,9 +98,6 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
       else LiteralColumn(true)
     ).filter(row =>
       if (absenceRequestLoad.total != 0) row._1._1._1._1.totalTime === absenceRequestLoad.total
-      else LiteralColumn(true)
-    ).filter(row =>
-      if (absenceRequestLoad.ordervalue > 0) row._1._1._1._1.status === absenceRequestLoad.ordervalue
       else LiteralColumn(true)
     ).result
     val rs1 = db.run {
@@ -151,6 +158,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
   }
 
   def delete(Id: Int): Future[Int] = {
+    val q = AbsenceTable
     db.run(AbsenceTable.filter(_.id === Id).delete)
   }
 
@@ -216,7 +224,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
       val profileLoad: (String, String) = (rss1.head._1._1._2.name, rss1.head._2.title)
       r1.foreach {
         item => {
-          if(item._2.id != id) {
+          if(item._2.id != Some(id)) {
             val itemName: AbsenceReciverRequest = new AbsenceReciverRequest(item._2.id, item._2.full_name)
             listName += itemName
           }
@@ -233,6 +241,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
       .update(absenceApplicationsData.reasonId, absenceApplicationsData.description, absenceApplicationsData.startTime, absenceApplicationsData.endTime, absenceApplicationsData.status, absenceApplicationsData.userId, absenceApplicationsData.totalTime, absenceApplicationsData.created_by, absenceApplicationsData.update_by)
     db.run(q)
   }
+
 }
 
 case class AbsenceApplicationsLoad(id: Int, reasonTitle: String, writer: String, reciever: String, startTime: Int, totalTime: Float, status: Int)
@@ -242,7 +251,7 @@ object AbsenceApplicationsLoad {
   implicit val writer = Json.writes[AbsenceApplicationsLoad]
 }
 
-case class AbsenceRequestLoad(id: Int, offset: Int, limit: Int, start: Int, writer: String, reciever: String, reasons: String, total: Float, ordervalue: Int)
+case class AbsenceRequestLoad(id: Int, offset: Int, limit: Int, start: Int, writer: String, reciever: String, reasons: String, total: Float, ordervalue: Int, sortvalue: Int)
 
 object AbsenceRequestLoad {
   implicit val reader = Json.reads[AbsenceRequestLoad]
