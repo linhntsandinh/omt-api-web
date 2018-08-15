@@ -63,6 +63,8 @@ POST        /profile/update                     controllers.ProfileController.up
 
 GET         /profile/info/:id                       controllers.ProfileController.getProfile(id: Int)
 
+GET         /profile/load                       controllers.ProfileController.loadProfile
+
 +nocsrf
 POST        /DRole/update                     controllers.RoleController.update
 

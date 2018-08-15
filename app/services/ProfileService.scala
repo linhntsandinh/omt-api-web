@@ -19,11 +19,22 @@ class ProfileService @Inject()(profile: Profile) {
     val result = profile.getProfile(id)
     result.map{
       case Some(x) => {
-        JS.OK("profile" -> Json.toJson(x._1), "job_position" -> Json.toJson(x._2), "job_title" -> Json.toJson(x._3))
+        JS.OK("profile" -> Json.toJson(x._1), "job_position" -> Json.toJson(x._2), "job_title" -> Json.toJson(x._3), "avatar" -> Json.toJson(x._4),"email" -> Json.toJson(x._5))
       }
       case None => JS.KO("Khong tim thay profile.")
     }
   }
+
+  def loadProfile = {
+    val result = profile.loadProfile
+    result.map{
+      case Some(x) => {
+        JS.OK("profile" -> Json.toJson(x))
+      }
+      case None => JS.KO("Khong tim thay profile.")
+    }
+  }
+
 
   def insert(profileForm: ProfileForm): Future[Int] = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")

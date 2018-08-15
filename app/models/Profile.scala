@@ -1,6 +1,7 @@
 package models
 
 import java.sql.Date
+import java.text.SimpleDateFormat
 
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 
@@ -11,6 +12,8 @@ import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import utils.JS
+
+import scala.collection.mutable.ListBuffer
 
 case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int, created_by: Option[Int])
 object ProfileForm {
@@ -23,6 +26,13 @@ object ProfileData {
   implicit val reader = Json.reads[ProfileData]
   implicit val writer = Json.writes[ProfileData]
 }
+
+case class Profileload(  user_id: Int, full_name: String, avatar: String,email: String)
+object Profileload {
+  implicit val reader = Json.reads[Profileload]
+  implicit val writer = Json.writes[Profileload]
+}
+
 class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
   def id = column[Option[Int]]("id", O.PrimaryKey, O.AutoInc)
 
@@ -66,18 +76,41 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   private val ProfileTable = TableQuery[ProfileTableDef]
 
-  def getProfile(id: Int): Future[Option[(ProfileData, JobPositionData, TitleData)]] = {
+  def getProfile(id: Int) = {
     val jobPosition = TableQuery[JobPositionDef]
     val jobTitle = TableQuery[TitleTableDef]
-    val query = (ProfileTable join jobPosition on (_.job_position_id === _.id) join jobTitle on (_._1.job_title_id === _.id)).filter(_._1._1.id === id).result
+    val user = TableQuery[UserTableDef]
+    val query = ((ProfileTable join jobPosition on (_.job_position_id === _.id) join jobTitle on (_._1.job_title_id === _.id)) join user on (_._1._1.id === _.id)).filter(_._1._1._1.user_id === id).result
     val rs = db.run(query)
     rs.map{
       list => {
         list.size match {
           case 0 => None
           case _ => {
-            val ((profile, job_posistion),job_title) = list.head
-            Some(profile, job_posistion, job_title)
+            val ((((profile, job_posistion),job_title),avatar),email) = ((list.head._1,list.head._2.avatar),list.head._2.email)
+            Some(profile, job_posistion, job_title,avatar,email)
+          }
+        }
+      }
+    }
+  }
+
+  def loadProfile = {
+    val user = TableQuery[UserTableDef]
+    val query = ((ProfileTable join user) on (_.user_id === _.id)).result
+    val rs = db.run(query)
+    rs.map{
+      list => {
+        list.size match {
+          case 0 => None
+          case _ => {
+            val data = ListBuffer.empty[Profileload]
+            list.foreach{x=> {
+                val item = Profileload(x._1.user_id, x._1.full_name, x._2.avatar, x._2.email)
+                  data += item
+              }
+            }
+            Some(data)
           }
         }
       }

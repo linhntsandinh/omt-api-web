@@ -22,6 +22,9 @@ class ProfileController  @Inject()(deadbolt: DeadboltActions, actorSystem: Actor
   def getProfile(id: Int) = Action.async{
     profileService.getProfile(id)
   }
+  def loadProfile = Action.async{
+    profileService.loadProfile
+  }
 
   def update = Action.async(parse.json[ProfileForm]) { request =>
     profileService.update(request.body).map{x =>
