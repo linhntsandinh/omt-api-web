@@ -27,7 +27,7 @@ object ProfileData {
   implicit val writer = Json.writes[ProfileData]
 }
 
-case class Profileload(  user_id: Int, full_name: String, avatar: String,email: String)
+case class Profileload(  user_id: Int, full_name: String, avatar: String,email: String,departmenti_id: Int,department: String,job_title_id: Int,title: String)
 object Profileload {
   implicit val reader = Json.reads[Profileload]
   implicit val writer = Json.writes[Profileload]
@@ -75,29 +75,35 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
   private val ProfileTable = TableQuery[ProfileTableDef]
-
+  private val jobPosition = TableQuery[JobPositionDef]
+  private val jobTitle = TableQuery[TitleTableDef]
+  private val user = TableQuery[UserTableDef]
+  private val depart = TableQuery[DepartmentTableDef]
   def getProfile(id: Int) = {
-    val jobPosition = TableQuery[JobPositionDef]
-    val jobTitle = TableQuery[TitleTableDef]
-    val user = TableQuery[UserTableDef]
-    val query = ((ProfileTable join jobPosition on (_.job_position_id === _.id) join jobTitle on (_._1.job_title_id === _.id)) join user on (_._1._1.id === _.id)).filter(_._1._1._1.user_id === id).result
+    val query = ((ProfileTable) join user on (_.id === _.id)).filter(_._1.user_id === id).result
     val rs = db.run(query)
-    rs.map{
-      list => {
-        list.size match {
-          case 0 => None
-          case _ => {
-            val ((((profile, job_posistion),job_title),avatar),email) = ((list.head._1,list.head._2.avatar),list.head._2.email)
-            Some(profile, job_posistion, job_title,avatar,email)
-          }
+    val rs1 = db.run(jobPosition.result)
+    val rs2 = db.run(jobTitle.result)
+    val rs3 = db.run(depart.result)
+    for{
+      fs <- rs
+      fs1 <- rs1
+      fs2 <- rs2
+      fs3 <- rs3
+    }yield {
+      fs.size match{
+        case 0 => None
+        case _ => {
+          val (((profile),avatar),email) = ((fs.head._1,fs.head._2.avatar),fs.head._2.email)
+          Some(profile,avatar,email,fs1,fs2,fs3)
         }
       }
     }
   }
 
   def loadProfile = {
-    val user = TableQuery[UserTableDef]
-    val query = ((ProfileTable join user) on (_.user_id === _.id)).result
+    val query = (((((ProfileTable join jobPosition on (_.job_position_id === _.id)) join jobTitle on (_._1.job_title_id === _.id)) join user) on (_._1._1.user_id === _.id))  ).result
+
     val rs = db.run(query)
     rs.map{
       list => {
@@ -106,7 +112,7 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
           case _ => {
             val data = ListBuffer.empty[Profileload]
             list.foreach{x=> {
-                val item = Profileload(x._1.user_id, x._1.full_name, x._2.avatar, x._2.email)
+                val item = Profileload(x._1._1._1.user_id, x._1._1._1.full_name, x._2.avatar, x._2.email,x._1._1._1.departmenti_id,x._1._1._2.title,x._1._2.id,x._1._2.title)
                   data += item
               }
             }

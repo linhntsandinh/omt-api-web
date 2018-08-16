@@ -19,7 +19,7 @@ class ProfileService @Inject()(profile: Profile) {
     val result = profile.getProfile(id)
     result.map{
       case Some(x) => {
-        JS.OK("profile" -> Json.toJson(x._1), "job_position" -> Json.toJson(x._2), "job_title" -> Json.toJson(x._3), "avatar" -> Json.toJson(x._4),"email" -> Json.toJson(x._5))
+        JS.OK("profile" -> Json.toJson(x._1), "job_position" -> Json.toJson(x._4), "job_title" -> Json.toJson(x._5), "department" -> Json.toJson(x._6),"avatar" -> Json.toJson(x._2),"email" -> Json.toJson(x._3))
       }
       case None => JS.KO("Khong tim thay profile.")
     }
