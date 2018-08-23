@@ -14,13 +14,14 @@ import scala.concurrent.Future
 class TimelogService @Inject()(timelog: Timelog) {
   def delete(id: Int): Future[Int] = timelog.delete(id)
 
-  def insert(timelogForm: TimelogForm): Future[Int] = {
+  def insert(timelogForm: TimelogForm) = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
     val sdf2 = new SimpleDateFormat("HH:mm:ss")
 
     val sqlDate = new Date(sdf1.parse(timelogForm.date).getTime)
     val sqlStartTime = new Time(sdf2.parse(timelogForm.start_time).getTime)
     val sqlEndTime = new Time(sdf2.parse(timelogForm.end_time).getTime)
+
 
     val timelogData = new TimelogData(null,
       timelogForm.user_id,
@@ -70,7 +71,7 @@ class TimelogService @Inject()(timelog: Timelog) {
   }
   def count(date :String) = {
     timelog.count(date).map { x =>
-      JS.OK("count" -> Json.toJson(x._1), "name" -> Json.toJson(x._2), "countLate" -> Json.toJson(x._3), "countEarly" -> Json.toJson(x._4))
+      JS.OK("count" -> Json.toJson(x._1), "name" -> Json.toJson(x._2), "countLate" -> Json.toJson(x._3), "countEarly" -> Json.toJson(x._4), "counthalf" -> Json.toJson(x._5))
     }
   }
 }

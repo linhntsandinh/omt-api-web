@@ -14,13 +14,13 @@ class TimelogController @Inject()(actorSystem: ActorSystem, timelogService: Time
 
   def insert = Action.async(parse.json[TimelogForm]) { request =>
     timelogService.insert(request.body).map{ x =>
-     JS.OK("data" -> "Insert Success!!")
+     JS.OK("data" -> x)
     }
   }
 
   def update = Action.async(parse.json[TimelogForm]) { request =>
     timelogService.update(request.body).map { x =>
-     JS.OK("data" -> "update Success!!")
+     JS.OK("TimelogId" -> "update Success!!")
     }
   }
 

@@ -251,7 +251,7 @@ object AbsenceApplicationsLoad {
   implicit val writer = Json.writes[AbsenceApplicationsLoad]
 }
 
-case class AbsenceRequestLoad(id: Int, offset: Int, limit: Int, start: Int, writer: String, reciever: String, reasons: String, total: Float, ordervalue: Int, sortvalue: Int)
+case class AbsenceRequestLoad(offset: Int, limit: Int, start: Int, writer: String, reciever: String, reasons: String, total: Float, ordervalue: Int, sortvalue: Int)
 
 object AbsenceRequestLoad {
   implicit val reader = Json.reads[AbsenceRequestLoad]

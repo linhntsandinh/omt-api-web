@@ -39,7 +39,7 @@ POST        /workingday/insert                        controllers.WorkingDayCont
 POST        /workingday/update                        controllers.WorkingDayController.update
 
 +nocsrf
-POST        /userole/insert                     controllers.UserRoleController.insert
+POST        /userrole/insert                     controllers.UserRoleController.insert
 
 +nocsrf
 POST        /absence/insert                     controllers.AbsenceApplicationController.insert

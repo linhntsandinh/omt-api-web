@@ -111,8 +111,9 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   private val TitleTable = TableQuery[TitleTableDef]
 
-  def insert(timelogData: TimelogData): Future[Int] = {
-    db.run(TimelogTable += timelogData)
+  def insert(timelogData: TimelogData) = {
+    db.run(TimelogTable returning TimelogTable.map(_.id) += timelogData)
+//    db.run(AbsenceTable returning AbsenceTable.map(_.id)+= result)
   }
 
   def delete(timelogId: Int) = {
@@ -179,11 +180,19 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
     val sdf2 = new SimpleDateFormat("HH:mm:ss")
     val startTime: String = "09:00:00"
+    val limitTime:String = "10:00:00"
     val endTime: String = "18:00:00"
     val sqlDate = new Date(sdf1.parse(date).getTime)
     val sqlStartTime = new Time(sdf2.parse(startTime).getTime)
     val sqlEndTime = new Time(sdf2.parse(endTime).getTime)
-    val q =((TimelogTable join ProfileTable on(_.user_id === _.user_id)).filter(_._1.date === sqlDate)).groupBy(_._1.user_id).map { case (c, tbl)  =>
+    val sqlLimitTime = new Time(sdf2.parse(limitTime).getTime)
+    val monthFormat = new SimpleDateFormat("MM")
+    val yearFormat = new SimpleDateFormat("yyyy")
+    val sqlmonth = new Date(sdf1.parse("01-"+monthFormat.format(sqlDate)+"-"+yearFormat.format(sqlDate)).getTime)
+    printf(sqlmonth.toString)
+    printf(sqlLimitTime.toString)
+    printf(sqlDate.toString)
+    val q =((((TimelogTable join ProfileTable on(_.user_id === _.user_id)).filter(_._1.date <= sqlDate)).filter(_._1.start_time <= sqlLimitTime)).filter(_._1.date >= sqlmonth)).groupBy(_._1.user_id).map { case (c, tbl)  =>
       (c ,tbl.length)
     }.drop(0).result
     val rs = db.run(q)
@@ -191,26 +200,32 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     val q1 = (ProfileTable).result
     val rs1 = db.run(q1)
 
-    val q2 =(TimelogTable.filter(_.start_time > sqlStartTime).filter(_.date === sqlDate)).groupBy(_.user_id).map { case (c, tbl)  =>
+    val q2 =(((TimelogTable.filter(_.start_time > sqlStartTime)).filter(_.date <= sqlDate)).filter(_.date >= sqlmonth)).groupBy(_.user_id).map { case (c, tbl)  =>
       (c ,tbl.length)
     }.result
     val rs2 = db.run(q2)
 
-    val q3 =(TimelogTable.filter(_.end_time < sqlEndTime).filter(_.date === sqlDate)).groupBy(_.user_id).map { case (c, tbl)  =>
+    val q3 =(((TimelogTable.filter(_.end_time < sqlEndTime)).filter(_.date <= sqlDate)).filter(_.date >= sqlmonth)).groupBy(_.user_id).map { case (c, tbl)  =>
       (c ,tbl.length)
     }.result
     val rs3 = db.run(q3)
 
+    val q4 =(((TimelogTable.filter(_.date <= sqlDate)).filter(_.date >= sqlmonth)).filter(_.start_time > sqlLimitTime)).groupBy(_.user_id).map { case (c, tbl)  =>
+      (c ,tbl.length)
+    }.result
+    val rs4 = db.run(q4)
     for{
       fs <- rs
       fs1 <- rs1
       fs2 <- rs2
       fs3 <- rs3
+      fs4 <- rs4
     }yield {
       val cfs = ListBuffer.empty[CountItem]
       val cfs1 = ListBuffer.empty[NameItem]
       val cfs2 = ListBuffer.empty[CountItem]
       val cfs3 = ListBuffer.empty[CountItem]
+      val cfs4 = ListBuffer.empty[CountItem]
       fs.foreach{x=>{
         val item = new CountItem(x._1,x._2)
         cfs += item
@@ -227,7 +242,11 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
         val item = new CountItem(x._1,x._2)
         cfs3 += item
       }}
-      (cfs,cfs1,cfs2,cfs3)
+      fs4.foreach{x=>{
+        val item = new CountItem(x._1,x._2)
+        cfs4 += item
+      }}
+      (cfs,cfs1,cfs2,cfs3,cfs4)
     }
 
 
