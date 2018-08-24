@@ -27,10 +27,10 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
 
   def load(absenceRequestLoad: AbsenceRequestLoad): Future[Option[(ListBuffer[AbsenceApplicationsLoad], Int)]] = {
     val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
-    val q = (((((AbsenceTable join AbsenceReasonsTable)
-      .on(_.reasonId === _.id) join ProfileTable)
-      .on(_._1.userId === _.user_id) join AbsenceApproveTable)
-      .on(_._1._1.id === _.approve_id) join ProfileTable)
+    val q = ((((((((AbsenceTable join AbsenceReasonsTable)
+      .on(_.reasonId === _.id)) join ProfileTable)
+      .on(_._1.userId === _.user_id)) join AbsenceApproveTable)
+      .on(_._1._1.id === _.application_id)) join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(row =>
       if (absenceRequestLoad.reciever != "") row._2.full_name === absenceRequestLoad.reciever
       else LiteralColumn(true)
@@ -80,10 +80,10 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     //        }
     //      }
     //    }
-    val p = (((((AbsenceTable join AbsenceReasonsTable)
-      .on(_.reasonId === _.id) join ProfileTable)
+    val p = ((((((AbsenceTable join AbsenceReasonsTable)
+      .on(_.reasonId === _.id)) join ProfileTable)
       .on(_._1.userId === _.user_id) join AbsenceApproveTable)
-      .on(_._1._1.id === _.approve_id) join ProfileTable)
+      .on(_._1._1.id === _.application_id) join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(row =>
       if (absenceRequestLoad.reciever != "") row._2.full_name === absenceRequestLoad.reciever
       else LiteralColumn(true)
