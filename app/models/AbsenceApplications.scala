@@ -27,16 +27,16 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
 
   def load(absenceRequestLoad: AbsenceRequestLoad): Future[Option[(ListBuffer[AbsenceApplicationsLoad], Int)]] = {
     val listAbsence = ListBuffer.empty[AbsenceApplicationsLoad]
-    val q = ((((((((AbsenceTable join AbsenceReasonsTable)
+    val p = ((((((AbsenceTable join AbsenceReasonsTable)
       .on(_.reasonId === _.id)) join ProfileTable)
-      .on(_._1.userId === _.user_id)) join AbsenceApproveTable)
-      .on(_._1._1.id === _.application_id)) join ProfileTable)
+      .on(_._1.userId === _.user_id) join AbsenceApproveTable)
+      .on(_._1._1.id === _.application_id) join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(row =>
       if (absenceRequestLoad.reciever != "") row._2.full_name === absenceRequestLoad.reciever
       else LiteralColumn(true)
     ).filter(row =>
       if (absenceRequestLoad.start != 0) row._1._1._1._1.startTime < absenceRequestLoad.start && (row._1._1._1._1.startTime + 86400) > absenceRequestLoad.start
-    else LiteralColumn(true)
+      else LiteralColumn(true)
     ).filter(row =>
       if (absenceRequestLoad.writer != "") row._1._1._2.full_name === absenceRequestLoad.writer
       else LiteralColumn(true)
@@ -46,7 +46,11 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     ).filter(row =>
       if (absenceRequestLoad.total != 0) row._1._1._1._1.totalTime === absenceRequestLoad.total
       else LiteralColumn(true)
-    ).drop(absenceRequestLoad.offset).take(absenceRequestLoad.limit)
+    )
+    val rs1 = db.run {
+      p.result
+    }
+    val q = p.drop(absenceRequestLoad.offset).take(absenceRequestLoad.limit)
     var r = q.result
     if(absenceRequestLoad.ordervalue ==1){
       if(absenceRequestLoad.sortvalue == 1) {
@@ -80,29 +84,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     //        }
     //      }
     //    }
-    val p = ((((((AbsenceTable join AbsenceReasonsTable)
-      .on(_.reasonId === _.id)) join ProfileTable)
-      .on(_._1.userId === _.user_id) join AbsenceApproveTable)
-      .on(_._1._1.id === _.application_id) join ProfileTable)
-      .on(_._2.approve_id === _.user_id)).filter(row =>
-      if (absenceRequestLoad.reciever != "") row._2.full_name === absenceRequestLoad.reciever
-      else LiteralColumn(true)
-    ).filter(row =>
-      if (absenceRequestLoad.start != 0) row._1._1._1._1.startTime < absenceRequestLoad.start && (row._1._1._1._1.startTime + 86400) > absenceRequestLoad.start
-      else LiteralColumn(true)
-    ).filter(row =>
-      if (absenceRequestLoad.writer != "") row._1._1._2.full_name === absenceRequestLoad.writer
-      else LiteralColumn(true)
-    ).filter(row =>
-      if (absenceRequestLoad.reasons != "") row._1._1._1._2.title === absenceRequestLoad.reasons
-      else LiteralColumn(true)
-    ).filter(row =>
-      if (absenceRequestLoad.total != 0) row._1._1._1._1.totalTime === absenceRequestLoad.total
-      else LiteralColumn(true)
-    ).result
-    val rs1 = db.run {
-      p
-    }
+
     for {
       fs <- rs
       fs1 <- rs1

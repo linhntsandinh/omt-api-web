@@ -71,7 +71,7 @@ class TimelogService @Inject()(timelog: Timelog) {
   }
   def count(date :String) = {
     timelog.count(date).map { x =>
-      JS.OK("count" -> Json.toJson(x._1), "name" -> Json.toJson(x._2), "countLate" -> Json.toJson(x._3), "countEarly" -> Json.toJson(x._4), "counthalf" -> Json.toJson(x._5))
+      JS.OK("count" -> Json.toJson(x._1), "name" -> Json.toJson(x._2), "countLate" -> Json.toJson(x._3), "countEarly" -> Json.toJson(x._4))
     }
   }
 }
