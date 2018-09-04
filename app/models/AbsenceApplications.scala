@@ -32,7 +32,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
       .on(_._1.userId === _.user_id) join AbsenceApproveTable)
       .on(_._1._1.id === _.application_id) join ProfileTable)
       .on(_._2.approve_id === _.user_id)).filter(row =>
-      if (absenceRequestLoad.reciever != "") row._2.full_name === absenceRequestLoad.reciever
+      if (absenceRequestLoad.receiver != "") row._2.full_name === absenceRequestLoad.receiver
       else LiteralColumn(true)
     ).filter(row =>
       if (absenceRequestLoad.start != 0) row._1._1._1._1.startTime < absenceRequestLoad.start && (row._1._1._1._1.startTime + 86400) > absenceRequestLoad.start
@@ -155,7 +155,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     //        listReason = list
     //      }
     //    }
-    val a = (((ProfileTable join DepartmentTable).on(_.departmenti_id === _.id)
+    val a = (((ProfileTable join DepartmentTable).on(_.department_id === _.id)
       join JobPossitionTable).on(_._1.job_position_id === _.id)
       join JobTitleTable).on(_._1._1.job_title_id === _.id).filter(_._1._1._1.user_id === id).result
     val rss = db.run {
@@ -166,7 +166,7 @@ class AbsenceApplications @Inject()(absenceApprove: AbsenceApproveService, prote
     //        profileLoad = list
     //      }
     //    }
-    val p = ((UserTable join ProfileTable).on(_.id === _.user_id) join ProfileTable).on(_._2.departmenti_id === _.departmenti_id)
+    val p = ((UserTable join ProfileTable).on(_.id === _.user_id) join ProfileTable).on(_._2.department_id === _.department_id)
       .filter(_._1._1.id === id).result
     val r = db.run {
       p

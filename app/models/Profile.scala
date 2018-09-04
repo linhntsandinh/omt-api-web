@@ -27,7 +27,7 @@ object ProfileData {
   implicit val writer = Json.writes[ProfileData]
 }
 
-case class Profileload(  user_id: Int, full_name: String, avatar: String,email: String,departmenti_id: Int,department: String,job_title_id: Int,title: String)
+case class Profileload(  user_id: Int, full_name: String, avatar: String,email: String,department_id: Int,department: String,job_title_id: Int,title: String)
 object Profileload {
   implicit val reader = Json.reads[Profileload]
   implicit val writer = Json.writes[Profileload]
@@ -46,7 +46,7 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
 
   def address = column[String]("address")
 
-  def departmenti_id = column[Int]("department_id")
+  def department_id = column[Int]("department_id")
 
   def job_title_id = column[Int]("job_title_id")
 
@@ -67,7 +67,7 @@ class ProfileTableDef(tag: Tag) extends Table[ProfileData](tag, "profiles") {
   def updated_by = column[Option[Int]]("updated_by")
 
   override def * =
-    (id, user_id, full_name, phone_number, birth_date, address, departmenti_id, job_title_id, job_position_id, status, join_date, gender, created_at, updated_at, created_by, updated_by) <> ((ProfileData.apply _).tupled, ProfileData.unapply)
+    (id, user_id, full_name, phone_number, birth_date, address, department_id, job_title_id, job_position_id, status, join_date, gender, created_at, updated_at, created_by, updated_by) <> ((ProfileData.apply _).tupled, ProfileData.unapply)
 }
 
 class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
@@ -133,7 +133,7 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   def update(profileData: ProfileData) = {
     val q = ProfileTable.filter(_.id === profileData.id)
-      .map(p => (p.full_name, p.phone_number, p.birth_date, p.address, p.departmenti_id, p.job_title_id, p.job_position_id, p.status, p.gender, p.updated_at))
+      .map(p => (p.full_name, p.phone_number, p.birth_date, p.address, p.department_id, p.job_title_id, p.job_position_id, p.status, p.gender, p.updated_at))
       .update(profileData.full_name, profileData.phone_number, profileData.birth_date, profileData.address, profileData.departmenti_id, profileData.job_title_id, profileData.job_position_id, profileData.status, profileData.gender, profileData.updated_at)
     db.run(q)
   }

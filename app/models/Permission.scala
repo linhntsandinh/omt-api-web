@@ -1,8 +1,8 @@
 package models
 
 import javax.inject.Inject
-
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.JdbcProfile
@@ -10,13 +10,19 @@ import slick.jdbc.MySQLProfile.api._
 
 /***/
 case class PermissionData(id: Int, code: String, name: String)
+object PermissionData {
+  implicit val reader = Json.reads[PermissionData]
+  implicit val writer = Json.writes[PermissionData]
+}
+
 class PermissionTableDef(tag: Tag) extends Table[PermissionData](tag, "permissions") {
   def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
   def code = column[String]("code")
   def name = column[String]("name")
   override def * =
-    (id, code, name) <> (PermissionData.tupled, PermissionData.unapply)
+    (id, code, name) <> ((PermissionData.apply _).tupled, PermissionData.unapply)
 }
+
 
 /***/
 case class PermissionForm(code: String, name: String)

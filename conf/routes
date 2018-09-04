@@ -111,6 +111,7 @@ POST        /jobTitle/update                     controllers.JobTitleController.
 
 GET         /timelog/delete/:id                 controllers.TimelogController.delete(id: Int)
 GET         /timelog/count/:date                controllers.TimelogController.count(date: String)
+GET         /timelog/countDay/:date                controllers.TimelogController.countDay(date: String)
 
 
 GET         /*file                              controllers.HomeController.assetOrDefault(file)

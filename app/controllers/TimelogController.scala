@@ -37,4 +37,7 @@ class TimelogController @Inject()(actorSystem: ActorSystem, timelogService: Time
   def count(date: String) = Action.async{
     timelogService.count(date)
   }
+  def countDay(date: String) = Action.async{
+    timelogService.countDay(date)
+  }
 }
