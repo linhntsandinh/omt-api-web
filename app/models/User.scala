@@ -3,6 +3,7 @@ package models
 import javax.inject.Inject
 import be.objectify.deadbolt.scala.models.Subject
 import controllers.ProfileController
+import org.mindrot.jbcrypt.BCrypt
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -63,7 +64,7 @@ class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: D
 
   private val UserTable = TableQuery[UserTableDef]
 
-  def getAuthInfo(username: String) = {
+  def getAuthInfo(login: LoginForm) = {
     val role = TableQuery[RoleTableDef]
     val permission = TableQuery[PermissionTableDef]
     val userRole = TableQuery[UserRoleTableDef]
@@ -80,7 +81,8 @@ class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: D
       join jobTitle on (_._2.job_title_id === _.id))
       join jobPoss on (_._1._2.job_position_id === _.id))
       join department on(_._1._1._2.department_id === _.id))
-      .filter(_._1._1._1._1._1._1._1._1.username === username).result
+      .filter(_._1._1._1._1._1._1._1._1.username === login.username)
+      .filter(_._1._1._1._1._1._1._1._1.password === BCrypt.hashpw(login.password, BCrypt.gensalt())).result
     q.statements.foreach(println) // print query
     val rs = db.run {
       q

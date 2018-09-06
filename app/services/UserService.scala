@@ -37,7 +37,7 @@ class UserService @Inject()(user: User) {
 
   def login(loginForm: LoginForm): Future[Result] = {
 
-    val userAuth = user.getAuthInfo(loginForm.username)
+    val userAuth = user.getAuthInfo(loginForm)
     userAuth.map {
       case Some(x) => {
         val js = Json.toJson(x)
