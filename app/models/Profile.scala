@@ -15,13 +15,13 @@ import utils.JS
 
 import scala.collection.mutable.ListBuffer
 
-case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int, created_by: Option[Int])
+case class ProfileForm(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: String, address: String, department_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: String, gender: Int, created_by: Option[Int])
 object ProfileForm {
   implicit val reader = Json.reads[ProfileForm]
   implicit val writer = Json.writes[ProfileForm]
 }
 
-case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Date, address: String, departmenti_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: Date, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
+case class ProfileData(id: Option[Int], user_id: Int, full_name: String, phone_number: String, birth_date: Date, address: String, department_id: Int, job_title_id: Int, job_position_id: Int, status: Int, join_date: Date, gender: Int, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Int], updated_by: Option[Int])
 object ProfileData {
   implicit val reader = Json.reads[ProfileData]
   implicit val writer = Json.writes[ProfileData]
@@ -112,7 +112,7 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
           case _ => {
             val data = ListBuffer.empty[Profileload]
             list.foreach{x=> {
-                val item = Profileload(x._1._1._1.user_id, x._1._1._1.full_name, x._2.avatar, x._2.email,x._1._1._1.departmenti_id,x._1._1._2.title,x._1._2.id,x._1._2.title)
+                val item = Profileload(x._1._1._1.user_id, x._1._1._1.full_name, x._2.avatar, x._2.email,x._1._1._1.department_id,x._1._1._2.title,x._1._2.id,x._1._2.title)
                   data += item
               }
             }
@@ -134,7 +134,7 @@ class Profile @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   def update(profileData: ProfileData) = {
     val q = ProfileTable.filter(_.id === profileData.id)
       .map(p => (p.full_name, p.phone_number, p.birth_date, p.address, p.department_id, p.job_title_id, p.job_position_id, p.status, p.gender, p.updated_at))
-      .update(profileData.full_name, profileData.phone_number, profileData.birth_date, profileData.address, profileData.departmenti_id, profileData.job_title_id, profileData.job_position_id, profileData.status, profileData.gender, profileData.updated_at)
+      .update(profileData.full_name, profileData.phone_number, profileData.birth_date, profileData.address, profileData.department_id, profileData.job_title_id, profileData.job_position_id, profileData.status, profileData.gender, profileData.updated_at)
     db.run(q)
   }
 }

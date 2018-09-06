@@ -2,6 +2,7 @@ package services
 
 import javax.inject.Inject
 import models.{LoginForm, User, UserData, UserForm}
+import org.mindrot.jbcrypt.BCrypt
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import utils.JS
@@ -15,7 +16,7 @@ class UserService @Inject()(user: User) {
   def delete(id: Int): Future[Int] = user.delete(id)
 
   def insert(userForm: UserForm): Future[Int] = {
-    val userData: UserData = new UserData(1, userForm.username, userForm.password, userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), userForm.create_by, Some(1))
+    val userData: UserData = new UserData(1, userForm.username, BCrypt.hashpw(userForm.password, BCrypt.gensalt()), userForm.email, userForm.avatar, userForm.holidayRemaining, userForm.status, Some(System.currentTimeMillis() / 1000), Some(1), userForm.create_by, Some(1))
     user.insert(userData)
   }
 
