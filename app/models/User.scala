@@ -82,7 +82,9 @@ class User @Inject()(Profile : ProfileService, protected val dbConfigProvider: D
       join jobPoss on (_._1._2.job_position_id === _.id))
       join department on(_._1._1._2.department_id === _.id))
       .filter(_._1._1._1._1._1._1._1._1.username === login.username)
-      .filter(_._1._1._1._1._1._1._1._1.password === BCrypt.hashpw(login.password, BCrypt.gensalt())).result
+      .filter(_._1._1._1._1._1._1._1._1.password === login.password).result
+    // khi nao dùng mã hóa pass
+    // .filter(_._1._1._1._1._1._1._1._1.password === BCrypt.hashpw(login.password, BCrypt.gensalt())).result
     q.statements.foreach(println) // print query
     val rs = db.run {
       q
