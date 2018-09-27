@@ -79,4 +79,9 @@ class TimelogService @Inject()(timelog: Timelog) {
       JS.OK("data" -> Json.toJson(x))
     }
   }
+  def countUserId(id : Int) = {
+    timelog.countUserId(id).map { x =>
+      JS.OK("data" -> Json.toJson(x))
+    }
+  }
 }

@@ -3,7 +3,7 @@ package controllers
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
 import models.{TimelogForm, TimelogLoadRequest}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
 import services.TimelogService
 import utils.JS
 
@@ -39,5 +39,8 @@ class TimelogController @Inject()(actorSystem: ActorSystem, timelogService: Time
   }
   def countDay(date: String) = Action.async{
     timelogService.countDay(date)
+  }
+  def countUserId(id: Int) = Action.async{
+    timelogService.countUserId(id)
   }
 }

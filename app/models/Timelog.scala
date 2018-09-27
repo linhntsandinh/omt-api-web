@@ -18,6 +18,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 case class TimelogData(id: Option[Int], user_id: Int, date: Date, start_time: Time, end_time: Time, device_info: String, created_at: Option[Long], updated_at: Option[Long], created_by: Option[Long], updated_by: Option[Long])
+
 class TimelogTableDef(tag: Tag) extends Table[TimelogData](tag, "time_logs") {
   def id = column[Option[Int]]("id", O.PrimaryKey, O.AutoInc)
 
@@ -89,14 +90,15 @@ object TimelogLoad {
   implicit val writer = Json.writes[TimelogLoad]
 }
 
-case class CountItem(id: Int,name: String , jobTitle: String, jobPosition: String,department: String,count: Double,early: Int,late: Int)
+case class CountItem(id: Int, name: String, jobTitle: String, jobPosition: String, department: String, count: Double, early: Int, late: Int)
 
 object CountItem {
   implicit val reader = Json.reads[CountItem]
   implicit val writer = Json.writes[CountItem]
 }
 
-case class CountDayItem(profile: ProfileData, job_title: String,job_possison: String,department: String,startTime: String,endTime: String)
+case class CountDayItem(profile: ProfileData, job_title: String, job_possison: String, department: String, startTime: String, endTime: String)
+
 object CountDayItem {
   implicit val reader = Json.reads[CountDayItem]
   implicit val writer = Json.writes[CountDayItem]
@@ -200,10 +202,10 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     }.result
     val rs = db.run(q)
 
-    val q1 = ((((ProfileTable )
+    val q1 = ((((ProfileTable)
       join jobTitle on (_.job_title_id === _.id))
       join jobPoss on (_._1.job_position_id === _.id))
-      join department on(_._1._1.department_id === _.id)).result
+      join department on (_._1._1.department_id === _.id)).result
     val rs1 = db.run(q1)
 
     val q2 = (((TimelogTable.filter(_.start_time > sqlStartTime)).filter(_.date <= sqlDate)).filter(_.date >= sqlmonth)).groupBy(_.user_id).map { case (c, tbl) =>
@@ -228,68 +230,98 @@ class Timelog @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       fs4 <- rs4
     } yield {
       val cfs = ListBuffer.empty[CountItem]
-      fs1.foreach{x=>{
-        var count: Double=0.0
-        var halfcount: Double=0.0
+      fs1.foreach { x => {
+        var count: Double = 0.0
+        var halfcount: Double = 0.0
         var latecount: Int = 0
         var earlycount: Int = 0
-        fs.foreach{y=>{
-           if(x._1._1._1.user_id == y._1){
-             count = y._2
-           }
-        }}
-        fs4.foreach{y=>{
-          if(x._1._1._1.user_id == y._1){
+        fs.foreach { y => {
+          if (x._1._1._1.user_id == y._1) {
+            count = y._2
+          }
+        }
+        }
+        fs4.foreach { y => {
+          if (x._1._1._1.user_id == y._1) {
             halfcount = y._2
           }
-        }}
-        fs2.foreach{y=>{
-          if(x._1._1._1.user_id == y._1){
+        }
+        }
+        fs2.foreach { y => {
+          if (x._1._1._1.user_id == y._1) {
             latecount = y._2
           }
-        }}
-        fs3.foreach{y=>{
-          if(x._1._1._1.user_id == y._1){
-            earlycount= y._2
+        }
+        }
+        fs3.foreach { y => {
+          if (x._1._1._1.user_id == y._1) {
+            earlycount = y._2
           }
-        }}
-        val item = new CountItem(x._1._1._1.user_id,x._1._1._1.full_name,x._1._1._2.title,x._1._2.title,x._2.name,count-halfcount/2,earlycount,latecount)
+        }
+        }
+        val item = new CountItem(x._1._1._1.user_id, x._1._1._1.full_name, x._1._1._2.title, x._1._2.title, x._2.name, count - halfcount / 2, earlycount, latecount)
         cfs += item
-      }}
+      }
+      }
       cfs
     }
 
   }
-  def countDay(date: String) ={
+
+  def countDay(date: String) = {
     val sdf1 = new SimpleDateFormat("dd-MM-yyyy")
     val sqlDate = new Date(sdf1.parse(date).getTime)
-    val q = ((((ProfileTable )
+    val q = ((((ProfileTable)
       join jobTitle on (_.job_title_id === _.id))
-    join jobPoss on (_._1.job_position_id === _.id))
-    join department on(_._1._1.department_id === _.id)).result
+      join jobPoss on (_._1.job_position_id === _.id))
+      join department on (_._1._1.department_id === _.id)).result
     val rs = db.run(q)
     val q1 = (TimelogTable).filter(_.date === sqlDate).result
     val rs1 = db.run(q1)
-    for{
+    for {
       fs <- rs
       fs1 <- rs1
-    } yield{
+    } yield {
       val cfs = ListBuffer.empty[CountDayItem]
-      fs.foreach{x=>{
+      fs.foreach { x => {
         var check = false
-        fs1.foreach{y=>{
-          if(x._1._1._1.user_id == y.user_id) {
+        fs1.foreach { y => {
+          if (x._1._1._1.user_id == y.user_id) {
             check = true
-            val item = new CountDayItem(x._1._1._1,x._1._1._2.title,x._1._2.title,x._2.name,y.start_time.toString,y.end_time.toString)
+            val item = new CountDayItem(x._1._1._1, x._1._1._2.title, x._1._2.title, x._2.name, y.start_time.toString, y.end_time.toString)
             cfs += item
           }
-        }}
-        if(check == false){
-          val item = new CountDayItem(x._1._1._1,x._1._1._2.title,x._1._2.title,x._2.name,"","")
+        }
+        }
+        if (check == false) {
+          val item = new CountDayItem(x._1._1._1, x._1._1._2.title, x._1._2.title, x._2.name, "", "")
           cfs += item
         }
-      }}
+      }
+      }
       cfs
     }
   }
+
+  def countUserId(id: Int) = {
+    val q = TimelogTable.filter(_.user_id === id).result
+    val fs = db.run(q)
+    fs.map { list => {
+      list.size match {
+        case 0 => None
+        case _ => {
+          val cfs = ListBuffer.empty[String]
+          list.foreach {
+            x => {
+              val item = new String(x.date.toString)
+              cfs += item
+            }
+          }
+          Some(cfs)
+        }
+      }
+    }
+    }
+  }
+
 }
